@@ -1,0 +1,9 @@
+node_modules/
+dist/
+build/
+.svelte-kit/
+**/dashboard-dist/*
+!**/dashboard-dist/.gitkeep
+.telescope/
+*.log
+.DS_Store
