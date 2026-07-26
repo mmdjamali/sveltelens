@@ -29,6 +29,7 @@
     "vite": "^6.0.0"
   },
   "dependencies": {
-    "@tabler/icons-svelte": "^3.45.0"
+    "@tabler/icons-svelte": "^3.45.0",
+    "highlight.js": "^11.11.1"
   }
 }

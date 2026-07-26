@@ -103,6 +103,11 @@ html {
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  --syntax-key: oklch(0.48 0.14 262);
+  --syntax-string: oklch(0.5 0.13 150);
+  --syntax-number: oklch(0.55 0.15 45);
+  --syntax-keyword: oklch(0.52 0.17 320);
+  --syntax-comment: oklch(0.62 0.02 260);
 }
 
 .dark {
@@ -137,6 +142,11 @@ html {
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+  --syntax-key: oklch(0.75 0.11 240);
+  --syntax-string: oklch(0.78 0.12 145);
+  --syntax-number: oklch(0.8 0.12 65);
+  --syntax-keyword: oklch(0.76 0.13 320);
+  --syntax-comment: oklch(0.58 0.02 260);
 }
 
 @layer base {
@@ -149,4 +159,26 @@ html {
 	html {
 		@apply font-sans;
   }
+}
+
+/* highlight.js theme, mapped onto the dashboard palette instead of shipping one of its own. */
+.hljs-attr {
+  color: var(--syntax-key);
+}
+.hljs-string {
+  color: var(--syntax-string);
+}
+.hljs-number,
+.hljs-literal {
+  color: var(--syntax-number);
+}
+.hljs-keyword,
+.hljs-built_in,
+.hljs-type,
+.hljs-operator {
+  color: var(--syntax-keyword);
+}
+.hljs-comment {
+  color: var(--syntax-comment);
+  font-style: italic;
 }

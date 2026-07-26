@@ -1,6 +1,7 @@
 <script lang="ts">
   import { base } from '$app/paths';
   import { timeAgo, statusClass, methodClass, formatDuration, formatBytes } from '../format';
+  import { highlight } from '../highlight';
   import JsonView from './JsonView.svelte';
   import * as Tabs from './ui/tabs/index.js';
   import { Badge } from './ui/badge/index.js';
@@ -132,7 +133,7 @@
         {:else}
           <Tabs.Content value="details">
             {#if entry.type === 'query'}
-              <pre class="bg-muted/40 overflow-x-auto rounded-md border p-3 font-mono text-xs whitespace-pre-wrap">{entry.payload.sql}</pre>
+              <pre class="bg-muted/40 overflow-x-auto rounded-md border p-3 font-mono text-xs whitespace-pre-wrap">{@html highlight(entry.payload.sql, 'sql')}</pre>
               {#if entry.payload.params.length}
                 <h3 class="text-muted-foreground mt-3 mb-1.5 text-xs font-medium">Params</h3>
                 <JsonView text={JSON.stringify(entry.payload.params)} />
