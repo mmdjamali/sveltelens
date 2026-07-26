@@ -1,20 +1,23 @@
 <script lang="ts">
-  import { store } from '../store.svelte';
+  import { base } from '$app/paths';
   import { timeAgo, statusClass, methodClass, formatDuration, formatBytes } from '../format';
   import JsonView from './JsonView.svelte';
   import * as Tabs from './ui/tabs/index.js';
   import { Badge } from './ui/badge/index.js';
   import { Button } from './ui/button/index.js';
-  import IconX from '@tabler/icons-svelte/icons/x';
+  import IconArrowLeft from '@tabler/icons-svelte/icons/arrow-left';
+  import type { Entry } from '../types';
 
-  const entry = $derived(store.selectedEntry);
-  const hasHttpTabs = $derived(entry?.type === 'request' || entry?.type === 'client-request');
+  let { entry, related }: { entry: Entry; related: Entry[] } = $props();
+
+  const hasHttpTabs = $derived(entry.type === 'request' || entry.type === 'client-request');
 
   type Tab = 'headers' | 'payload' | 'response' | 'details' | 'related';
   let tab = $state<Tab>('payload');
 
   $effect(() => {
-    if (entry) tab = hasHttpTabs ? 'payload' : 'details';
+    entry.id;
+    tab = hasHttpTabs ? 'payload' : 'details';
   });
 
   function headersOf(record: Record<string, string>) {
@@ -35,9 +38,12 @@
   </table>
 {/snippet}
 
-{#if entry}
-  <div class="bg-background flex h-full flex-col">
-    <div class="flex items-start justify-between gap-2 border-b px-4 py-3">
+<div class="bg-background flex h-full flex-col">
+    <div class="flex items-start gap-3 border-b px-4 py-3">
+      <Button variant="ghost" size="icon-lg" class="shrink-0" href="{base}/{entry.type}">
+        <IconArrowLeft class="size-5" />
+        <span class="sr-only">Back to {entry.type} list</span>
+      </Button>
       <div class="min-w-0">
         <div class="flex items-center gap-2">
           <span class="text-muted-foreground text-xs tracking-wide uppercase">{entry.type}</span>
@@ -61,10 +67,6 @@
           {timeAgo(entry.timestamp)} · {formatDuration(entry.durationMs)}
         </p>
       </div>
-      <Button variant="ghost" size="icon-lg" class="shrink-0" onclick={() => store.closeDetail()}>
-        <IconX class="size-5" />
-        <span class="sr-only">Close</span>
-      </Button>
     </div>
 
     <Tabs.Root bind:value={tab} class="flex min-h-0 flex-1 flex-col gap-0">
@@ -79,8 +81,8 @@
           {/if}
           <Tabs.Trigger value="related">
             Related
-            {#if store.relatedEntries.length}
-              <Badge variant="secondary" class="ml-1.5">{store.relatedEntries.length}</Badge>
+            {#if related.length}
+              <Badge variant="secondary" class="ml-1.5">{related.length}</Badge>
             {/if}
           </Tabs.Trigger>
         </Tabs.List>
@@ -144,15 +146,15 @@
         {/if}
 
         <Tabs.Content value="related">
-          {#if store.relatedEntries.length === 0}
+          {#if related.length === 0}
             <p class="text-muted-foreground text-xs italic">no related entries for this request</p>
           {:else}
             <ul class="space-y-1.5">
-              {#each store.relatedEntries as rel (rel.id)}
+              {#each related as rel (rel.id)}
                 <li>
-                  <button
-                    class="hover:bg-accent hover:text-accent-foreground w-full rounded-md border px-3 py-2 text-left transition-colors"
-                    onclick={() => store.selectEntry(rel.id)}
+                  <a
+                    class="hover:bg-accent hover:text-accent-foreground block w-full rounded-md border px-3 py-2 text-left transition-colors"
+                    href="{base}/{rel.id}"
                   >
                     <span class="text-muted-foreground text-xs uppercase">{rel.type}</span>
                     <span class="ml-2 font-mono text-xs">
@@ -166,7 +168,7 @@
                               ? rel.payload.message
                               : `${rel.payload.name}: ${rel.payload.message}`}
                     </span>
-                  </button>
+                  </a>
                 </li>
               {/each}
             </ul>
@@ -174,5 +176,4 @@
         </Tabs.Content>
       </div>
     </Tabs.Root>
-  </div>
-{/if}
+</div>

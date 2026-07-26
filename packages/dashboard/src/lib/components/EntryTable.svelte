@@ -1,9 +1,12 @@
 <script lang="ts">
-  import { store } from '../store.svelte';
+  import { base } from '$app/paths';
+  import { goto } from '$app/navigation';
   import { timeAgo, statusClass, methodClass, formatDuration } from '../format';
   import { ENTRY_TYPE_ICONS, type Entry } from '../types';
   import * as Table from './ui/table/index.js';
   import { Badge } from './ui/badge/index.js';
+
+  let { entries }: { entries: Entry[] } = $props();
 
   function verb(entry: Entry): string | null {
     if (entry.type === 'request' || entry.type === 'client-request') return entry.payload.method;
@@ -45,13 +48,9 @@
     </Table.Row>
   </Table.Header>
   <Table.Body>
-    {#each store.filtered as entry (entry.id)}
+    {#each entries as entry (entry.id)}
       {@const Icon = ENTRY_TYPE_ICONS[entry.type]}
-      <Table.Row
-        class="cursor-pointer"
-        data-state={store.selectedId === entry.id ? 'selected' : undefined}
-        onclick={() => store.selectEntry(entry.id)}
-      >
+      <Table.Row class="cursor-pointer" onclick={() => goto(`${base}/${entry.id}`)}>
         <Table.Cell class="text-muted-foreground pl-4 text-xs">
           <span class="flex items-center gap-1.5">
             <Icon class="size-3.5" />

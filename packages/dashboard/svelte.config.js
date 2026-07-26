@@ -10,7 +10,10 @@ const config = {
       assets: 'build',
       fallback: undefined,
       precompress: false,
-      strict: true,
+      // Only `/` is prerendered; sirv (single: true) serves that index.html for the
+      // dynamic routes. A real `fallback` page would emit absolute /_app/ URLs, which
+      // break under the configurable mount path — the prerendered page uses relative ones.
+      strict: false,
     }),
   },
 };

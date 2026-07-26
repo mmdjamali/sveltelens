@@ -1,6 +1,8 @@
 <script lang="ts">
+  import { base } from '$app/paths';
+  import { page } from '$app/state';
   import { store } from '../store.svelte';
-  import { ENTRY_TYPES, ENTRY_TYPE_LABELS, ENTRY_TYPE_ICONS, type EntryType } from '../types';
+  import { ENTRY_TYPES, ENTRY_TYPE_LABELS, ENTRY_TYPE_ICONS } from '../types';
   import * as Sidebar from './ui/sidebar/index.js';
   import IconListDetails from '@tabler/icons-svelte/icons/list-details';
   import IconPlayerPause from '@tabler/icons-svelte/icons/player-pause';
@@ -9,11 +11,7 @@
   import IconTrash from '@tabler/icons-svelte/icons/trash';
 
   const total = $derived(Object.values(store.counts).reduce((a, b) => a + b, 0));
-
-  function select(type: EntryType | 'all') {
-    store.activeType = type;
-    store.closeDetail();
-  }
+  const current = $derived(page.params.type ?? (page.route.id === '/' ? 'all' : null));
 </script>
 
 <Sidebar.Root>
@@ -41,9 +39,13 @@
       <Sidebar.GroupContent>
         <Sidebar.Menu>
           <Sidebar.MenuItem>
-            <Sidebar.MenuButton isActive={store.activeType === 'all'} onclick={() => select('all')}>
-              <IconListDetails />
-              <span>All entries</span>
+            <Sidebar.MenuButton isActive={current === 'all'}>
+              {#snippet child({ props })}
+                <a href="{base}/" {...props}>
+                  <IconListDetails />
+                  <span>All entries</span>
+                </a>
+              {/snippet}
             </Sidebar.MenuButton>
             <Sidebar.MenuBadge>{total}</Sidebar.MenuBadge>
           </Sidebar.MenuItem>
@@ -51,9 +53,13 @@
           {#each ENTRY_TYPES as type (type)}
             {@const Icon = ENTRY_TYPE_ICONS[type]}
             <Sidebar.MenuItem>
-              <Sidebar.MenuButton isActive={store.activeType === type} onclick={() => select(type)}>
-                <Icon />
-                <span>{ENTRY_TYPE_LABELS[type]}</span>
+              <Sidebar.MenuButton isActive={current === type}>
+                {#snippet child({ props })}
+                  <a href="{base}/{type}" {...props}>
+                    <Icon />
+                    <span>{ENTRY_TYPE_LABELS[type]}</span>
+                  </a>
+                {/snippet}
               </Sidebar.MenuButton>
               <Sidebar.MenuBadge>{store.counts[type]}</Sidebar.MenuBadge>
             </Sidebar.MenuItem>
