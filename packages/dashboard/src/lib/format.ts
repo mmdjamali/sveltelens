@@ -1,4 +1,4 @@
-import type { EntryType, LogPayload } from './types';
+import type { Entry, EntryType, LogPayload } from './types';
 
 export function timeAgo(timestamp: number): string {
   const diffMs = Date.now() - timestamp;
@@ -63,6 +63,27 @@ const ENTRY_TYPE_CLASSES: Record<EntryType, string> = {
 
 export function entryTypeClass(type: EntryType): string {
   return ENTRY_TYPE_CLASSES[type];
+}
+
+// The "verb" badge next to the type badge: HTTP method, log level, or exception name.
+export function entryVerb(entry: Entry): string | null {
+  if (entry.type === 'request' || entry.type === 'client-request') return entry.payload.method;
+  // 'log' level is redundant with the type badge, which already reads "LOG".
+  if (entry.type === 'log') return entry.payload.level === 'log' ? null : entry.payload.level.toUpperCase();
+  if (entry.type === 'exception') return entry.payload.name;
+  return null;
+}
+
+export function entryVerbClass(entry: Entry): string {
+  if (entry.type === 'log') return levelClass(entry.payload.level);
+  if (entry.type === 'exception') return entryTypeClass('exception');
+  if (entry.type === 'request' || entry.type === 'client-request') return methodClass(entry.payload.method);
+  return NEUTRAL;
+}
+
+export function entryStatus(entry: Entry): number | null {
+  if (entry.type === 'request' || entry.type === 'client-request') return entry.payload.status;
+  return null;
 }
 
 export function formatDuration(ms: number | null): string {

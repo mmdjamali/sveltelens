@@ -77,6 +77,15 @@ export const ENTRY_TYPE_LABELS: Record<EntryType, string> = {
   exception: 'Exceptions',
 };
 
+// Singular labels for badges on a single entry (as opposed to the sidebar's category counts above).
+export const ENTRY_TYPE_BADGE_LABELS: Record<EntryType, string> = {
+  request: 'Request',
+  'client-request': 'HTTP Client',
+  query: 'Query',
+  log: 'Log',
+  exception: 'Exception',
+};
+
 export const ENTRY_TYPE_ICONS: Record<EntryType, Icon> = {
   request: IconRoute,
   'client-request': IconWorld,
