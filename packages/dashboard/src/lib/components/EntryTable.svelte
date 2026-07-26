@@ -1,0 +1,94 @@
+<script lang="ts">
+  import { store } from '../store.svelte';
+  import { timeAgo, statusClass, methodClass, formatDuration } from '../format';
+  import { ENTRY_TYPE_ICONS, type Entry } from '../types';
+  import * as Table from './ui/table/index.js';
+  import { Badge } from './ui/badge/index.js';
+
+  function verb(entry: Entry): string | null {
+    if (entry.type === 'request' || entry.type === 'client-request') return entry.payload.method;
+    if (entry.type === 'log') return entry.payload.level.toUpperCase();
+    if (entry.type === 'exception') return 'ERR';
+    return null;
+  }
+
+  function primary(entry: Entry): string {
+    switch (entry.type) {
+      case 'request':
+        return entry.payload.path;
+      case 'client-request':
+        return entry.payload.url;
+      case 'query':
+        return entry.payload.sql;
+      case 'log':
+        return entry.payload.message;
+      case 'exception':
+        return `${entry.payload.name}: ${entry.payload.message}`;
+    }
+  }
+
+  function status(entry: Entry): number | null {
+    if (entry.type === 'request' || entry.type === 'client-request') return entry.payload.status;
+    return null;
+  }
+</script>
+
+<Table.Root>
+  <Table.Header class="bg-background sticky top-0 z-10">
+    <Table.Row class="hover:bg-transparent">
+      <Table.Head class="text-muted-foreground pl-4 text-xs">Type</Table.Head>
+      <Table.Head class="text-muted-foreground w-20 text-xs"></Table.Head>
+      <Table.Head class="text-muted-foreground text-xs">Detail</Table.Head>
+      <Table.Head class="text-muted-foreground w-20 text-xs">Status</Table.Head>
+      <Table.Head class="text-muted-foreground w-24 text-xs">Duration</Table.Head>
+      <Table.Head class="text-muted-foreground w-28 pr-4 text-right text-xs">Time</Table.Head>
+    </Table.Row>
+  </Table.Header>
+  <Table.Body>
+    {#each store.filtered as entry (entry.id)}
+      {@const Icon = ENTRY_TYPE_ICONS[entry.type]}
+      <Table.Row
+        class="cursor-pointer"
+        data-state={store.selectedId === entry.id ? 'selected' : undefined}
+        onclick={() => store.selectEntry(entry.id)}
+      >
+        <Table.Cell class="text-muted-foreground pl-4 text-xs">
+          <span class="flex items-center gap-1.5">
+            <Icon class="size-3.5" />
+            {entry.type}
+          </span>
+        </Table.Cell>
+        <Table.Cell>
+          {#if verb(entry)}
+            <Badge
+              variant="outline"
+              class="font-mono {entry.type === 'log' || entry.type === 'exception'
+                ? 'border-border bg-muted text-muted-foreground'
+                : methodClass(verb(entry) ?? '')}"
+            >
+              {verb(entry)}
+            </Badge>
+          {/if}
+        </Table.Cell>
+        <Table.Cell class="text-foreground max-w-0 truncate font-mono text-xs">
+          {primary(entry)}
+        </Table.Cell>
+        <Table.Cell>
+          {#if status(entry) !== null}
+            <Badge variant="outline" class="font-mono {statusClass(status(entry))}">
+              {status(entry)}
+            </Badge>
+          {/if}
+        </Table.Cell>
+        <Table.Cell class="text-muted-foreground text-xs">{formatDuration(entry.durationMs)}</Table.Cell>
+        <Table.Cell class="text-muted-foreground pr-4 text-right text-xs">{timeAgo(entry.timestamp)}</Table.Cell>
+      </Table.Row>
+    {:else}
+      <Table.Row class="hover:bg-transparent">
+        <Table.Cell colspan={6} class="text-muted-foreground h-32 text-center text-sm">
+          No entries yet — trigger a request in your app.
+        </Table.Cell>
+      </Table.Row>
+    {/each}
+  </Table.Body>
+</Table.Root>
