@@ -8,6 +8,7 @@ function makeEntry(overrides: Partial<Entry> = {}): Entry {
     requestId: overrides.requestId ?? null,
     timestamp: overrides.timestamp ?? Date.now(),
     durationMs: overrides.durationMs ?? null,
+    offsetMs: overrides.offsetMs ?? null,
     type: overrides.type ?? 'log',
     payload: overrides.payload ?? { level: 'log', message: 'hi' },
   } as Entry;

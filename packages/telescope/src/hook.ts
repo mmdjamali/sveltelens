@@ -1,8 +1,19 @@
+import os from 'node:os';
 import type { Handle } from '@sveltejs/kit';
 import { getTelescopeState } from './state.js';
 import { requestContext } from './context.js';
 import { generateId, redactHeaders, headersToObject, captureBody, matchesIgnore } from './utils.js';
 import { recordException } from './intercept/exceptions.js';
+
+const hostname = os.hostname();
+
+function clientAddressOf(event: Parameters<Handle>[0]['event']): string | null {
+  try {
+    return event.getClientAddress();
+  } catch {
+    return null;
+  }
+}
 
 /** No-op passthrough when the vite plugin isn't active (e.g. production build). */
 export const telescopeHandle: Handle = async ({ event, resolve }) => {
@@ -14,7 +25,8 @@ export const telescopeHandle: Handle = async ({ event, resolve }) => {
   if (matchesIgnore(path, config.ignore)) return resolve(event);
 
   const requestId = generateId();
-  const start = Date.now();
+  const start = performance.now();
+  const ip = clientAddressOf(event);
   const requestHeaders = redactHeaders(headersToObject(event.request.headers), config.redactHeaders);
 
   let requestBodyText: string | null = null;
@@ -24,7 +36,7 @@ export const telescopeHandle: Handle = async ({ event, resolve }) => {
     requestBodyText = null;
   }
 
-  return requestContext.run({ requestId }, async () => {
+  return requestContext.run({ requestId, startedAt: start }, async () => {
     try {
       const response = await resolve(event);
       const responseClone = response.clone();
@@ -38,12 +50,16 @@ export const telescopeHandle: Handle = async ({ event, resolve }) => {
       recorder.record({
         type: 'request',
         requestId,
-        durationMs: Date.now() - start,
+        durationMs: Math.round(performance.now() - start),
+        offsetMs: 0,
         payload: {
           method: event.request.method,
           path,
           routeId: event.route.id,
           status: response.status,
+          hostname,
+          ip,
+          memoryUsageBytes: process.memoryUsage().heapUsed,
           requestHeaders,
           responseHeaders: redactHeaders(headersToObject(response.headers), config.redactHeaders),
           requestBody: captureBody(requestBodyText, requestHeaders['content-type'] ?? null),
@@ -58,12 +74,16 @@ export const telescopeHandle: Handle = async ({ event, resolve }) => {
       recorder.record({
         type: 'request',
         requestId,
-        durationMs: Date.now() - start,
+        durationMs: Math.round(performance.now() - start),
+        offsetMs: 0,
         payload: {
           method: event.request.method,
           path,
           routeId: event.route.id,
           status: 500,
+          hostname,
+          ip,
+          memoryUsageBytes: process.memoryUsage().heapUsed,
           requestHeaders,
           responseHeaders: {},
           requestBody: captureBody(requestBodyText, requestHeaders['content-type'] ?? null),

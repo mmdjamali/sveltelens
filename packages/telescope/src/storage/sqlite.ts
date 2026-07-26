@@ -13,6 +13,7 @@ interface Row {
   requestId: string | null;
   timestamp: number;
   durationMs: number | null;
+  offsetMs: number | null;
   payload: string;
 }
 
@@ -34,21 +35,27 @@ export class SqliteStorage implements Storage {
         requestId TEXT,
         timestamp INTEGER NOT NULL,
         durationMs INTEGER,
+        offsetMs INTEGER,
         payload TEXT NOT NULL
       );
       CREATE INDEX IF NOT EXISTS idx_entries_type ON entries(type);
       CREATE INDEX IF NOT EXISTS idx_entries_requestId ON entries(requestId);
       CREATE INDEX IF NOT EXISTS idx_entries_timestamp ON entries(timestamp);
     `);
+    // Migration for databases created before offsetMs existed.
+    const columns = this.db.prepare('PRAGMA table_info(entries)').all() as { name: string }[];
+    if (!columns.some((c) => c.name === 'offsetMs')) {
+      this.db.exec('ALTER TABLE entries ADD COLUMN offsetMs INTEGER');
+    }
   }
 
   add(entry: Entry): void {
-    const { id, type, requestId, timestamp, durationMs, ...rest } = entry;
+    const { id, type, requestId, timestamp, durationMs, offsetMs, ...rest } = entry;
     this.db
       .prepare(
-        'INSERT OR REPLACE INTO entries (id, type, requestId, timestamp, durationMs, payload) VALUES (?, ?, ?, ?, ?, ?)'
+        'INSERT OR REPLACE INTO entries (id, type, requestId, timestamp, durationMs, offsetMs, payload) VALUES (?, ?, ?, ?, ?, ?, ?)'
       )
-      .run(id, type, requestId, timestamp, durationMs, JSON.stringify(rest.payload));
+      .run(id, type, requestId, timestamp, durationMs, offsetMs, JSON.stringify(rest.payload));
 
     const count = (this.db.prepare('SELECT COUNT(*) as c FROM entries').get() as { c: number }).c;
     if (count > this.maxEntries) {
@@ -119,6 +126,7 @@ function rowToEntry(row: Row): Entry {
     requestId: row.requestId,
     timestamp: row.timestamp,
     durationMs: row.durationMs,
+    offsetMs: row.offsetMs,
     payload: JSON.parse(row.payload),
   } as Entry;
 }

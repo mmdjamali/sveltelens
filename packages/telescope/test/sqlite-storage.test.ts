@@ -11,6 +11,7 @@ function makeEntry(id: string): Entry {
     requestId: 'r1',
     timestamp: Date.now(),
     durationMs: null,
+    offsetMs: null,
     type: 'log',
     payload: { level: 'log', message: `msg-${id}` },
   } as Entry;

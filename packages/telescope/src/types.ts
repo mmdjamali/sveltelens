@@ -5,6 +5,10 @@ export interface RequestPayload {
   path: string;
   routeId: string | null;
   status: number;
+  hostname: string;
+  ip: string | null;
+  /** process.memoryUsage().heapUsed at response time, in bytes. */
+  memoryUsageBytes: number | null;
   requestHeaders: Record<string, string>;
   responseHeaders: Record<string, string>;
   requestBody: BodyCapture | null;
@@ -59,6 +63,8 @@ export type Entry = {
   requestId: string | null;
   timestamp: number;
   durationMs: number | null;
+  /** Offset in ms from the start of the owning request, for waterfall/timeline rendering. Null outside a request context. */
+  offsetMs: number | null;
 } & EntryPayload;
 
 export interface ListFilter {

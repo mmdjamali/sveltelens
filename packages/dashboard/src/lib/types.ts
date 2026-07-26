@@ -19,6 +19,9 @@ export interface RequestPayload {
   path: string;
   routeId: string | null;
   status: number;
+  hostname: string;
+  ip: string | null;
+  memoryUsageBytes: number | null;
   requestHeaders: Record<string, string>;
   responseHeaders: Record<string, string>;
   requestBody: BodyCapture | null;
@@ -65,6 +68,7 @@ export type Entry = {
   requestId: string | null;
   timestamp: number;
   durationMs: number | null;
+  offsetMs: number | null;
 } & EntryPayload;
 
 export const ENTRY_TYPES: EntryType[] = ['request', 'client-request', 'query', 'log', 'exception'];

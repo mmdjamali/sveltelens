@@ -65,6 +65,19 @@ export function entryTypeClass(type: EntryType): string {
   return ENTRY_TYPE_CLASSES[type];
 }
 
+// Solid fill colors for timeline waterfall bars/markers — same hues as the tinted badges above.
+const ENTRY_TYPE_BAR_CLASSES: Record<EntryType, string> = {
+  request: 'bg-sky-500',
+  'client-request': 'bg-violet-500',
+  query: 'bg-amber-500',
+  log: 'bg-emerald-500',
+  exception: 'bg-red-500',
+};
+
+export function entryTypeBarClass(type: EntryType): string {
+  return ENTRY_TYPE_BAR_CLASSES[type];
+}
+
 // The "verb" badge next to the type badge: HTTP method, log level, or exception name.
 export function entryVerb(entry: Entry): string | null {
   if (entry.type === 'request' || entry.type === 'client-request') return entry.payload.method;
@@ -106,6 +119,44 @@ export function entrySummary(entry: Entry): string {
     case 'exception':
       return `${entry.payload.name}: ${entry.payload.message}`;
   }
+}
+
+export function formatAbsoluteTime(timestamp: number): string {
+  return new Date(timestamp).toLocaleString(undefined, {
+    dateStyle: 'medium',
+    timeStyle: 'medium',
+  });
+}
+
+// The aggregate stats line above the timeline, e.g. "3 queries · 24ms DB · 1 http call · 15ms".
+export function timelineSummary(entries: Entry[]): string {
+  const parts: string[] = [];
+
+  const queries = entries.filter((e) => e.type === 'query');
+  if (queries.length) {
+    const known = queries.filter((e) => e.durationMs !== null);
+    const dbMs = known.reduce((sum, e) => sum + (e.durationMs ?? 0), 0);
+    parts.push(
+      `${queries.length} ${queries.length === 1 ? 'query' : 'queries'}${known.length ? ` · ${formatDuration(dbMs)} DB` : ''}`
+    );
+  }
+
+  const calls = entries.filter((e) => e.type === 'client-request');
+  if (calls.length) {
+    const known = calls.filter((e) => e.durationMs !== null);
+    const httpMs = known.reduce((sum, e) => sum + (e.durationMs ?? 0), 0);
+    parts.push(
+      `${calls.length} http ${calls.length === 1 ? 'call' : 'calls'}${known.length ? ` · ${formatDuration(httpMs)}` : ''}`
+    );
+  }
+
+  const logs = entries.filter((e) => e.type === 'log').length;
+  if (logs) parts.push(`${logs} ${logs === 1 ? 'log' : 'logs'}`);
+
+  const exceptions = entries.filter((e) => e.type === 'exception').length;
+  if (exceptions) parts.push(`${exceptions} ${exceptions === 1 ? 'exception' : 'exceptions'}`);
+
+  return parts.join(' · ');
 }
 
 export function formatDuration(ms: number | null): string {

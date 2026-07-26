@@ -2,15 +2,16 @@
   import { base } from "$app/paths";
   import {
     timeAgo,
+    formatAbsoluteTime,
     statusClass,
+    methodClass,
     entryTypeClass,
-    entryVerb,
-    entryVerbClass,
-    entryStatus,
+    entryTypeBarClass,
     entrySummary,
     formatDuration,
     formatBytes,
     stripAnsi,
+    timelineSummary,
   } from "../format";
   import { highlight } from "../highlight";
   import BodyView from "./BodyView.svelte";
@@ -26,7 +27,7 @@
     entry.type === "request" || entry.type === "client-request",
   );
 
-  type Tab = "headers" | "payload" | "response" | "details" | "related";
+  type Tab = "headers" | "payload" | "response" | "details" | "timeline";
   let tab = $state<Tab>("payload");
 
   $effect(() => {
@@ -37,6 +38,24 @@
   function headersOf(record: Record<string, string>) {
     return Object.entries(record);
   }
+
+  // Waterfall reference: the request that owns this entry (itself, or found among its siblings).
+  const timelineRoot = $derived(
+    entry.type === "request"
+      ? entry
+      : (related.find((r) => r.type === "request") ?? null),
+  );
+  const timelineTotalMs = $derived.by(() => {
+    const spans = [entry, ...related].map(
+      (e) => (e.offsetMs ?? 0) + (e.durationMs ?? 0),
+    );
+    return Math.max(1, timelineRoot?.durationMs ?? 0, ...spans);
+  });
+  const timelineRows = $derived(
+    [...related].sort(
+      (a, b) => (a.offsetMs ?? 0) - (b.offsetMs ?? 0) || a.timestamp - b.timestamp,
+    ),
+  );
 </script>
 
 {#snippet headerTable(rows: [string, string][])}
@@ -70,17 +89,6 @@
       >
         {ENTRY_TYPE_BADGE_LABELS[entry.type]}
       </Badge>
-
-      {#if entryVerb(entry)}
-        <Badge variant="soft" class={entryVerbClass(entry)}>
-          {entryVerb(entry)}
-        </Badge>
-      {/if}
-      {#if entryStatus(entry) !== null}
-        <Badge variant="soft" class={statusClass(entryStatus(entry))}>
-          {entryStatus(entry)}
-        </Badge>
-      {/if}
       <h2
         class="text-foreground min-w-0 truncate text-sm font-medium"
         title={entrySummary(entry)}
@@ -93,6 +101,178 @@
     </p>
   </div>
 
+  <div class="border-b p-4">
+    <div class="overflow-hidden rounded-lg border">
+      <table class="w-full text-xs">
+        <tbody>
+          <tr class="border-b last:border-0">
+            <td
+              class="text-muted-foreground bg-muted/20 w-44 shrink-0 px-3 py-2 align-top font-medium"
+              >Time</td
+            >
+            <td class="px-3 py-2"
+              >{formatAbsoluteTime(entry.timestamp)}
+              <span class="text-muted-foreground">({timeAgo(entry.timestamp)})</span
+              ></td
+            >
+          </tr>
+
+          {#if entry.type === "request"}
+            <tr class="border-b last:border-0">
+              <td
+                class="text-muted-foreground bg-muted/20 w-44 shrink-0 px-3 py-2 align-top font-medium"
+                >Hostname</td
+              >
+              <td class="px-3 py-2 break-all">{entry.payload.hostname}</td>
+            </tr>
+            <tr class="border-b last:border-0">
+              <td
+                class="text-muted-foreground bg-muted/20 w-44 shrink-0 px-3 py-2 align-top font-medium"
+                >Method</td
+              >
+              <td class="px-3 py-2">
+                <Badge variant="soft" class={methodClass(entry.payload.method)}>
+                  {entry.payload.method}
+                </Badge>
+              </td>
+            </tr>
+            <tr class="border-b last:border-0">
+              <td
+                class="text-muted-foreground bg-muted/20 w-44 shrink-0 px-3 py-2 align-top font-medium"
+                >Controller / route handler</td
+              >
+              <td class="px-3 py-2 break-all">{entry.payload.routeId ?? "—"}</td>
+            </tr>
+            <tr class="border-b last:border-0">
+              <td
+                class="text-muted-foreground bg-muted/20 w-44 shrink-0 px-3 py-2 align-top font-medium"
+                >Path</td
+              >
+              <td class="px-3 py-2 break-all">{entry.payload.path}</td>
+            </tr>
+            <tr class="border-b last:border-0">
+              <td
+                class="text-muted-foreground bg-muted/20 w-44 shrink-0 px-3 py-2 align-top font-medium"
+                >Status</td
+              >
+              <td class="px-3 py-2">
+                <Badge variant="soft" class={statusClass(entry.payload.status)}>
+                  {entry.payload.status}
+                </Badge>
+              </td>
+            </tr>
+            <tr class="border-b last:border-0">
+              <td
+                class="text-muted-foreground bg-muted/20 w-44 shrink-0 px-3 py-2 align-top font-medium"
+                >Duration</td
+              >
+              <td class="px-3 py-2">{formatDuration(entry.durationMs)}</td>
+            </tr>
+            <tr class="border-b last:border-0">
+              <td
+                class="text-muted-foreground bg-muted/20 w-44 shrink-0 px-3 py-2 align-top font-medium"
+                >IP</td
+              >
+              <td class="px-3 py-2">{entry.payload.ip ?? "—"}</td>
+            </tr>
+            <tr class="border-b last:border-0">
+              <td
+                class="text-muted-foreground bg-muted/20 w-44 shrink-0 px-3 py-2 align-top font-medium"
+                >Memory usage</td
+              >
+              <td class="px-3 py-2"
+                >{entry.payload.memoryUsageBytes !== null
+                  ? formatBytes(entry.payload.memoryUsageBytes)
+                  : "—"}</td
+              >
+            </tr>
+          {:else if entry.type === "client-request"}
+            <tr class="border-b last:border-0">
+              <td
+                class="text-muted-foreground bg-muted/20 w-44 shrink-0 px-3 py-2 align-top font-medium"
+                >Method</td
+              >
+              <td class="px-3 py-2">
+                <Badge variant="soft" class={methodClass(entry.payload.method)}>
+                  {entry.payload.method}
+                </Badge>
+              </td>
+            </tr>
+            <tr class="border-b last:border-0">
+              <td
+                class="text-muted-foreground bg-muted/20 w-44 shrink-0 px-3 py-2 align-top font-medium"
+                >URL</td
+              >
+              <td class="px-3 py-2 break-all">{entry.payload.url}</td>
+            </tr>
+            <tr class="border-b last:border-0">
+              <td
+                class="text-muted-foreground bg-muted/20 w-44 shrink-0 px-3 py-2 align-top font-medium"
+                >Status</td
+              >
+              <td class="px-3 py-2">
+                {#if entry.payload.status !== null}
+                  <Badge variant="soft" class={statusClass(entry.payload.status)}>
+                    {entry.payload.status}
+                  </Badge>
+                {:else}
+                  —
+                {/if}
+              </td>
+            </tr>
+            <tr class="border-b last:border-0">
+              <td
+                class="text-muted-foreground bg-muted/20 w-44 shrink-0 px-3 py-2 align-top font-medium"
+                >Duration</td
+              >
+              <td class="px-3 py-2">{formatDuration(entry.durationMs)}</td>
+            </tr>
+            {#if entry.payload.error}
+              <tr class="border-b last:border-0">
+                <td
+                  class="text-muted-foreground bg-muted/20 w-44 shrink-0 px-3 py-2 align-top font-medium"
+                  >Error</td
+                >
+                <td class="text-destructive px-3 py-2 break-all">{entry.payload.error}</td>
+              </tr>
+            {/if}
+          {:else if entry.type === "query"}
+            <tr class="border-b last:border-0">
+              <td
+                class="text-muted-foreground bg-muted/20 w-44 shrink-0 px-3 py-2 align-top font-medium"
+                >Connection</td
+              >
+              <td class="px-3 py-2">{entry.payload.connection ?? "—"}</td>
+            </tr>
+            <tr class="border-b last:border-0">
+              <td
+                class="text-muted-foreground bg-muted/20 w-44 shrink-0 px-3 py-2 align-top font-medium"
+                >Duration</td
+              >
+              <td class="px-3 py-2">{formatDuration(entry.durationMs)}</td>
+            </tr>
+          {:else if entry.type === "log"}
+            <tr class="border-b last:border-0">
+              <td
+                class="text-muted-foreground bg-muted/20 w-44 shrink-0 px-3 py-2 align-top font-medium"
+                >Level</td
+              >
+              <td class="px-3 py-2">{entry.payload.level}</td>
+            </tr>
+          {:else if entry.type === "exception"}
+            <tr class="border-b last:border-0">
+              <td
+                class="text-muted-foreground bg-muted/20 w-44 shrink-0 px-3 py-2 align-top font-medium"
+                >Name</td
+              >
+              <td class="text-destructive px-3 py-2 break-all">{entry.payload.name}</td>
+            </tr>
+          {/if}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
   <Tabs.Root bind:value={tab} class="flex min-h-0 flex-1 flex-col gap-0">
     <div class="border-b px-4">
       <Tabs.List variant="line" class="h-auto gap-5 p-0">
@@ -103,8 +283,8 @@
         {:else}
           <Tabs.Trigger value="details" class="px-0 py-2.5">Details</Tabs.Trigger>
         {/if}
-        <Tabs.Trigger value="related" class="gap-1.5 px-0 py-2.5">
-          Related
+        <Tabs.Trigger value="timeline" class="gap-1.5 px-0 py-2.5">
+          Timeline
           {#if related.length}
             <Badge
               variant="soft"
@@ -196,35 +376,63 @@
         </Tabs.Content>
       {/if}
 
-      <Tabs.Content value="related">
+      <Tabs.Content value="timeline">
         {#if related.length === 0}
           <p class="text-muted-foreground text-xs italic">
             no related entries for this request
           </p>
         {:else}
-          <ul class="space-y-1.5">
-            {#each related as rel (rel.id)}
-              <li>
-                <a
-                  class="hover:bg-accent hover:text-accent-foreground flex w-full items-center gap-2 rounded-md border px-3 py-2 text-left transition-colors"
-                  href="{base}/{rel.id}"
-                  title={entrySummary(rel)}
-                >
+          <p class="text-muted-foreground mb-3 text-xs">
+            {timelineSummary(related)}
+          </p>
+          <div class="space-y-1">
+            {#each timelineRows as row (row.id)}
+              {@const leftPct = ((row.offsetMs ?? 0) / timelineTotalMs) * 100}
+              {@const widthPct =
+                row.durationMs !== null
+                  ? Math.max((row.durationMs / timelineTotalMs) * 100, 0.6)
+                  : 0}
+              <a
+                href="{base}/{row.id}"
+                class="hover:bg-accent hover:text-accent-foreground grid grid-cols-[minmax(0,240px)_1fr_3.5rem] items-center gap-3 rounded-md px-2 py-1.5 text-left transition-colors"
+                title="{ENTRY_TYPE_BADGE_LABELS[row.type]} · offset {formatDuration(
+                  row.offsetMs,
+                )} · duration {formatDuration(row.durationMs)}"
+              >
+                <span class="flex min-w-0 items-center gap-1.5">
                   <Badge
                     variant="soft"
-                    class="shrink-0 tracking-wide uppercase {entryTypeClass(
-                      rel.type,
-                    )}"
+                    class="shrink-0 tracking-wide uppercase {entryTypeClass(row.type)}"
                   >
-                    {ENTRY_TYPE_BADGE_LABELS[rel.type]}
+                    {ENTRY_TYPE_BADGE_LABELS[row.type]}
                   </Badge>
-                  <span class="min-w-0 flex-1 truncate text-xs"
-                    >{entrySummary(rel)}</span
+                  <span class="min-w-0 truncate text-xs" title={entrySummary(row)}
+                    >{entrySummary(row)}</span
                   >
-                </a>
-              </li>
+                </span>
+                <span class="bg-muted/40 relative h-2 w-full overflow-hidden rounded-full">
+                  {#if row.durationMs !== null}
+                    <span
+                      class="absolute inset-y-0 rounded-full {entryTypeBarClass(row.type)}"
+                      style="left: {leftPct}%; width: {widthPct}%"
+                    ></span>
+                  {:else}
+                    <span
+                      class="absolute top-1/2 size-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full {entryTypeBarClass(
+                        row.type,
+                      )}"
+                      style="left: {leftPct}%"
+                    ></span>
+                  {/if}
+                </span>
+                <span
+                  class="text-muted-foreground shrink-0 text-right text-xs tabular-nums"
+                >
+                  {row.durationMs !== null ? formatDuration(row.durationMs) : "—"}
+                </span>
+              </a>
             {/each}
-          </ul>
+          </div>
         {/if}
       </Tabs.Content>
     </div>

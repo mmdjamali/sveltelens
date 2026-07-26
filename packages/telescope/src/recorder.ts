@@ -1,9 +1,14 @@
 import { EventEmitter } from 'node:events';
 import type { Entry, EntryPayload, Storage } from './types.js';
 import { generateId } from './utils.js';
-import { currentRequestId } from './context.js';
+import { currentRequestId, currentRequestStart } from './context.js';
 
-export type RecordInput = EntryPayload & { requestId?: string | null; durationMs?: number | null };
+export type RecordInput = EntryPayload & {
+  requestId?: string | null;
+  durationMs?: number | null;
+  /** Offset in ms from the request's start. Defaults to now - requestContext.startedAt when inside a request. */
+  offsetMs?: number | null;
+};
 
 /** Wraps a Storage with id/timestamp/requestId defaulting and a live 'entry' event for WS push. */
 export class Recorder extends EventEmitter {
@@ -13,10 +18,19 @@ export class Recorder extends EventEmitter {
   }
 
   record(input: RecordInput): Entry {
+    const requestStart = currentRequestStart();
+    const offsetMs =
+      input.offsetMs !== undefined
+        ? input.offsetMs
+        : requestStart !== null
+          ? Math.max(0, Math.round(performance.now() - requestStart))
+          : null;
+
     const entry: Entry = {
       id: generateId(),
       timestamp: Date.now(),
       durationMs: input.durationMs ?? null,
+      offsetMs,
       requestId: input.requestId !== undefined ? input.requestId : currentRequestId(),
       type: input.type,
       payload: input.payload,

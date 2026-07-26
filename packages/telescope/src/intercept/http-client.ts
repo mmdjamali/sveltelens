@@ -2,6 +2,12 @@ import diagnosticsChannel from 'node:diagnostics_channel';
 import { AsyncLocalStorage } from 'node:async_hooks';
 import type { Recorder } from '../recorder.js';
 import { captureBody, headersToObject, redactHeaders } from '../utils.js';
+import { currentRequestStart } from '../context.js';
+
+function offsetFromRequestStart(): number | null {
+  const requestStart = currentRequestStart();
+  return requestStart !== null ? Math.max(0, Math.round(performance.now() - requestStart)) : null;
+}
 
 // Marks the async scope of a fetch() call we've already patched, so the undici
 // diagnostics_channel subscriber (which fires for the same call, since global
@@ -47,7 +53,13 @@ function parseHeaderBuffers(buffers: Buffer[] | undefined): Record<string, strin
 export function installHttpClientInterceptor(recorder: Recorder, redact: string[]): () => void {
   const pending = new WeakMap<
     object,
-    { start: number; method: string; url: string; requestHeaders: Record<string, string> }
+    {
+      start: number;
+      offsetMs: number | null;
+      method: string;
+      url: string;
+      requestHeaders: Record<string, string>;
+    }
   >();
 
   const onCreate = (message: unknown) => {
@@ -55,6 +67,7 @@ export function installHttpClientInterceptor(recorder: Recorder, redact: string[
     const { request } = message as { request: UndiciRequest };
     pending.set(request, {
       start: Date.now(),
+      offsetMs: offsetFromRequestStart(),
       method: request.method,
       url: request.origin + request.path,
       requestHeaders: redactHeaders(parseRawHeaders(request.headers), redact),
@@ -72,6 +85,7 @@ export function installHttpClientInterceptor(recorder: Recorder, redact: string[
     recorder.record({
       type: 'client-request',
       durationMs: Date.now() - entry.start,
+      offsetMs: entry.offsetMs,
       payload: {
         method: entry.method,
         url: entry.url,
@@ -94,6 +108,7 @@ export function installHttpClientInterceptor(recorder: Recorder, redact: string[
     recorder.record({
       type: 'client-request',
       durationMs: Date.now() - entry.start,
+      offsetMs: entry.offsetMs,
       payload: {
         method: entry.method,
         url: entry.url,
@@ -132,6 +147,7 @@ function installFetchPatch(recorder: Recorder, redact: string[]): () => void {
   const patched: typeof fetch = async (input, init) => {
     return fetchPatchScope.run(true, async () => {
       const start = Date.now();
+      const offsetMs = offsetFromRequestStart();
       const request = input instanceof Request ? input : new Request(input, init);
       const method = init?.method ?? request.method ?? 'GET';
       const url = request.url;
@@ -160,6 +176,7 @@ function installFetchPatch(recorder: Recorder, redact: string[]): () => void {
         recorder.record({
           type: 'client-request',
           durationMs: Date.now() - start,
+          offsetMs,
           payload: {
             method,
             url,
@@ -176,6 +193,7 @@ function installFetchPatch(recorder: Recorder, redact: string[]): () => void {
         recorder.record({
           type: 'client-request',
           durationMs: Date.now() - start,
+          offsetMs,
           payload: {
             method,
             url,

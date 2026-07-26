@@ -2,6 +2,8 @@ import { AsyncLocalStorage } from 'node:async_hooks';
 
 export interface RequestContext {
   requestId: string;
+  /** performance.now() at request start — lets recorded entries compute their offset into the request's timeline. */
+  startedAt?: number;
 }
 
 // Backed by globalThis: Vite's SSR module graph can load this package's
@@ -18,4 +20,8 @@ export const requestContext: AsyncLocalStorage<RequestContext> =
 
 export function currentRequestId(): string | null {
   return requestContext.getStore()?.requestId ?? null;
+}
+
+export function currentRequestStart(): number | null {
+  return requestContext.getStore()?.startedAt ?? null;
 }
