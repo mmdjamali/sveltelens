@@ -12,13 +12,13 @@ export function timeAgo(timestamp: number): string {
   return `${Math.floor(h / 24)}d ago`;
 }
 
-// Badge overrides: tinted surface + border, readable in both themes.
-const NEUTRAL = 'border-border bg-muted text-muted-foreground';
-const RED = 'border-red-500/25 bg-red-500/10 text-red-600 dark:text-red-400';
-const AMBER = 'border-amber-500/25 bg-amber-500/10 text-amber-600 dark:text-amber-400';
-const SKY = 'border-sky-500/25 bg-sky-500/10 text-sky-600 dark:text-sky-400';
-const EMERALD = 'border-emerald-500/25 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400';
-const VIOLET = 'border-violet-500/25 bg-violet-500/10 text-violet-600 dark:text-violet-400';
+// Badge overrides: subtle tinted surface, no border — the dashboard is dark-only.
+const NEUTRAL = 'bg-muted text-muted-foreground';
+const RED = 'bg-red-500/10 text-red-400';
+const AMBER = 'bg-amber-500/10 text-amber-400';
+const SKY = 'bg-sky-500/10 text-sky-400';
+const EMERALD = 'bg-emerald-500/10 text-emerald-400';
+const VIOLET = 'bg-violet-500/10 text-violet-400';
 
 export function statusClass(status: number | null): string {
   if (status === null) return NEUTRAL;
