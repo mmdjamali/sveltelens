@@ -27,10 +27,10 @@
       <Separator orientation="vertical" class="mr-1 !h-4" />
       <div class="relative w-full max-w-xs">
         <IconSearch class="text-muted-foreground pointer-events-none absolute top-1/2 left-2.5 size-4 -translate-y-1/2" />
-        <Input class="h-8 pl-8" placeholder="Search entries…" bind:value={store.search} />
+        <Input class="h-10 pl-8" placeholder="Search entries…" bind:value={store.search} />
       </div>
       <Select.Root type="single" bind:value={store.methodFilter}>
-        <Select.Trigger class="ml-auto h-8 w-36">
+        <Select.Trigger class="ml-auto w-36">
           {store.methodFilter === 'all' ? 'All methods' : store.methodFilter}
         </Select.Trigger>
         <Select.Content>

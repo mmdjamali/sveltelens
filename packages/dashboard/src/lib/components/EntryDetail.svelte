@@ -61,8 +61,8 @@
           {timeAgo(entry.timestamp)} · {formatDuration(entry.durationMs)}
         </p>
       </div>
-      <Button variant="ghost" size="icon" class="size-7 shrink-0" onclick={() => store.closeDetail()}>
-        <IconX class="size-4" />
+      <Button variant="ghost" size="icon-lg" class="shrink-0" onclick={() => store.closeDetail()}>
+        <IconX class="size-5" />
         <span class="sr-only">Close</span>
       </Button>
     </div>
