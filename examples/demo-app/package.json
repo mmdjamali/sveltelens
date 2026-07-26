@@ -1,0 +1,27 @@
+{
+  "name": "telescope-demo-app",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite dev",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.0.0",
+    "drizzle-orm": "^0.36.4",
+    "sveltecope": "workspace:*"
+  },
+  "devDependencies": {
+    "@sveltejs/adapter-node": "^5.2.11",
+    "@sveltejs/kit": "^2.15.0",
+    "@sveltejs/vite-plugin-svelte": "^5.0.3",
+    "@types/better-sqlite3": "^7.6.11",
+    "@types/node": "^22.10.0",
+    "svelte": "^5.15.0",
+    "svelte-check": "^4.1.1",
+    "typescript": "^5.6.3",
+    "vite": "^6.0.0"
+  }
+}
