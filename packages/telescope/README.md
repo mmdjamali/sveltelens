@@ -1,0 +1,99 @@
+# sveltecope
+
+A local developer observability dashboard for SvelteKit, inspired by [Laravel Telescope](https://laravel.com/docs/telescope). Dev-only, zero-config, and package-agnostic: it captures requests, outgoing HTTP calls, DB queries, logs, and exceptions no matter which HTTP client, SDK, or ORM your app uses.
+
+## Install
+
+```sh
+npm i -D sveltecope
+```
+
+## Setup
+
+**1. Add the plugin** to `vite.config.ts`:
+
+```ts
+import { sveltekit } from '@sveltejs/kit/vite';
+import { telescope } from 'sveltecope';
+import { defineConfig } from 'vite';
+
+export default defineConfig({
+  plugins: [sveltekit(), telescope()],
+});
+```
+
+**2. Add the hook** to `src/hooks.server.ts`:
+
+```ts
+import { telescopeHandle } from 'sveltecope/hook';
+import { sequence } from '@sveltejs/kit/hooks';
+
+export const handle = sequence(telescopeHandle /*, ...your other hooks */);
+```
+
+Run `npm run dev` and open **http://localhost:5173/__telescope**.
+
+Nothing runs in production builds — the plugin is dev-only (`apply: 'serve'`), and `telescopeHandle` becomes a no-op passthrough when the plugin isn't active, so it's safe to leave the import in place.
+
+## How it works
+
+Telescope patches Node platform primitives inside the Vite dev server process, so it sees everything regardless of which libraries your app uses:
+
+| Data | How it's captured |
+|---|---|
+| Incoming requests | `telescopeHandle` wraps `resolve()` in `AsyncLocalStorage`, recording method, path, route id, status, duration, headers, and truncated bodies. |
+| Outgoing HTTP | Subscribes to undici's `diagnostics_channel` events and patches `globalThis.fetch`, so plain `fetch`, `axios`, `got`, and SDKs like the PocketBase client are all captured without an adapter. |
+| Exceptions | `process.on('uncaughtException'/'unhandledRejection')`, plus errors caught in the handle hook. |
+| Logs | `console.log/info/warn/error/debug` are patched server-side. |
+| DB queries | Optional thin adapters (see below) — most ORMs and clients that go over HTTP are already covered by the outgoing-HTTP interceptor. |
+
+Every entry carries a `requestId` from `AsyncLocalStorage` when one is available, so the dashboard's **Related** tab can show every query, outgoing call, and log line that happened during a single request — even though none of those libraries know Telescope exists.
+
+## Config
+
+```ts
+telescope({
+  enabled: true,              // set false to fully disable
+  path: '/__telescope',       // where the dashboard + API mount
+  storage: 'memory',          // 'memory' | 'sqlite'
+  sqlitePath: '.telescope/db.sqlite',
+  maxEntries: 1000,           // ring buffer size
+  ignore: [...],              // extra glob/regex route patterns to skip
+  redactHeaders: ['authorization', 'cookie'],
+})
+```
+
+| Option | Default | Description |
+|---|---|---|
+| `enabled` | `true` | Disable entirely without removing the plugin. |
+| `path` | `/__telescope` | Mount path for the dashboard and its API. |
+| `storage` | `'memory'` | `'memory'` uses an in-process ring buffer. `'sqlite'` persists to disk via `better-sqlite3` (lazily required — not a hard dependency). |
+| `sqlitePath` | `.telescope/db.sqlite` | Only used when `storage: 'sqlite'`. |
+| `maxEntries` | `1000` | Max entries kept (oldest evicted first). |
+| `ignore` | vite/telescope internals | Extra route patterns (string prefix, `*` glob, or `RegExp`) to exclude from capture. |
+| `redactHeaders` | `['authorization', 'cookie']` | Header names replaced with `[redacted]` in captured requests. |
+
+Request and response bodies are truncated at 64KB and binary bodies are never stored (only size + content-type are recorded).
+
+## Adapters
+
+### Drizzle
+
+```ts
+import { drizzle } from 'drizzle-orm/better-sqlite3';
+import { telescopeDrizzleLogger } from 'sveltecope/adapters/drizzle';
+
+export const db = drizzle(sqlite, { logger: telescopeDrizzleLogger() });
+```
+
+### Everything else
+
+Anything that talks HTTP (PocketBase, Supabase, a REST API client, `fetch`) is already captured by the outgoing-HTTP interceptor with no adapter needed. Writing a new adapter for a non-HTTP data source just means calling into the recorder the same way `telescopeDrizzleLogger` does — record a `query`-typed entry from wherever your library exposes a query/logging hook.
+
+## Example
+
+See `examples/demo-app` in this repo for a working SvelteKit app wired up with Drizzle + an outgoing `fetch` call.
+
+## License
+
+MIT
