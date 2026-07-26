@@ -1,13 +1,21 @@
 <script lang="ts">
   import { untrack } from 'svelte';
   import { prettyJson } from '../format';
-  import { highlight } from '../highlight';
+  import { highlight, languageFor, type Language } from '../highlight';
   import IconChevronDown from '@tabler/icons-svelte/icons/chevron-down';
   import IconChevronRight from '@tabler/icons-svelte/icons/chevron-right';
 
-  let { text = null, collapsed = false }: { text: string | null; collapsed?: boolean } = $props();
+  let {
+    text = null,
+    contentType = 'application/json',
+    collapsed = false,
+  }: { text: string | null; contentType?: string | null; collapsed?: boolean } = $props();
+
   let open = $state(untrack(() => !collapsed));
-  const html = $derived(text === null ? '' : highlight(prettyJson(text), 'json'));
+
+  const language = $derived<Language | null>(languageFor(contentType));
+  const source = $derived(language === 'json' ? prettyJson(text) : (text ?? ''));
+  const html = $derived(language === null ? '' : highlight(source, language));
 </script>
 
 {#if text === null}
@@ -24,9 +32,10 @@
         <IconChevronRight class="size-3.5" />
       {/if}
       {open ? 'Collapse' : 'Expand'}
+      <span class="ml-auto text-[10px] tracking-wide uppercase">{language ?? 'text'}</span>
     </button>
     {#if open}
-      <pre class="overflow-x-auto px-3 pb-3 font-mono text-xs whitespace-pre-wrap">{@html html}</pre>
+      <pre class="overflow-x-auto px-3 pb-3 font-mono text-xs whitespace-pre-wrap">{#if language === null}{source}{:else}{@html html}{/if}</pre>
     {/if}
   </div>
 {/if}

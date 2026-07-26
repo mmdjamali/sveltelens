@@ -2,7 +2,7 @@
   import { base } from '$app/paths';
   import { timeAgo, statusClass, methodClass, formatDuration, formatBytes } from '../format';
   import { highlight } from '../highlight';
-  import JsonView from './JsonView.svelte';
+  import BodyView from './BodyView.svelte';
   import * as Tabs from './ui/tabs/index.js';
   import { Badge } from './ui/badge/index.js';
   import { Button } from './ui/button/index.js';
@@ -109,7 +109,10 @@
                   truncated ({formatBytes(entry.payload.requestBody.size)})
                 </p>
               {/if}
-              <JsonView text={entry.payload.requestBody.text} />
+              <BodyView
+                text={entry.payload.requestBody.text}
+                contentType={entry.payload.requestBody.contentType}
+              />
             {:else}
               <p class="text-muted-foreground text-xs italic">no request body</p>
             {/if}
@@ -125,7 +128,10 @@
                   truncated ({formatBytes(entry.payload.responseBody.size)})
                 </p>
               {/if}
-              <JsonView text={entry.payload.responseBody.text} />
+              <BodyView
+                text={entry.payload.responseBody.text}
+                contentType={entry.payload.responseBody.contentType}
+              />
             {:else}
               <p class="text-muted-foreground text-xs italic">no response body</p>
             {/if}
@@ -136,7 +142,7 @@
               <pre class="bg-muted/40 overflow-x-auto rounded-md border p-3 font-mono text-xs whitespace-pre-wrap">{@html highlight(entry.payload.sql, 'sql')}</pre>
               {#if entry.payload.params.length}
                 <h3 class="text-muted-foreground mt-3 mb-1.5 text-xs font-medium">Params</h3>
-                <JsonView text={JSON.stringify(entry.payload.params)} />
+                <BodyView text={JSON.stringify(entry.payload.params)} />
               {/if}
             {:else if entry.type === 'log'}
               <pre class="bg-muted/40 overflow-x-auto rounded-md border p-3 font-mono text-xs whitespace-pre-wrap">{entry.payload.message}</pre>
