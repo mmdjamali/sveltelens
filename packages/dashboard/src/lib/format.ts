@@ -1,3 +1,5 @@
+import type { EntryType, LogPayload } from './types';
+
 export function timeAgo(timestamp: number): string {
   const diffMs = Date.now() - timestamp;
   const s = Math.floor(diffMs / 1000);
@@ -16,6 +18,7 @@ const RED = 'border-red-500/25 bg-red-500/10 text-red-600 dark:text-red-400';
 const AMBER = 'border-amber-500/25 bg-amber-500/10 text-amber-600 dark:text-amber-400';
 const SKY = 'border-sky-500/25 bg-sky-500/10 text-sky-600 dark:text-sky-400';
 const EMERALD = 'border-emerald-500/25 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400';
+const VIOLET = 'border-violet-500/25 bg-violet-500/10 text-violet-600 dark:text-violet-400';
 
 export function statusClass(status: number | null): string {
   if (status === null) return NEUTRAL;
@@ -36,6 +39,30 @@ const METHOD_CLASSES: Record<string, string> = {
 
 export function methodClass(method: string): string {
   return METHOD_CLASSES[method.toUpperCase()] ?? NEUTRAL;
+}
+
+const LEVEL_CLASSES: Record<LogPayload['level'], string> = {
+  error: RED,
+  warn: AMBER,
+  info: SKY,
+  debug: VIOLET,
+  log: EMERALD,
+};
+
+export function levelClass(level: LogPayload['level']): string {
+  return LEVEL_CLASSES[level] ?? NEUTRAL;
+}
+
+const ENTRY_TYPE_CLASSES: Record<EntryType, string> = {
+  request: SKY,
+  'client-request': VIOLET,
+  query: AMBER,
+  log: EMERALD,
+  exception: RED,
+};
+
+export function entryTypeClass(type: EntryType): string {
+  return ENTRY_TYPE_CLASSES[type];
 }
 
 export function formatDuration(ms: number | null): string {

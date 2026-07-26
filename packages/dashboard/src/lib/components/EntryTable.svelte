@@ -1,7 +1,14 @@
 <script lang="ts">
   import { base } from '$app/paths';
   import { goto } from '$app/navigation';
-  import { timeAgo, statusClass, methodClass, formatDuration } from '../format';
+  import {
+    timeAgo,
+    statusClass,
+    methodClass,
+    levelClass,
+    entryTypeClass,
+    formatDuration,
+  } from '../format';
   import { ENTRY_TYPE_ICONS, type Entry } from '../types';
   import * as Table from './ui/table/index.js';
   import { Badge } from './ui/badge/index.js';
@@ -13,6 +20,12 @@
     if (entry.type === 'log') return entry.payload.level.toUpperCase();
     if (entry.type === 'exception') return 'ERR';
     return null;
+  }
+
+  function verbClass(entry: Entry): string {
+    if (entry.type === 'log') return levelClass(entry.payload.level);
+    if (entry.type === 'exception') return entryTypeClass('exception');
+    return methodClass(verb(entry) ?? '');
   }
 
   function primary(entry: Entry): string {
@@ -51,20 +64,15 @@
     {#each entries as entry (entry.id)}
       {@const Icon = ENTRY_TYPE_ICONS[entry.type]}
       <Table.Row class="cursor-pointer" onclick={() => goto(`${base}/${entry.id}`)}>
-        <Table.Cell class="text-muted-foreground pl-4 text-xs">
-          <span class="flex items-center gap-1.5">
+        <Table.Cell class="pl-4">
+          <Badge variant="outline" class="gap-1.5 {entryTypeClass(entry.type)}">
             <Icon class="size-3.5" />
             {entry.type}
-          </span>
+          </Badge>
         </Table.Cell>
         <Table.Cell>
           {#if verb(entry)}
-            <Badge
-              variant="outline"
-              class="font-mono {entry.type === 'log' || entry.type === 'exception'
-                ? 'border-border bg-muted text-muted-foreground'
-                : methodClass(verb(entry) ?? '')}"
-            >
+            <Badge variant="outline" class="font-mono {verbClass(entry)}">
               {verb(entry)}
             </Badge>
           {/if}

@@ -1,6 +1,14 @@
 <script lang="ts">
   import { base } from '$app/paths';
-  import { timeAgo, statusClass, methodClass, formatDuration, formatBytes } from '../format';
+  import {
+    timeAgo,
+    statusClass,
+    methodClass,
+    levelClass,
+    entryTypeClass,
+    formatDuration,
+    formatBytes,
+  } from '../format';
   import { highlight } from '../highlight';
   import BodyView from './BodyView.svelte';
   import * as Tabs from './ui/tabs/index.js';
@@ -47,13 +55,23 @@
       </Button>
       <div class="min-w-0">
         <div class="flex items-center gap-2">
-          <span class="text-muted-foreground text-xs tracking-wide uppercase">{entry.type}</span>
+          <Badge variant="outline" class="tracking-wide uppercase {entryTypeClass(entry.type)}">
+            {entry.type}
+          </Badge>
           {#if entry.type === 'request' || entry.type === 'client-request'}
             <Badge variant="outline" class="font-mono {methodClass(entry.payload.method)}">
               {entry.payload.method}
             </Badge>
             <Badge variant="outline" class="font-mono {statusClass(entry.payload.status)}">
               {entry.payload.status ?? '—'}
+            </Badge>
+          {:else if entry.type === 'log'}
+            <Badge variant="outline" class="font-mono {levelClass(entry.payload.level)}">
+              {entry.payload.level.toUpperCase()}
+            </Badge>
+          {:else if entry.type === 'exception'}
+            <Badge variant="outline" class="font-mono {entryTypeClass('exception')}">
+              {entry.payload.name}
             </Badge>
           {/if}
         </div>
@@ -163,7 +181,9 @@
                     class="hover:bg-accent hover:text-accent-foreground block w-full rounded-md border px-3 py-2 text-left transition-colors"
                     href="{base}/{rel.id}"
                   >
-                    <span class="text-muted-foreground text-xs uppercase">{rel.type}</span>
+                    <Badge variant="outline" class="uppercase {entryTypeClass(rel.type)}">
+                      {rel.type}
+                    </Badge>
                     <span class="ml-2 font-mono text-xs">
                       {rel.type === 'request'
                         ? rel.payload.path
