@@ -81,10 +81,15 @@ Request and response bodies are truncated at 64KB and binary bodies are never st
 
 ```ts
 import { drizzle } from 'drizzle-orm/better-sqlite3';
-import { telescopeDrizzleLogger } from 'sveltecope/adapters/drizzle';
+import { telescopeBetterSqlite3 } from 'sveltecope/adapters/drizzle';
 
-export const db = drizzle(sqlite, { logger: telescopeDrizzleLogger() });
+export const db = drizzle(telescopeBetterSqlite3(sqlite));
 ```
+
+`telescopeBetterSqlite3` wraps the better-sqlite3 `Database` itself, so recorded queries get a
+real `durationMs`. There's also `telescopeDrizzleLogger()`, passed as drizzle's `logger` option —
+but Drizzle calls that hook *before* the driver runs the query, so its entries never have a
+duration; only reach for it with drivers `telescopeBetterSqlite3` doesn't cover.
 
 ### Everything else
 
