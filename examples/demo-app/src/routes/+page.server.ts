@@ -6,5 +6,8 @@ export const load: PageServerLoad = async () => {
   const items = await db.select().from(todos);
   const res = await fetch(`http://localhost:${MOCK_API_PORT}/ping`);
   const ping = await res.json();
+  console.log(JSON.stringify({
+    "test": true
+  }, null, 2))
   return { items, ping };
 };
