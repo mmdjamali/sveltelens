@@ -86,6 +86,28 @@ export function entryStatus(entry: Entry): number | null {
   return null;
 }
 
+// Strips ANSI escape codes (e.g. from console color output) so raw terminal formatting
+// never leaks into rendered log text.
+export function stripAnsi(text: string): string {
+  return text.replace(/\x1b\[[0-9;]*[a-zA-Z]/g, '');
+}
+
+// The one-line summary shown in the entry list, detail header, and related-entries list.
+export function entrySummary(entry: Entry): string {
+  switch (entry.type) {
+    case 'request':
+      return entry.payload.path;
+    case 'client-request':
+      return entry.payload.url;
+    case 'query':
+      return entry.payload.sql;
+    case 'log':
+      return stripAnsi(entry.payload.message);
+    case 'exception':
+      return `${entry.payload.name}: ${entry.payload.message}`;
+  }
+}
+
 export function formatDuration(ms: number | null): string {
   if (ms === null) return '—';
   if (ms < 1000) return `${ms}ms`;
