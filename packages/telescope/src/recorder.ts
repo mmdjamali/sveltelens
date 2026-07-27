@@ -12,12 +12,17 @@ export type RecordInput = EntryPayload & {
 
 /** Wraps a Storage with id/timestamp/requestId defaulting and a live 'entry' event for WS push. */
 export class Recorder extends EventEmitter {
+  /** Toggled from the dashboard; while paused nothing is stored or streamed. */
+  paused = false;
+
   constructor(private storage: Storage) {
     super();
     this.setMaxListeners(0);
   }
 
-  record(input: RecordInput): Entry {
+  record(input: RecordInput): Entry | null {
+    if (this.paused) return null;
+
     const requestStart = currentRequestStart();
     const offsetMs =
       input.offsetMs !== undefined

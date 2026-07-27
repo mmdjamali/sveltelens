@@ -31,7 +31,19 @@ describe('Recorder + requestContext correlation', () => {
       requestId: 'explicit',
       payload: { level: 'log', message: 'x' },
     });
-    expect(entry.requestId).toBe('explicit');
+    expect(entry?.requestId).toBe('explicit');
+  });
+
+  it('records nothing while paused', () => {
+    const storage = new MemoryStorage(10);
+    const recorder = new Recorder(storage);
+    recorder.paused = true;
+    expect(recorder.record({ type: 'log', payload: { level: 'log', message: 'x' } })).toBeNull();
+    expect(storage.list().entries).toHaveLength(0);
+
+    recorder.paused = false;
+    recorder.record({ type: 'log', payload: { level: 'log', message: 'y' } });
+    expect(storage.list().entries).toHaveLength(1);
   });
 
   it('emits an entry event for live streaming', () => {

@@ -1,5 +1,6 @@
 import type { IncomingMessage, ServerResponse } from 'node:http';
 import type { Storage } from '../types.js';
+import type { Recorder } from '../recorder.js';
 
 type NextFn = (err?: unknown) => void;
 
@@ -10,7 +11,7 @@ function sendJson(res: ServerResponse, status: number, body: unknown): void {
 }
 
 /** Connect-style middleware serving the entries API under `${basePath}/api`. */
-export function createApiMiddleware(storage: Storage, basePath: string) {
+export function createApiMiddleware(storage: Storage, recorder: Recorder, basePath: string) {
   const apiPrefix = `${basePath}/api`;
 
   return function telescopeApiMiddleware(req: IncomingMessage, res: ServerResponse, next: NextFn) {
@@ -37,6 +38,16 @@ export function createApiMiddleware(storage: Storage, basePath: string) {
     if (pathname === `${apiPrefix}/entries` && req.method === 'DELETE') {
       storage.clear();
       return sendJson(res, 200, { ok: true });
+    }
+
+    if (pathname === `${apiPrefix}/pause` && req.method === 'GET') {
+      return sendJson(res, 200, { paused: recorder.paused });
+    }
+
+    // ponytail: state in a query param, so no request body parsing.
+    if (pathname === `${apiPrefix}/pause` && req.method === 'POST') {
+      recorder.paused = url.searchParams.get('paused') === 'true';
+      return sendJson(res, 200, { paused: recorder.paused });
     }
 
     if (pathname === `${apiPrefix}/counts` && req.method === 'GET') {

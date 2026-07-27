@@ -34,7 +34,7 @@ export function telescope(userConfig: TelescopeConfig = {}): Plugin {
       }
       server.httpServer?.once('close', () => uninstallStream?.());
 
-      server.middlewares.use(createApiMiddleware(storage, config.path));
+      server.middlewares.use(createApiMiddleware(storage, recorder, config.path));
 
       // sirv resolves relative asset URLs against the request's directory, so a
       // request for the bare mount path (no trailing slash) must redirect first.
