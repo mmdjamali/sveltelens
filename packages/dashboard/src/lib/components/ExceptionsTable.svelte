@@ -25,10 +25,10 @@
 <Table.Root class="rounded-field overflow-hidden bg-base-200">
   <Table.Header class="bg-base-300">
     <Table.Row>
-      <Table.Head class="text-base-content/60 w-48 pl-4 text-xs">Class</Table.Head>
-      <Table.Head class="text-base-content/60 text-xs">Message</Table.Head>
-      <Table.Head class="text-base-content/60 w-56 text-xs">Location</Table.Head>
-      <Table.Head class="text-base-content/60 w-28 pr-4 text-right text-xs">Happened</Table.Head>
+      <Table.Head class="text-base-content/60 uppercase tracking-wider w-48 pl-4 text-xs">Class</Table.Head>
+      <Table.Head class="text-base-content/60 uppercase tracking-wider text-xs">Message</Table.Head>
+      <Table.Head class="text-base-content/60 uppercase tracking-wider w-56 text-xs">Location</Table.Head>
+      <Table.Head class="text-base-content/60 uppercase tracking-wider w-28 pr-4 text-right text-xs">Happened</Table.Head>
     </Table.Row>
   </Table.Header>
   <Table.Body>

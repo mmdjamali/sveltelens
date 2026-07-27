@@ -13,11 +13,11 @@
 <Table.Root class="rounded-field overflow-hidden bg-base-200">
   <Table.Header class="bg-base-300">
     <Table.Row>
-      <Table.Head class="text-base-content/60 w-24 pl-4 text-xs">Method</Table.Head>
-      <Table.Head class="text-base-content/60 text-xs">URI</Table.Head>
-      <Table.Head class="text-base-content/60 w-20 text-center text-xs">Status</Table.Head>
-      <Table.Head class="text-base-content/60 w-24 text-right text-xs">Duration</Table.Head>
-      <Table.Head class="text-base-content/60 w-28 pr-4 text-right text-xs">Happened</Table.Head>
+      <Table.Head class="text-base-content/60 uppercase tracking-wider w-24 pl-4 text-xs">Method</Table.Head>
+      <Table.Head class="text-base-content/60 uppercase tracking-wider text-xs">URI</Table.Head>
+      <Table.Head class="text-base-content/60 uppercase tracking-wider w-20 text-center text-xs">Status</Table.Head>
+      <Table.Head class="text-base-content/60 uppercase tracking-wider w-24 text-right text-xs">Duration</Table.Head>
+      <Table.Head class="text-base-content/60 uppercase tracking-wider w-28 pr-4 text-right text-xs">Happened</Table.Head>
     </Table.Row>
   </Table.Header>
   <Table.Body>

@@ -14,9 +14,9 @@
 <Table.Root class="rounded-field overflow-hidden bg-base-200">
   <Table.Header class="bg-base-300">
     <Table.Row>
-      <Table.Head class="text-base-content/60 pl-4 text-xs">SQL</Table.Head>
-      <Table.Head class="text-base-content/60 w-24 text-xs">Time</Table.Head>
-      <Table.Head class="text-base-content/60 w-28 pr-4 text-right text-xs">Happened</Table.Head>
+      <Table.Head class="text-base-content/60 uppercase tracking-wider pl-4 text-xs">SQL</Table.Head>
+      <Table.Head class="text-base-content/60 uppercase tracking-wider w-24 text-xs">Time</Table.Head>
+      <Table.Head class="text-base-content/60 uppercase tracking-wider w-28 pr-4 text-right text-xs">Happened</Table.Head>
     </Table.Row>
   </Table.Header>
   <Table.Body>
