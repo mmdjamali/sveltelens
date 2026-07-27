@@ -22,6 +22,7 @@ export const telescopeHandle: Handle = async ({ event, resolve }) => {
 
   const { recorder, config } = state;
   const path = event.url.pathname;
+  const pathWithQuery = path + event.url.search;
   if (matchesIgnore(path, config.ignore)) return resolve(event);
 
   const requestId = generateId();
@@ -54,7 +55,7 @@ export const telescopeHandle: Handle = async ({ event, resolve }) => {
         offsetMs: 0,
         payload: {
           method: event.request.method,
-          path,
+          path: pathWithQuery,
           routeId: event.route.id,
           status: response.status,
           hostname,
@@ -78,7 +79,7 @@ export const telescopeHandle: Handle = async ({ event, resolve }) => {
         offsetMs: 0,
         payload: {
           method: event.request.method,
-          path,
+          path: pathWithQuery,
           routeId: event.route.id,
           status: 500,
           hostname,
