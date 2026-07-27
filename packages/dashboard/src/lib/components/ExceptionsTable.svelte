@@ -25,10 +25,10 @@
 <Table.Root>
   <Table.Header>
     <Table.Row>
-      <Table.Head class="text-muted-foreground w-48 pl-4 text-xs">Class</Table.Head>
-      <Table.Head class="text-muted-foreground text-xs">Message</Table.Head>
-      <Table.Head class="text-muted-foreground w-56 text-xs">Location</Table.Head>
-      <Table.Head class="text-muted-foreground w-28 pr-4 text-right text-xs">Happened</Table.Head>
+      <Table.Head class="text-base-content/60 w-48 pl-4 text-xs">Class</Table.Head>
+      <Table.Head class="text-base-content/60 text-xs">Message</Table.Head>
+      <Table.Head class="text-base-content/60 w-56 text-xs">Location</Table.Head>
+      <Table.Head class="text-base-content/60 w-28 pr-4 text-right text-xs">Happened</Table.Head>
     </Table.Row>
   </Table.Header>
   <Table.Body>
@@ -39,21 +39,21 @@
       >
         <Table.Cell class="py-0 pl-4">
           <span class="flex items-center gap-1.5">
-            <span class="text-destructive truncate font-mono text-xs font-bold">{entry.payload.name}</span>
+            <span class="text-error truncate font-mono text-xs font-bold">{entry.payload.name}</span>
             {#if count > 1}
-              <Badge variant="soft" class="bg-destructive/10 text-destructive h-4 min-w-4 rounded-full px-1 text-[10px]">
+              <Badge variant="soft" class="badge-error h-4 min-w-4 rounded-full px-1 text-[10px]">
                 {count}
               </Badge>
             {/if}
           </span>
         </Table.Cell>
-        <Table.Cell class="text-foreground max-w-0 truncate py-0 text-xs" title={entry.payload.message}>
+        <Table.Cell class="text-base-content max-w-0 truncate py-0 text-xs" title={entry.payload.message}>
           {entry.payload.message}
         </Table.Cell>
-        <Table.Cell class="text-muted-foreground max-w-0 truncate py-0 font-mono text-xs" title={location ?? ""}>
+        <Table.Cell class="text-base-content/60 max-w-0 truncate py-0 font-mono text-xs" title={location ?? ""}>
           {location ?? "—"}
         </Table.Cell>
-        <Table.Cell class="text-muted-foreground py-0 pr-4 text-right text-xs" title={formatAbsoluteTime(entry.timestamp)}>
+        <Table.Cell class="text-base-content/60 py-0 pr-4 text-right text-xs" title={formatAbsoluteTime(entry.timestamp)}>
           {timeAgo(entry.timestamp)}
         </Table.Cell>
       </Table.Row>

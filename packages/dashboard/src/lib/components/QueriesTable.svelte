@@ -14,9 +14,9 @@
 <Table.Root>
   <Table.Header>
     <Table.Row>
-      <Table.Head class="text-muted-foreground pl-4 text-xs">SQL</Table.Head>
-      <Table.Head class="text-muted-foreground w-24 text-xs">Time</Table.Head>
-      <Table.Head class="text-muted-foreground w-28 pr-4 text-right text-xs">Happened</Table.Head>
+      <Table.Head class="text-base-content/60 pl-4 text-xs">SQL</Table.Head>
+      <Table.Head class="text-base-content/60 w-24 text-xs">Time</Table.Head>
+      <Table.Head class="text-base-content/60 w-28 pr-4 text-right text-xs">Happened</Table.Head>
     </Table.Row>
   </Table.Header>
   <Table.Body>
@@ -28,7 +28,7 @@
         <Table.Cell class="max-w-0 py-0 pl-4">
           <div class="flex min-w-0 items-center gap-2">
             {#if entry.payload.connection}
-              <Badge variant="soft" class="bg-muted text-muted-foreground shrink-0">{entry.payload.connection}</Badge>
+              <Badge variant="soft" class="bg-base-300 text-base-content/60 shrink-0">{entry.payload.connection}</Badge>
             {/if}
             <code
               class="min-w-0 truncate font-mono text-xs"
@@ -40,7 +40,7 @@
         <Table.Cell class="py-0">
           <Badge variant="soft" class={durationClass(entry.durationMs)}>{formatDuration(entry.durationMs)}</Badge>
         </Table.Cell>
-        <Table.Cell class="text-muted-foreground py-0 pr-4 text-right text-xs" title={formatAbsoluteTime(entry.timestamp)}>
+        <Table.Cell class="text-base-content/60 py-0 pr-4 text-right text-xs" title={formatAbsoluteTime(entry.timestamp)}>
           {timeAgo(entry.timestamp)}
         </Table.Cell>
       </Table.Row>

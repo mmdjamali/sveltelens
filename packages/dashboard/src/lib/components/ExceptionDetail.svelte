@@ -14,7 +14,7 @@
 </script>
 
 <div class="mx-auto max-w-[1140px] px-4 pt-6">
-  <div class="card overflow-hidden rounded-lg border border-border bg-card">
+  <div class="card bg-base-200">
     <DetailHeader
       backHref="{base}/exceptions"
       backLabel="Exceptions"
@@ -24,30 +24,30 @@
     />
     <div class="p-4">
       {#if location}
-        <p class="text-muted-foreground mb-3 font-mono text-xs">{location}</p>
+        <p class="text-base-content/60 mb-3 font-mono text-xs">{location}</p>
       {/if}
 
-      <h3 class="text-muted-foreground mb-1.5 text-xs font-medium">Message</h3>
-      <p class="text-destructive mb-4 text-xs break-all">{entry.payload.message}</p>
+      <h3 class="text-base-content/60 mb-1.5 text-xs font-medium">Message</h3>
+      <p class="text-error mb-4 text-xs break-all">{entry.payload.message}</p>
 
-      <h3 class="text-muted-foreground mb-1.5 text-xs font-medium">Stack trace</h3>
+      <h3 class="text-base-content/60 mb-1.5 text-xs font-medium">Stack trace</h3>
       <pre
-        class="text-destructive bg-destructive/5 border-destructive/20 max-h-96 overflow-auto rounded-md border border-border p-3 font-mono text-xs whitespace-pre-wrap">{entry.payload.stack ??
+        class="text-error bg-error/5 border-error/20 max-h-96 overflow-auto rounded-box border border-base-300 p-3 font-mono text-xs whitespace-pre-wrap">{entry.payload.stack ??
           entry.payload.message}</pre>
 
-      <h3 class="text-muted-foreground mt-4 mb-1.5 text-xs font-medium">Request context</h3>
+      <h3 class="text-base-content/60 mt-4 mb-1.5 text-xs font-medium">Request context</h3>
       {#if requestEntry}
         <a
           href="{base}/requests/{requestEntry.id}"
-          class="hover:bg-accent hover:text-accent-foreground flex items-center gap-2 rounded-md border border-border p-2.5 text-xs transition-colors"
+          class="hover:bg-base-300 flex items-center gap-2 rounded-box border border-base-300 p-2.5 text-xs transition-colors"
         >
           <Badge variant="soft" class={methodClass(requestEntry.payload.method)}>{requestEntry.payload.method}</Badge>
           <span class="min-w-0 flex-1 truncate font-mono">{requestEntry.payload.path}</span>
           <Badge variant="soft" class={statusClass(requestEntry.payload.status)}>{requestEntry.payload.status}</Badge>
-          <span class="text-muted-foreground shrink-0">{formatDuration(requestEntry.durationMs)}</span>
+          <span class="text-base-content/60 shrink-0">{formatDuration(requestEntry.durationMs)}</span>
         </a>
       {:else}
-        <p class="text-muted-foreground text-xs italic">not triggered during a request</p>
+        <p class="text-base-content/60 text-xs italic">not triggered during a request</p>
       {/if}
     </div>
   </div>

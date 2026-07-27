@@ -13,11 +13,11 @@
 <Table.Root>
   <Table.Header>
     <Table.Row>
-      <Table.Head class="text-muted-foreground w-24 pl-4 text-xs">Method</Table.Head>
-      <Table.Head class="text-muted-foreground text-xs">URI</Table.Head>
-      <Table.Head class="text-muted-foreground w-20 text-center text-xs">Status</Table.Head>
-      <Table.Head class="text-muted-foreground w-24 text-right text-xs">Duration</Table.Head>
-      <Table.Head class="text-muted-foreground w-28 pr-4 text-right text-xs">Happened</Table.Head>
+      <Table.Head class="text-base-content/60 w-24 pl-4 text-xs">Method</Table.Head>
+      <Table.Head class="text-base-content/60 text-xs">URI</Table.Head>
+      <Table.Head class="text-base-content/60 w-20 text-center text-xs">Status</Table.Head>
+      <Table.Head class="text-base-content/60 w-24 text-right text-xs">Duration</Table.Head>
+      <Table.Head class="text-base-content/60 w-28 pr-4 text-right text-xs">Happened</Table.Head>
     </Table.Row>
   </Table.Header>
   <Table.Body>
@@ -29,18 +29,18 @@
         <Table.Cell class="py-0 pl-4">
           <Badge variant="soft" class={methodClass(entry.payload.method)}>{entry.payload.method}</Badge>
         </Table.Cell>
-        <Table.Cell class="text-foreground max-w-0 truncate py-0 font-mono text-xs" title={entry.payload.url}>
+        <Table.Cell class="text-base-content max-w-0 truncate py-0 font-mono text-xs" title={entry.payload.url}>
           {entry.payload.url}
         </Table.Cell>
         <Table.Cell class="py-0 text-center">
           {#if entry.payload.status !== null}
             <Badge variant="soft" class={statusClass(entry.payload.status)}>{entry.payload.status}</Badge>
           {:else}
-            <span class="text-muted-foreground text-xs">—</span>
+            <span class="text-base-content/60 text-xs">—</span>
           {/if}
         </Table.Cell>
-        <Table.Cell class="text-muted-foreground py-0 text-right text-xs">{formatDuration(entry.durationMs)}</Table.Cell>
-        <Table.Cell class="text-muted-foreground py-0 pr-4 text-right text-xs" title={formatAbsoluteTime(entry.timestamp)}>
+        <Table.Cell class="text-base-content/60 py-0 text-right text-xs">{formatDuration(entry.durationMs)}</Table.Cell>
+        <Table.Cell class="text-base-content/60 py-0 pr-4 text-right text-xs" title={formatAbsoluteTime(entry.timestamp)}>
           {timeAgo(entry.timestamp)}
         </Table.Cell>
       </Table.Row>

@@ -18,8 +18,8 @@
   const isDetail = $derived(page.route.id?.endsWith("/[id]") ?? false);
 </script>
 
-<div class="min-h-screen bg-background">
-  <header class="border-b border-border">
+<div class="min-h-screen bg-base-100">
+  <header class="border-b border-base-300">
     <div class="mx-auto flex h-14 max-w-[1140px] items-center justify-between px-4">
       <a href="{base}" class="flex items-center gap-3">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" class="size-7">
@@ -34,7 +34,7 @@
       {#if !isDetail}
         <div class="flex items-center gap-2">
           <button
-            class="btn-muted"
+            class="btn btn-ghost btn-square text-primary border border-base-300"
             onclick={() => store.togglePause()}
             title={store.paused ? "Resume recording" : "Pause recording"}
           >
@@ -44,7 +44,7 @@
               <IconPlayerPause class="size-4" />
             {/if}
           </button>
-          <button class="btn-muted" onclick={() => store.clear()} title="Clear entries">
+          <button class="btn btn-ghost btn-square text-error border border-base-300" onclick={() => store.clear()} title="Clear entries">
             <IconTrash class="size-4" />
           </button>
         </div>
@@ -61,22 +61,3 @@
     </main>
   </div>
 </div>
-
-<style>
-  .btn-muted {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.5rem;
-    border-radius: 6px;
-    color: #9ca3af;
-    background: #1f2937;
-    border: 1px solid #4b5563;
-    cursor: pointer;
-    transition: color 0.15s, background 0.15s;
-  }
-  .btn-muted:hover {
-    color: #f3f4f6;
-    background: #374151;
-  }
-</style>

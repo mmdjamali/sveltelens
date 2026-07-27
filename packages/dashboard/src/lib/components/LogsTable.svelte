@@ -13,9 +13,9 @@
 <Table.Root>
   <Table.Header>
     <Table.Row>
-      <Table.Head class="text-muted-foreground w-24 pl-4 text-xs">Level</Table.Head>
-      <Table.Head class="text-muted-foreground text-xs">Message</Table.Head>
-      <Table.Head class="text-muted-foreground w-28 pr-4 text-right text-xs">Happened</Table.Head>
+      <Table.Head class="text-base-content/60 w-24 pl-4 text-xs">Level</Table.Head>
+      <Table.Head class="text-base-content/60 text-xs">Message</Table.Head>
+      <Table.Head class="text-base-content/60 w-28 pr-4 text-right text-xs">Happened</Table.Head>
     </Table.Row>
   </Table.Header>
   <Table.Body>
@@ -28,12 +28,12 @@
           <Badge variant="soft" class="uppercase {levelClass(entry.payload.level)}">{entry.payload.level}</Badge>
         </Table.Cell>
         <Table.Cell
-          class="text-foreground max-w-0 truncate py-0 font-mono text-xs"
+          class="text-base-content max-w-0 truncate py-0 font-mono text-xs"
           title={stripAnsi(entry.payload.message)}
         >
           {stripAnsi(entry.payload.message)}
         </Table.Cell>
-        <Table.Cell class="text-muted-foreground py-0 pr-4 text-right text-xs" title={formatAbsoluteTime(entry.timestamp)}>
+        <Table.Cell class="text-base-content/60 py-0 pr-4 text-right text-xs" title={formatAbsoluteTime(entry.timestamp)}>
           {timeAgo(entry.timestamp)}
         </Table.Cell>
       </Table.Row>

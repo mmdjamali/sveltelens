@@ -6,14 +6,14 @@
   let search = $state("");
 </script>
 
-<div class="card overflow-hidden rounded-lg border border-border bg-card">
-  <div class="flex items-center justify-between border-b border-border bg-muted px-4 py-3">
+<div class="card bg-base-200">
+  <div class="flex items-center justify-between border-b border-base-300 bg-base-300 px-4 py-3">
     <h2 class="m-0 text-sm font-semibold">Exceptions</h2>
     <div class="relative w-48">
-      <IconSearch class="text-muted-foreground pointer-events-none absolute left-2.5 top-1/2 size-4 -translate-y-1/2" />
+      <IconSearch class="text-base-content/60 pointer-events-none absolute left-2.5 top-1/2 size-4 -translate-y-1/2" />
       <input
         type="text"
-        class="w-full rounded-md border border-border bg-card px-3 py-1.5 pl-8 text-xs text-foreground placeholder:text-muted-foreground"
+        class="input w-full pl-8 text-xs"
         placeholder="Search Tag"
         bind:value={search}
       />

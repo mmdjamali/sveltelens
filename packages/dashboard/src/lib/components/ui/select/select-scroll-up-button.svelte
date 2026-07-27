@@ -12,9 +12,8 @@
 
 <SelectPrimitive.ScrollUpButton
 	bind:ref
-	data-slot="select-scroll-up-button"
-	class={cn("bg-popover z-10 flex cursor-default items-center justify-center py-1 [&_svg:not([class*='size-'])]:size-4 top-0 w-full", className)}
+	class={cn("z-10 flex cursor-default items-center justify-center py-1 w-full", className)}
 	{...restProps}
 >
-	<ChevronUpIcon  />
+	<ChevronUpIcon class="size-4" />
 </SelectPrimitive.ScrollUpButton>

@@ -11,7 +11,7 @@
 </script>
 
 <div class="mx-auto max-w-[1140px] px-4 pt-6">
-  <div class="card overflow-hidden rounded-lg border border-border bg-card">
+  <div class="card bg-base-200">
     <DetailHeader
       backHref="{base}/client-requests"
       backLabel="HTTP Client"
@@ -22,17 +22,17 @@
       durationMs={entry.durationMs}
     />
 
-    <div class="table-responsive border-t border-border">
+    <div class="table-responsive border-t border-base-300">
       <table class="w-full border-collapse text-sm">
         <tbody>
-          <tr class="border-b border-border">
-            <td class="text-muted-foreground w-44 px-4 py-2.5 align-top">Method</td>
+          <tr class="border-b border-base-300">
+            <td class="text-base-content/60 w-44 px-4 py-2.5 align-top">Method</td>
             <td class="px-4 py-2.5">
               <Badge variant="soft" class={methodClass(entry.payload.method)}>{entry.payload.method}</Badge>
             </td>
           </tr>
-          <tr class="border-b border-border">
-            <td class="text-muted-foreground w-44 px-4 py-2.5 align-top">Status</td>
+          <tr class="border-b border-base-300">
+            <td class="text-base-content/60 w-44 px-4 py-2.5 align-top">Status</td>
             <td class="px-4 py-2.5">
               {#if entry.payload.status !== null}
                 <Badge variant="soft" class={statusClass(entry.payload.status)}>{entry.payload.status}</Badge>
@@ -42,9 +42,9 @@
             </td>
           </tr>
           {#if entry.payload.error}
-            <tr class="border-b border-border">
-              <td class="text-muted-foreground w-44 px-4 py-2.5 align-top">Error</td>
-              <td class="text-destructive px-4 py-2.5 break-all">{entry.payload.error}</td>
+            <tr class="border-b border-base-300">
+              <td class="text-base-content/60 w-44 px-4 py-2.5 align-top">Error</td>
+              <td class="text-error px-4 py-2.5 break-all">{entry.payload.error}</td>
             </tr>
           {/if}
         </tbody>
@@ -53,55 +53,55 @@
   </div>
 
   <!-- Request Headers -->
-  <div class="card mt-5 overflow-hidden rounded-lg border border-border bg-card">
-    <div class="flex items-center justify-between border-b border-border bg-muted px-4 py-3">
+  <div class="card mt-5 bg-base-200">
+    <div class="flex items-center justify-between border-b border-base-300 bg-base-300 px-4 py-3">
       <h2 class="m-0 text-sm font-semibold">Request Headers</h2>
     </div>
     <KeyValueTable rows={Object.entries(entry.payload.requestHeaders)} />
   </div>
 
   <!-- Request Payload -->
-  <div class="card mt-5 overflow-hidden rounded-lg border border-border bg-card">
-    <div class="flex items-center justify-between border-b border-border bg-muted px-4 py-3">
+  <div class="card mt-5 bg-base-200">
+    <div class="flex items-center justify-between border-b border-base-300 bg-base-300 px-4 py-3">
       <h2 class="m-0 text-sm font-semibold">Request Payload</h2>
     </div>
     <div class="p-4">
       {#if entry.payload.requestBody}
         {#if entry.payload.requestBody.truncated}
-          <p class="mb-2 text-xs text-amber-400">
+          <p class="mb-2 text-xs text-warning">
             truncated ({formatBytes(entry.payload.requestBody.size)})
           </p>
         {/if}
         <BodyView text={entry.payload.requestBody.text} contentType={entry.payload.requestBody.contentType} />
       {:else}
-        <p class="text-muted-foreground text-xs italic">no request body</p>
+        <p class="text-base-content/60 text-xs italic">no request body</p>
       {/if}
     </div>
   </div>
 
   <!-- Response Headers -->
-  <div class="card mt-5 overflow-hidden rounded-lg border border-border bg-card">
-    <div class="flex items-center justify-between border-b border-border bg-muted px-4 py-3">
+  <div class="card mt-5 bg-base-200">
+    <div class="flex items-center justify-between border-b border-base-300 bg-base-300 px-4 py-3">
       <h2 class="m-0 text-sm font-semibold">Response Headers</h2>
     </div>
     <KeyValueTable rows={Object.entries(entry.payload.responseHeaders)} />
   </div>
 
   <!-- Response -->
-  <div class="card mt-5 overflow-hidden rounded-lg border border-border bg-card">
-    <div class="flex items-center justify-between border-b border-border bg-muted px-4 py-3">
+  <div class="card mt-5 bg-base-200">
+    <div class="flex items-center justify-between border-b border-base-300 bg-base-300 px-4 py-3">
       <h2 class="m-0 text-sm font-semibold">Response</h2>
     </div>
     <div class="p-4">
       {#if entry.payload.responseBody}
         {#if entry.payload.responseBody.truncated}
-          <p class="mb-2 text-xs text-amber-400">
+          <p class="mb-2 text-xs text-warning">
             truncated ({formatBytes(entry.payload.responseBody.size)})
           </p>
         {/if}
         <BodyView text={entry.payload.responseBody.text} contentType={entry.payload.responseBody.contentType} />
       {:else}
-        <p class="text-muted-foreground text-xs italic">no response body</p>
+        <p class="text-base-content/60 text-xs italic">no response body</p>
       {/if}
     </div>
   </div>

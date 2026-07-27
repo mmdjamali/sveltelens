@@ -5,7 +5,7 @@
 </script>
 
 <div class="flex flex-col items-center justify-center gap-2 py-16">
-  <IconInbox class="text-muted-foreground/40 size-10" />
-  <p class="text-foreground text-sm font-medium">No entries yet</p>
-  <p class="text-muted-foreground text-xs">{message}</p>
+  <IconInbox class="text-base-content/30 size-10" />
+  <p class="text-base-content text-sm font-medium">No entries yet</p>
+  <p class="text-base-content/60 text-xs">{message}</p>
 </div>

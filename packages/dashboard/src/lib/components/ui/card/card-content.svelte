@@ -12,8 +12,7 @@
 
 <div
 	bind:this={ref}
-	data-slot="card-content"
-	class={cn("px-(--card-spacing)", className)}
+	class={cn("px-6 pb-6", className)}
 	{...restProps}
 >
 	{@render children?.()}

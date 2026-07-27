@@ -19,11 +19,11 @@
 </script>
 
 {#if text === null}
-  <p class="text-muted-foreground text-xs italic">no body</p>
+  <p class="text-base-content/60 text-xs italic">no body</p>
 {:else}
-  <div class="bg-muted/40 rounded-md border">
+  <div class="bg-base-300/40 rounded-box border border-base-300">
     <button
-      class="text-muted-foreground hover:text-foreground flex w-full items-center gap-1 px-3 py-1.5 text-left text-xs transition-colors"
+      class="text-base-content/60 hover:text-base-content flex w-full items-center gap-1 px-3 py-1.5 text-left text-xs transition-colors"
       onclick={() => (open = !open)}
     >
       {#if open}
