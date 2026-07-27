@@ -19,7 +19,7 @@
     <li>
       <a
         href="{base}/{slug}"
-        class="flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors {active
+        class="flex items-center gap-3 rounded-field px-3 py-2 text-sm transition-colors {active
           ? 'text-primary bg-base-300'
           : 'text-base-content/60 hover:text-base-content hover:bg-base-300'}"
       >
