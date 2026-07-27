@@ -4,42 +4,36 @@
   import DetailHeader from "./DetailHeader.svelte";
   import KeyValueTable from "./KeyValueTable.svelte";
   import BodyView from "./BodyView.svelte";
-  import * as Tabs from "./ui/tabs/index.js";
   import { Badge } from "./ui/badge/index.js";
   import { ENTRY_TYPE_BADGE_LABELS, type Entry } from "../types";
 
   let { entry }: { entry: Extract<Entry, { type: "client-request" }> } = $props();
-
-  let tab = $state<"request-headers" | "request-payload" | "response-headers" | "response">("request-payload");
-  $effect(() => {
-    entry.id;
-    tab = "request-payload";
-  });
 </script>
 
-<div class="bg-background flex h-full flex-col">
-  <DetailHeader
-    backHref="{base}/client-requests"
-    badgeLabel={ENTRY_TYPE_BADGE_LABELS["client-request"]}
-    badgeClass={entryTypeClass("client-request")}
-    title={entry.payload.url}
-    timestamp={entry.timestamp}
-    durationMs={entry.durationMs}
-  />
+<div class="mx-auto max-w-[1140px] px-4 pt-6">
+  <div class="card overflow-hidden rounded-lg border border-border bg-card">
+    <DetailHeader
+      backHref="{base}/client-requests"
+      backLabel="HTTP Client"
+      badgeLabel={ENTRY_TYPE_BADGE_LABELS["client-request"]}
+      badgeClass={entryTypeClass("client-request")}
+      title={entry.payload.url}
+      timestamp={entry.timestamp}
+      durationMs={entry.durationMs}
+    />
 
-  <div class="border-b p-4">
-    <div class="overflow-hidden rounded-lg border">
-      <table class="w-full text-xs">
+    <div class="table-responsive border-t border-border">
+      <table class="w-full border-collapse text-sm">
         <tbody>
-          <tr class="border-b last:border-0">
-            <td class="text-muted-foreground bg-muted/20 w-44 shrink-0 px-3 py-2 align-top font-medium">Method</td>
-            <td class="px-3 py-2">
+          <tr class="border-b border-border">
+            <td class="text-muted-foreground w-44 px-4 py-2.5 align-top">Method</td>
+            <td class="px-4 py-2.5">
               <Badge variant="soft" class={methodClass(entry.payload.method)}>{entry.payload.method}</Badge>
             </td>
           </tr>
-          <tr class="border-b last:border-0">
-            <td class="text-muted-foreground bg-muted/20 w-44 shrink-0 px-3 py-2 align-top font-medium">Status</td>
-            <td class="px-3 py-2">
+          <tr class="border-b border-border">
+            <td class="text-muted-foreground w-44 px-4 py-2.5 align-top">Status</td>
+            <td class="px-4 py-2.5">
               {#if entry.payload.status !== null}
                 <Badge variant="soft" class={statusClass(entry.payload.status)}>{entry.payload.status}</Badge>
               {:else}

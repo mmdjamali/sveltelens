@@ -1,11 +1,9 @@
 <script lang="ts">
-  import { timeAgo, formatDuration } from "../format";
   import { Badge } from "./ui/badge/index.js";
-  import { Button } from "./ui/button/index.js";
-  import IconArrowLeft from "@tabler/icons-svelte/icons/arrow-left";
 
   let {
     backHref,
+    backLabel,
     badgeLabel,
     badgeClass,
     title,
