@@ -4,10 +4,13 @@
   import SearchBar from "$lib/components/SearchBar.svelte";
 </script>
 
-<div class="card bg-base-200">
-  <div class="flex items-center justify-between border-b border-base-300 bg-base-300 px-4 py-3">
+<div class="card rounded-field overflow-hidden pb-6">
+  <div
+    class="flex items-center justify-between border-b border-base-300 bg-base-300 rounded-box mb-4 ps-6 pe-3 py-3"
+  >
     <h2 class="m-0 text-sm font-semibold">Requests</h2>
     <SearchBar bind:value={store.search} />
   </div>
+
   <RequestsTable entries={store.filtered("request")} />
 </div>
