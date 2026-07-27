@@ -13,12 +13,28 @@
   import KeyValueTable from "./KeyValueTable.svelte";
   import BodyView from "./BodyView.svelte";
   import { Badge } from "./ui/badge/index.js";
-  import { ENTRY_TYPE_BADGE_LABELS, ENTRY_TYPE_SLUGS, type Entry } from "../types";
+  import {
+    ENTRY_TYPE_BADGE_LABELS,
+    ENTRY_TYPE_SLUGS,
+    type Entry,
+  } from "../types";
 
-  let { entry, related }: { entry: Extract<Entry, { type: "request" }>; related: Entry[] } = $props();
+  let {
+    entry,
+    related,
+  }: { entry: Extract<Entry, { type: "request" }>; related: Entry[] } =
+    $props();
 
-  const timelineTotalMs = $derived(Math.max(1, entry.durationMs ?? 0, ...related.map((e) => (e.offsetMs ?? 0) + (e.durationMs ?? 0))));
-  const timelineRows = $derived([...related].sort((a, b) => (a.offsetMs ?? 0) - (b.offsetMs ?? 0)));
+  const timelineTotalMs = $derived(
+    Math.max(
+      1,
+      entry.durationMs ?? 0,
+      ...related.map((e) => (e.offsetMs ?? 0) + (e.durationMs ?? 0)),
+    ),
+  );
+  const timelineRows = $derived(
+    [...related].sort((a, b) => (a.offsetMs ?? 0) - (b.offsetMs ?? 0)),
+  );
 </script>
 
 <div class="mx-auto max-w-[1140px] px-4 pt-6">
@@ -37,31 +53,49 @@
       <table class="w-full border-collapse text-sm">
         <tbody>
           <tr class="border-b border-base-300">
-            <td class="text-base-content/60 w-44 px-4 py-2.5 align-top">Method</td>
+            <td class="text-base-content/60 w-44 px-4 py-2.5 align-top"
+              >Method</td
+            >
             <td class="px-4 py-2.5">
-              <Badge variant="soft" class={methodClass(entry.payload.method)}>{entry.payload.method}</Badge>
+              <Badge variant="soft" class={methodClass(entry.payload.method)}
+                >{entry.payload.method}</Badge
+              >
             </td>
           </tr>
           <tr class="border-b border-base-300">
-            <td class="text-base-content/60 w-44 px-4 py-2.5 align-top">Path</td>
-            <td class="px-4 py-2.5 break-all font-mono text-xs">{entry.payload.path}</td>
+            <td class="text-base-content/60 w-44 px-4 py-2.5 align-top">Path</td
+            >
+            <td class="px-4 py-2.5 break-all font-mono text-xs"
+              >{entry.payload.path}</td
+            >
           </tr>
           <tr class="border-b border-base-300">
-            <td class="text-base-content/60 w-44 px-4 py-2.5 align-top">Controller / route handler</td>
-            <td class="px-4 py-2.5 break-all">{entry.payload.routeId ?? "—"}</td>
+            <td class="text-base-content/60 w-44 px-4 py-2.5 align-top"
+              >Controller / route handler</td
+            >
+            <td class="px-4 py-2.5 break-all">{entry.payload.routeId ?? "—"}</td
+            >
           </tr>
           <tr class="border-b border-base-300">
-            <td class="text-base-content/60 w-44 px-4 py-2.5 align-top">Status</td>
+            <td class="text-base-content/60 w-44 px-4 py-2.5 align-top"
+              >Status</td
+            >
             <td class="px-4 py-2.5">
-              <Badge variant="soft" class={statusClass(entry.payload.status)}>{entry.payload.status}</Badge>
+              <Badge variant="soft" class={statusClass(entry.payload.status)}
+                >{entry.payload.status}</Badge
+              >
             </td>
           </tr>
           <tr class="border-b border-base-300">
-            <td class="text-base-content/60 w-44 px-4 py-2.5 align-top">Duration</td>
+            <td class="text-base-content/60 w-44 px-4 py-2.5 align-top"
+              >Duration</td
+            >
             <td class="px-4 py-2.5">{formatDuration(entry.durationMs)}</td>
           </tr>
           <tr class="border-b border-base-300">
-            <td class="text-base-content/60 w-44 px-4 py-2.5 align-top">Hostname</td>
+            <td class="text-base-content/60 w-44 px-4 py-2.5 align-top"
+              >Hostname</td
+            >
             <td class="px-4 py-2.5 break-all">{entry.payload.hostname}</td>
           </tr>
           <tr class="border-b border-base-300">
@@ -69,9 +103,13 @@
             <td class="px-4 py-2.5">{entry.payload.ip ?? "—"}</td>
           </tr>
           <tr class="border-b border-base-300">
-            <td class="text-base-content/60 w-44 px-4 py-2.5 align-top">Memory usage</td>
+            <td class="text-base-content/60 w-44 px-4 py-2.5 align-top"
+              >Memory usage</td
+            >
             <td class="px-4 py-2.5">
-              {entry.payload.memoryUsageBytes !== null ? formatBytes(entry.payload.memoryUsageBytes) : "—"}
+              {entry.payload.memoryUsageBytes !== null
+                ? formatBytes(entry.payload.memoryUsageBytes)
+                : "—"}
             </td>
           </tr>
         </tbody>
@@ -81,7 +119,9 @@
 
   <!-- Request Headers -->
   <div class="card mt-5 bg-base-200">
-    <div class="flex items-center justify-between border-b border-base-300 bg-base-300 px-4 py-3">
+    <div
+      class="flex items-center justify-between border-b border-base-300 bg-base-300 px-4 py-3"
+    >
       <h2 class="m-0 text-sm font-semibold">Headers</h2>
     </div>
     <KeyValueTable rows={Object.entries(entry.payload.requestHeaders)} />
@@ -89,7 +129,9 @@
 
   <!-- Request Payload -->
   <div class="card mt-5 bg-base-200">
-    <div class="flex items-center justify-between border-b border-base-300 bg-base-300 px-4 py-3">
+    <div
+      class="flex items-center justify-between border-b border-base-300 bg-base-300 px-4 py-3"
+    >
       <h2 class="m-0 text-sm font-semibold">Request Payload</h2>
     </div>
     <div class="p-4">
@@ -99,7 +141,10 @@
             truncated ({formatBytes(entry.payload.requestBody.size)})
           </p>
         {/if}
-        <BodyView text={entry.payload.requestBody.text} contentType={entry.payload.requestBody.contentType} />
+        <BodyView
+          text={entry.payload.requestBody.text}
+          contentType={entry.payload.requestBody.contentType}
+        />
       {:else}
         <p class="text-base-content/60 text-xs italic">no request body</p>
       {/if}
@@ -108,7 +153,9 @@
 
   <!-- Response Headers -->
   <div class="card mt-5 bg-base-200">
-    <div class="flex items-center justify-between border-b border-base-300 bg-base-300 px-4 py-3">
+    <div
+      class="flex items-center justify-between border-b border-base-300 bg-base-300 px-4 py-3"
+    >
       <h2 class="m-0 text-sm font-semibold">Response Headers</h2>
     </div>
     <KeyValueTable rows={Object.entries(entry.payload.responseHeaders)} />
@@ -116,7 +163,9 @@
 
   <!-- Response -->
   <div class="card mt-5 bg-base-200">
-    <div class="flex items-center justify-between border-b border-base-300 bg-base-300 px-4 py-3">
+    <div
+      class="flex items-center justify-between border-b border-base-300 bg-base-300 px-4 py-3"
+    >
       <h2 class="m-0 text-sm font-semibold">Response</h2>
     </div>
     <div class="p-4">
@@ -126,7 +175,10 @@
             truncated ({formatBytes(entry.payload.responseBody.size)})
           </p>
         {/if}
-        <BodyView text={entry.payload.responseBody.text} contentType={entry.payload.responseBody.contentType} />
+        <BodyView
+          text={entry.payload.responseBody.text}
+          contentType={entry.payload.responseBody.contentType}
+        />
       {:else}
         <p class="text-base-content/60 text-xs italic">no response body</p>
       {/if}
@@ -135,42 +187,70 @@
 
   <!-- Related entries -->
   <div class="card mt-5 bg-base-200">
-    <div class="flex items-center justify-between border-b border-base-300 bg-base-300 px-4 py-3">
-      <h2 class="m-0 text-sm font-semibold">Related entries {#if related.length}({related.length}){/if}</h2>
+    <div
+      class="flex items-center justify-between border-b border-base-300 bg-base-300 px-4 py-3"
+    >
+      <h2 class="m-0 text-sm font-semibold">
+        Related entries {#if related.length}({related.length}){/if}
+      </h2>
     </div>
     <div class="p-4">
       {#if related.length === 0}
-        <p class="text-base-content/60 text-xs italic">no related entries for this request</p>
+        <p class="text-base-content/60 text-xs italic">
+          no related entries for this request
+        </p>
       {:else}
         <div class="space-y-1">
           {#each timelineRows as row (row.id)}
             {@const leftPct = ((row.offsetMs ?? 0) / timelineTotalMs) * 100}
-            {@const widthPct = row.durationMs !== null ? Math.max((row.durationMs / timelineTotalMs) * 100, 0.6) : 0}
+            {@const widthPct =
+              row.durationMs !== null
+                ? Math.max((row.durationMs / timelineTotalMs) * 100, 0.6)
+                : 0}
             <a
               href="{base}/{ENTRY_TYPE_SLUGS[row.type]}/{row.id}"
               class="hover:bg-base-300 grid grid-cols-[minmax(0,240px)_1fr_3.5rem] items-center gap-3 rounded-md px-2 py-1.5 text-left transition-colors"
-              title="{ENTRY_TYPE_BADGE_LABELS[row.type]} · offset {row.offsetMs !== null ? formatDuration(row.offsetMs) : '-'} · duration {formatDuration(row.durationMs)}"
+              title="{ENTRY_TYPE_BADGE_LABELS[
+                row.type
+              ]} · offset {row.offsetMs !== null
+                ? formatDuration(row.offsetMs)
+                : '-'} · duration {formatDuration(row.durationMs)}"
             >
               <span class="flex min-w-0 items-center gap-1.5">
-                <Badge variant="soft" class="shrink-0 tracking-wide uppercase {entryTypeClass(row.type)}">
+                <Badge
+                  variant="soft"
+                  class="shrink-0 tracking-wide uppercase {entryTypeClass(
+                    row.type,
+                  )}"
+                >
                   {ENTRY_TYPE_BADGE_LABELS[row.type]}
                 </Badge>
-                <span class="min-w-0 truncate text-xs" title={entrySummary(row)}>{entrySummary(row)}</span>
+                <span class="min-w-0 truncate text-xs" title={entrySummary(row)}
+                  >{entrySummary(row)}</span
+                >
               </span>
-              <span class="bg-base-300/40 relative h-2 w-full overflow-hidden rounded-full">
+              <span
+                class="bg-base-300/40 relative h-2 w-full overflow-hidden rounded-full"
+              >
                 {#if row.durationMs !== null}
                   <span
-                    class="absolute inset-y-0 rounded-full {entryTypeBarClass(row.type)}"
+                    class="absolute inset-y-0 rounded-full {entryTypeBarClass(
+                      row.type,
+                    )}"
                     style="left: {leftPct}%; width: {widthPct}%"
                   ></span>
                 {:else}
                   <span
-                    class="absolute top-1/2 size-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full {entryTypeBarClass(row.type)}"
+                    class="absolute top-1/2 size-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full {entryTypeBarClass(
+                      row.type,
+                    )}"
                     style="left: {leftPct}%"
                   ></span>
                 {/if}
               </span>
-              <span class="text-base-content/60 shrink-0 text-right text-xs tabular-nums">
+              <span
+                class="text-base-content/60 shrink-0 text-right text-xs tabular-nums"
+              >
                 {row.durationMs !== null ? formatDuration(row.durationMs) : "—"}
               </span>
             </a>
