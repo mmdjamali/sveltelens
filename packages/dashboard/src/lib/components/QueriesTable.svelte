@@ -12,17 +12,17 @@
 </script>
 
 <Table.Root>
-  <Table.Header class="bg-background sticky top-0 z-10">
-    <Table.Row class="hover:bg-transparent">
+  <Table.Header>
+    <Table.Row>
       <Table.Head class="text-muted-foreground pl-4 text-xs">SQL</Table.Head>
       <Table.Head class="text-muted-foreground w-24 text-xs">Time</Table.Head>
-      <Table.Head class="text-muted-foreground w-28 pr-4 text-right text-xs">Time</Table.Head>
+      <Table.Head class="text-muted-foreground w-28 pr-4 text-right text-xs">Happened</Table.Head>
     </Table.Row>
   </Table.Header>
   <Table.Body>
-    {#each entries as entry, i (entry.id)}
+    {#each entries as entry (entry.id)}
       <Table.Row
-        class="h-11 cursor-pointer {i % 2 === 1 ? 'bg-muted/20' : ''}"
+        class="h-11 cursor-pointer"
         onclick={() => goto(`${base}/queries/${entry.id}`)}
       >
         <Table.Cell class="max-w-0 py-0 pl-4">
