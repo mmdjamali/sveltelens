@@ -20,8 +20,8 @@
 
 <div class="min-h-screen bg-base-100">
   <header class="border-b border-base-300">
-    <div class="mx-auto flex h-14 max-w-[1140px] items-center justify-between px-4">
-      <a href="{base}" class="flex items-center gap-3">
+    <div class="mx-auto flex h-14 max-w-6xl items-center justify-between px-4">
+      <a href={base} class="flex items-center gap-3">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" class="size-7">
           <path
             class="fill-primary"
@@ -52,7 +52,7 @@
     </div>
   </header>
 
-  <div class="mx-auto flex max-w-[1140px] gap-0 px-4 pt-6">
+  <div class="mx-auto flex max-w-6xl gap-8 px-4 pt-6">
     <nav class="w-2/12 shrink-0">
       <AppSidebar />
     </nav>
