@@ -19,7 +19,7 @@
 </script>
 
 <div class="min-h-screen bg-base-100">
-  <header class="border-b border-base-300">
+  <header class="border-b bg-base-100 border-base-300 sticky top-0 z-50">
     <div class="mx-auto flex h-14 max-w-6xl items-center justify-between px-4">
       <a href={base} class="flex items-center gap-3">
         <svg
@@ -60,11 +60,11 @@
     </div>
   </header>
 
-  <div class="mx-auto flex max-w-6xl gap-8 px-4 pt-6">
-    <nav class="w-2/12 shrink-0">
+  <div class="mx-auto relative flex max-w-6xl gap-8 px-4 pt-6">
+    <nav class="w-52 h-fit shrink-0 block sticky top-20.25">
       <AppSidebar />
     </nav>
-    <main class="w-10/12 min-w-0">
+    <main class="w-full min-w-0">
       {@render children()}
     </main>
   </div>
