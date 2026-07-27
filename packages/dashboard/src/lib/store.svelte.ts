@@ -1,4 +1,4 @@
-import { fetchEntries, fetchCounts, clearEntries, connectStream } from './api';
+import { fetchEntries, fetchCounts, clearEntries, connectStream, fetchPaused, setPaused } from './api';
 import { ENTRY_TYPES, type Entry, type EntryType } from './types';
 
 function emptyCounts(): Record<EntryType, number> {
@@ -29,6 +29,7 @@ class TelescopeStore {
   }
 
   async init(): Promise<void> {
+    this.paused = await fetchPaused();
     await this.refresh();
     this.connect();
   }
@@ -54,6 +55,7 @@ class TelescopeStore {
 
   togglePause(): void {
     this.paused = !this.paused;
+    void setPaused(this.paused);
   }
 
   async clear(): Promise<void> {

@@ -35,6 +35,17 @@ export async function fetchCounts(): Promise<Record<EntryType, number>> {
   return res.json();
 }
 
+export async function fetchPaused(): Promise<boolean> {
+  const res = await fetch(`${base}/api/pause`);
+  if (!res.ok) throw new Error(`failed to fetch pause state: ${res.status}`);
+  return (await res.json()).paused;
+}
+
+/** Pausing is server-side: the recorder stops storing entries until resumed. */
+export async function setPaused(paused: boolean): Promise<void> {
+  await fetch(`${base}/api/pause?paused=${paused}`, { method: 'POST' });
+}
+
 export async function clearEntries(): Promise<void> {
   await fetch(`${base}/api/entries`, { method: 'DELETE' });
 }
