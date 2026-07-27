@@ -71,7 +71,7 @@ export type Entry = {
   offsetMs: number | null;
 } & EntryPayload;
 
-export const ENTRY_TYPES: EntryType[] = ['request', 'client-request', 'query', 'log', 'exception'];
+export const ENTRY_TYPES: EntryType[] = ['request', 'query', 'client-request', 'log', 'exception'];
 
 export const ENTRY_TYPE_LABELS: Record<EntryType, string> = {
   request: 'Requests',
@@ -80,6 +80,20 @@ export const ENTRY_TYPE_LABELS: Record<EntryType, string> = {
   log: 'Logs',
   exception: 'Exceptions',
 };
+
+// URL slugs match Telescope's own routes exactly (plural, "client-requests" despite the
+// singular EntryType value) — see the sidebar/route layout spec in the project CLAUDE.md.
+export const ENTRY_TYPE_SLUGS: Record<EntryType, string> = {
+  request: 'requests',
+  'client-request': 'client-requests',
+  query: 'queries',
+  log: 'logs',
+  exception: 'exceptions',
+};
+
+export const SLUG_TO_ENTRY_TYPE: Record<string, EntryType> = Object.fromEntries(
+  ENTRY_TYPES.map((t) => [ENTRY_TYPE_SLUGS[t], t])
+);
 
 // Singular labels for badges on a single entry (as opposed to the sidebar's category counts above).
 export const ENTRY_TYPE_BADGE_LABELS: Record<EntryType, string> = {

@@ -171,6 +171,31 @@ export function formatBytes(bytes: number): string {
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
+const SLOW_QUERY_MS = 100;
+
+// Telescope-style slow query highlighting: red past 2x threshold, amber past threshold.
+export function durationClass(ms: number | null): string {
+  if (ms === null) return NEUTRAL;
+  if (ms >= SLOW_QUERY_MS * 2) return RED;
+  if (ms >= SLOW_QUERY_MS) return AMBER;
+  return NEUTRAL;
+}
+
+// Naive positional `?` placeholder interpolation for display only — not SQL-safe, never
+// used for anything but showing the developer what ran.
+export function interpolateSql(sql: string, params: unknown[]): string {
+  if (!params.length) return sql;
+  let i = 0;
+  return sql.replace(/\?/g, () => (i < params.length ? JSON.stringify(params[i++]) : '?'));
+}
+
+// First "at <file>:<line>:<col>" frame in a stack trace, e.g. "src/routes/+page.server.ts:42:11".
+export function exceptionLocation(stack: string | null): string | null {
+  if (!stack) return null;
+  const match = stack.match(/at .*?\(?([^\s()]+:\d+:\d+)\)?/);
+  return match ? match[1] : null;
+}
+
 export function prettyJson(text: string | null): string {
   if (text === null) return '';
   try {

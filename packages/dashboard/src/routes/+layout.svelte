@@ -5,10 +5,13 @@
   import { store } from "$lib/store.svelte";
   import AppSidebar from "$lib/components/Sidebar.svelte";
   import * as Sidebar from "$lib/components/ui/sidebar/index.js";
-  import * as Select from "$lib/components/ui/select/index.js";
   import { Input } from "$lib/components/ui/input/index.js";
+  import { Button } from "$lib/components/ui/button/index.js";
   import { Separator } from "$lib/components/ui/separator/index.js";
   import IconSearch from "@tabler/icons-svelte/icons/search";
+  import IconPlayerPause from "@tabler/icons-svelte/icons/player-pause";
+  import IconPlayerPlay from "@tabler/icons-svelte/icons/player-play";
+  import IconTrash from "@tabler/icons-svelte/icons/trash";
 
   let { children } = $props();
 
@@ -16,10 +19,8 @@
     store.init();
   });
 
-  const methods = ["all", "GET", "POST", "PUT", "PATCH", "DELETE"];
-
-  // ponytail: entry ids are UUIDs, so any non-type segment is a detail page.
-  const isDetail = $derived(page.route.id === "/[id]");
+  // Every list route is "/<slug>"; every detail route is "/<slug>/[id]".
+  const isDetail = $derived(page.route.id?.endsWith("/[id]") ?? false);
 </script>
 
 <Sidebar.Provider class="h-svh overflow-hidden">
@@ -40,16 +41,24 @@
             bind:value={store.search}
           />
         </div>
-        <Select.Root type="single" bind:value={store.methodFilter}>
-          <Select.Trigger class="ml-auto w-36">
-            {store.methodFilter === "all" ? "All methods" : store.methodFilter}
-          </Select.Trigger>
-          <Select.Content>
-            {#each methods as m (m)}
-              <Select.Item value={m} label={m === "all" ? "All methods" : m} />
-            {/each}
-          </Select.Content>
-        </Select.Root>
+        <Button variant="ghost" size="icon" class="ml-auto" onclick={() => store.togglePause()}>
+          {#if store.paused}
+            <IconPlayerPlay class="size-4" />
+            <span class="sr-only">Resume recording</span>
+          {:else}
+            <IconPlayerPause class="size-4" />
+            <span class="sr-only">Pause recording</span>
+          {/if}
+        </Button>
+        <Button
+          variant="ghost"
+          size="icon"
+          class="text-destructive hover:text-destructive hover:bg-destructive/10"
+          onclick={() => store.clear()}
+        >
+          <IconTrash class="size-4" />
+          <span class="sr-only">Clear entries</span>
+        </Button>
       {/if}
     </header>
 

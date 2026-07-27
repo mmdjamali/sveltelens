@@ -4,7 +4,7 @@ import type { PageLoad } from './$types';
 
 export const load: PageLoad = async ({ params }) => {
   const entry = await fetchEntry(params.id);
-  if (!entry) error(404, 'entry not found');
+  if (!entry || entry.type !== 'request') error(404, 'entry not found');
 
   const related = entry.requestId
     ? (await fetchEntries({ requestId: entry.requestId, limit: 200 })).entries.filter((e) => e.id !== entry.id)

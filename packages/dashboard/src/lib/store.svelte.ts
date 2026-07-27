@@ -11,18 +11,15 @@ class TelescopeStore {
   paused = $state(false);
   connected = $state(false);
   search = $state('');
-  methodFilter = $state<string>('all');
 
   private ws: WebSocket | null = null;
 
+  filtered<T extends EntryType>(type: T): Extract<Entry, { type: T }>[];
+  filtered(type: 'all'): Entry[];
   filtered(type: EntryType | 'all'): Entry[] {
     const q = this.search.trim().toLowerCase();
     return this.entries.filter((e) => {
       if (type !== 'all' && e.type !== type) return false;
-      if (this.methodFilter !== 'all') {
-        const method = 'method' in e.payload ? e.payload.method : null;
-        if (method !== this.methodFilter) return false;
-      }
       if (q && !JSON.stringify(e).toLowerCase().includes(q)) return false;
       return true;
     });

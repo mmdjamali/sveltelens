@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { store } from '$lib/store.svelte';
-  import EntryTable from '$lib/components/EntryTable.svelte';
+  // Redirects to /requests in +page.ts — this shell only exists because adapter-static
+  // needs a prerendered `/` page to serve as the fallback for every dynamic route.
 </script>
-
-<EntryTable entries={store.filtered('all')} />

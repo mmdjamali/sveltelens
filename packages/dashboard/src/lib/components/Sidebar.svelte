@@ -2,16 +2,12 @@
   import { base } from '$app/paths';
   import { page } from '$app/state';
   import { store } from '../store.svelte';
-  import { ENTRY_TYPES, ENTRY_TYPE_LABELS, ENTRY_TYPE_ICONS } from '../types';
+  import { ENTRY_TYPES, ENTRY_TYPE_LABELS, ENTRY_TYPE_ICONS, ENTRY_TYPE_SLUGS } from '../types';
   import * as Sidebar from './ui/sidebar/index.js';
-  import IconListDetails from '@tabler/icons-svelte/icons/list-details';
-  import IconPlayerPause from '@tabler/icons-svelte/icons/player-pause';
-  import IconPlayerPlay from '@tabler/icons-svelte/icons/player-play';
   import IconTelescope from '@tabler/icons-svelte/icons/telescope';
-  import IconTrash from '@tabler/icons-svelte/icons/trash';
 
-  const total = $derived(Object.values(store.counts).reduce((a, b) => a + b, 0));
-  const current = $derived(page.params.type ?? (page.route.id === '/' ? 'all' : null));
+  // route.id is the matched pattern (e.g. "/requests/[id]"), unaffected by the configurable base path.
+  const current = $derived(page.route.id?.split('/')[1] ?? null);
 </script>
 
 <Sidebar.Root>
@@ -35,27 +31,14 @@
 
   <Sidebar.Content>
     <Sidebar.Group>
-      <Sidebar.GroupLabel>Entries</Sidebar.GroupLabel>
       <Sidebar.GroupContent>
         <Sidebar.Menu>
-          <Sidebar.MenuItem>
-            <Sidebar.MenuButton isActive={current === 'all'}>
-              {#snippet child({ props })}
-                <a href="{base}/" {...props}>
-                  <IconListDetails />
-                  <span>All entries</span>
-                </a>
-              {/snippet}
-            </Sidebar.MenuButton>
-            <Sidebar.MenuBadge>{total}</Sidebar.MenuBadge>
-          </Sidebar.MenuItem>
-
           {#each ENTRY_TYPES as type (type)}
             {@const Icon = ENTRY_TYPE_ICONS[type]}
             <Sidebar.MenuItem>
-              <Sidebar.MenuButton isActive={current === type}>
+              <Sidebar.MenuButton isActive={current === ENTRY_TYPE_SLUGS[type]}>
                 {#snippet child({ props })}
-                  <a href="{base}/{type}" {...props}>
+                  <a href="{base}/{ENTRY_TYPE_SLUGS[type]}" {...props}>
                     <Icon />
                     <span>{ENTRY_TYPE_LABELS[type]}</span>
                   </a>
@@ -68,29 +51,4 @@
       </Sidebar.GroupContent>
     </Sidebar.Group>
   </Sidebar.Content>
-
-  <Sidebar.Footer>
-    <Sidebar.Menu>
-      <Sidebar.MenuItem>
-        <Sidebar.MenuButton onclick={() => store.togglePause()}>
-          {#if store.paused}
-            <IconPlayerPlay />
-            <span>Resume stream</span>
-          {:else}
-            <IconPlayerPause />
-            <span>Pause stream</span>
-          {/if}
-        </Sidebar.MenuButton>
-      </Sidebar.MenuItem>
-      <Sidebar.MenuItem>
-        <Sidebar.MenuButton
-          class="text-destructive hover:text-destructive hover:bg-destructive/10"
-          onclick={() => store.clear()}
-        >
-          <IconTrash />
-          <span>Clear entries</span>
-        </Sidebar.MenuButton>
-      </Sidebar.MenuItem>
-    </Sidebar.Menu>
-  </Sidebar.Footer>
 </Sidebar.Root>

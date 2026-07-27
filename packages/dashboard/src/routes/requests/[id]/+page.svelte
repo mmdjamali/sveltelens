@@ -1,5 +1,5 @@
 <script lang="ts">
-  import EntryDetail from '$lib/components/EntryDetail.svelte';
+  import RequestDetail from '$lib/components/RequestDetail.svelte';
   import { store } from '$lib/store.svelte';
 
   let { data } = $props();
@@ -14,4 +14,4 @@
   });
 </script>
 
-<EntryDetail entry={data.entry} {related} />
+<RequestDetail entry={data.entry} {related} />
