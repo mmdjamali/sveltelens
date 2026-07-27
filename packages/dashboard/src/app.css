@@ -83,3 +83,113 @@
   color: var(--syntax-comment);
   font-style: italic;
 }
+
+::-moz-selection {
+	@apply bg-base-content/90 text-base-100;
+}
+
+::selection {
+	@apply bg-base-content/90 text-base-100;
+}
+
+.loading {
+	mask-image: url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20fill%3D%22currentColor%22%20d%3D%22M12%2C1A11%2C11%2C0%2C1%2C0%2C23%2C12%2C11%2C11%2C0%2C0%2C0%2C12%2C1Zm0%2C19a8%2C8%2C0%2C1%2C1%2C8-8A8%2C8%2C0%2C0%2C1%2C12%2C20Z%22%20opacity%3D%220.25%22%2F%3E%3Cpath%20fill%3D%22currentColor%22%20d%3D%22M12%2C4a8%2C8%2C0%2C0%2C1%2C7.89%2C6.7A1.53%2C1.53%2C0%2C0%2C0%2C21.38%2C12h0a1.5%2C1.5%2C0%2C0%2C0%2C1.48-1.75%2C11%2C11%2C0%2C0%2C0-21.72%2C0A1.5%2C1.5%2C0%2C0%2C0%2C2.62%2C12h0a1.53%2C1.53%2C0%2C0%2C0%2C1.49-1.3A8%2C8%2C0%2C0%2C1%2C12%2C4Z%22%3E%3CanimateTransform%20attributeName%3D%22transform%22%20dur%3D%220.75s%22%20repeatCount%3D%22indefinite%22%20type%3D%22rotate%22%20values%3D%220%2012%2012%3B360%2012%2012%22%2F%3E%3C%2Fpath%3E%3C%2Fsvg%3E');
+	-webkit-mask-image: url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20fill%3D%22currentColor%22%20d%3D%22M12%2C1A11%2C11%2C0%2C1%2C0%2C23%2C12%2C11%2C11%2C0%2C0%2C0%2C12%2C1Zm0%2C19a8%2C8%2C0%2C1%2C1%2C8-8A8%2C8%2C0%2C0%2C1%2C12%2C20Z%22%20opacity%3D%220.25%22%2F%3E%3Cpath%20fill%3D%22currentColor%22%20d%3D%22M12%2C4a8%2C8%2C0%2C0%2C1%2C7.89%2C6.7A1.53%2C1.53%2C0%2C0%2C0%2C21.38%2C12h0a1.5%2C1.5%2C0%2C0%2C0%2C1.48-1.75%2C11%2C11%2C0%2C0%2C0-21.72%2C0A1.5%2C1.5%2C0%2C0%2C0%2C2.62%2C12h0a1.53%2C1.53%2C0%2C0%2C0%2C1.49-1.3A8%2C8%2C0%2C0%2C1%2C12%2C4Z%22%3E%3CanimateTransform%20attributeName%3D%22transform%22%20dur%3D%220.75s%22%20repeatCount%3D%22indefinite%22%20type%3D%22rotate%22%20values%3D%220%2012%2012%3B360%2012%2012%22%2F%3E%3C%2Fpath%3E%3C%2Fsvg%3E');
+}
+
+.loading-spinner {
+	mask-image: url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20fill%3D%22currentColor%22%20d%3D%22M12%2C1A11%2C11%2C0%2C1%2C0%2C23%2C12%2C11%2C11%2C0%2C0%2C0%2C12%2C1Zm0%2C19a8%2C8%2C0%2C1%2C1%2C8-8A8%2C8%2C0%2C0%2C1%2C12%2C20Z%22%20opacity%3D%220.25%22%2F%3E%3Cpath%20fill%3D%22currentColor%22%20d%3D%22M12%2C4a8%2C8%2C0%2C0%2C1%2C7.89%2C6.7A1.53%2C1.53%2C0%2C0%2C0%2C21.38%2C12h0a1.5%2C1.5%2C0%2C0%2C0%2C1.48-1.75%2C11%2C11%2C0%2C0%2C0-21.72%2C0A1.5%2C1.5%2C0%2C0%2C0%2C2.62%2C12h0a1.53%2C1.53%2C0%2C0%2C0%2C1.49-1.3A8%2C8%2C0%2C0%2C1%2C12%2C4Z%22%3E%3CanimateTransform%20attributeName%3D%22transform%22%20dur%3D%220.75s%22%20repeatCount%3D%22indefinite%22%20type%3D%22rotate%22%20values%3D%220%2012%2012%3B360%2012%2012%22%2F%3E%3C%2Fpath%3E%3C%2Fsvg%3E');
+	-webkit-mask-image: url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20fill%3D%22currentColor%22%20d%3D%22M12%2C1A11%2C11%2C0%2C1%2C0%2C23%2C12%2C11%2C11%2C0%2C0%2C0%2C12%2C1Zm0%2C19a8%2C8%2C0%2C1%2C1%2C8-8A8%2C8%2C0%2C0%2C1%2C12%2C20Z%22%20opacity%3D%220.25%22%2F%3E%3Cpath%20fill%3D%22currentColor%22%20d%3D%22M12%2C4a8%2C8%2C0%2C0%2C1%2C7.89%2C6.7A1.53%2C1.53%2C0%2C0%2C0%2C21.38%2C12h0a1.5%2C1.5%2C0%2C0%2C0%2C1.48-1.75%2C11%2C11%2C0%2C0%2C0-21.72%2C0A1.5%2C1.5%2C0%2C0%2C0%2C2.62%2C12h0a1.53%2C1.53%2C0%2C0%2C0%2C1.49-1.3A8%2C8%2C0%2C0%2C1%2C12%2C4Z%22%3E%3CanimateTransform%20attributeName%3D%22transform%22%20dur%3D%220.75s%22%20repeatCount%3D%22indefinite%22%20type%3D%22rotate%22%20values%3D%220%2012%2012%3B360%2012%2012%22%2F%3E%3C%2Fpath%3E%3C%2Fsvg%3E');
+}
+
+.loading-dots {
+	mask-image: url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%3E%3Ccircle%20cx%3D%224%22%20cy%3D%2212%22%20r%3D%220%22%20fill%3D%22currentColor%22%3E%3Canimate%20fill%3D%22freeze%22%20attributeName%3D%22r%22%20begin%3D%220%3BSVGUppsBdVN.end%22%20calcMode%3D%22spline%22%20dur%3D%220.5s%22%20keySplines%3D%22.36%2C.6%2C.31%2C1%22%20values%3D%220%3B3%22%2F%3E%3Canimate%20fill%3D%22freeze%22%20attributeName%3D%22cx%22%20begin%3D%22SVGqCgsydxJ.end%22%20calcMode%3D%22spline%22%20dur%3D%220.5s%22%20keySplines%3D%22.36%2C.6%2C.31%2C1%22%20values%3D%224%3B12%22%2F%3E%3Canimate%20fill%3D%22freeze%22%20attributeName%3D%22cx%22%20begin%3D%22SVG3PwDNd6F.end%22%20calcMode%3D%22spline%22%20dur%3D%220.5s%22%20keySplines%3D%22.36%2C.6%2C.31%2C1%22%20values%3D%2212%3B20%22%2F%3E%3Canimate%20id%3D%22SVG3V8yEdYE%22%20fill%3D%22freeze%22%20attributeName%3D%22r%22%20begin%3D%22SVG6wCQhd9Q.end%22%20calcMode%3D%22spline%22%20dur%3D%220.5s%22%20keySplines%3D%22.36%2C.6%2C.31%2C1%22%20values%3D%223%3B0%22%2F%3E%3Canimate%20id%3D%22SVGUppsBdVN%22%20fill%3D%22freeze%22%20attributeName%3D%22cx%22%20begin%3D%22SVG3V8yEdYE.end%22%20dur%3D%220.001s%22%20values%3D%2220%3B4%22%2F%3E%3C%2Fcircle%3E%3Ccircle%20cx%3D%224%22%20cy%3D%2212%22%20r%3D%223%22%20fill%3D%22currentColor%22%3E%3Canimate%20fill%3D%22freeze%22%20attributeName%3D%22cx%22%20begin%3D%220%3BSVGUppsBdVN.end%22%20calcMode%3D%22spline%22%20dur%3D%220.5s%22%20keySplines%3D%22.36%2C.6%2C.31%2C1%22%20values%3D%224%3B12%22%2F%3E%3Canimate%20fill%3D%22freeze%22%20attributeName%3D%22cx%22%20begin%3D%22SVGqCgsydxJ.end%22%20calcMode%3D%22spline%22%20dur%3D%220.5s%22%20keySplines%3D%22.36%2C.6%2C.31%2C1%22%20values%3D%2212%3B20%22%2F%3E%3Canimate%20id%3D%22SVG4PgJdbds%22%20fill%3D%22freeze%22%20attributeName%3D%22r%22%20begin%3D%22SVG3PwDNd6F.end%22%20calcMode%3D%22spline%22%20dur%3D%220.5s%22%20keySplines%3D%22.36%2C.6%2C.31%2C1%22%20values%3D%223%3B0%22%2F%3E%3Canimate%20id%3D%22SVG6wCQhd9Q%22%20fill%3D%22freeze%22%20attributeName%3D%22cx%22%20begin%3D%22SVG4PgJdbds.end%22%20dur%3D%220.001s%22%20values%3D%2220%3B4%22%2F%3E%3Canimate%20fill%3D%22freeze%22%20attributeName%3D%22r%22%20begin%3D%22SVG6wCQhd9Q.end%22%20calcMode%3D%22spline%22%20dur%3D%220.5s%22%20keySplines%3D%22.36%2C.6%2C.31%2C1%22%20values%3D%220%3B3%22%2F%3E%3C%2Fcircle%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%223%22%20fill%3D%22currentColor%22%3E%3Canimate%20fill%3D%22freeze%22%20attributeName%3D%22cx%22%20begin%3D%220%3BSVGUppsBdVN.end%22%20calcMode%3D%22spline%22%20dur%3D%220.5s%22%20keySplines%3D%22.36%2C.6%2C.31%2C1%22%20values%3D%2212%3B20%22%2F%3E%3Canimate%20id%3D%22SVG38aCdcdI%22%20fill%3D%22freeze%22%20attributeName%3D%22r%22%20begin%3D%22SVGqCgsydxJ.end%22%20calcMode%3D%22spline%22%20dur%3D%220.5s%22%20keySplines%3D%22.36%2C.6%2C.31%2C1%22%20values%3D%223%3B0%22%2F%3E%3Canimate%20id%3D%22SVG3PwDNd6F%22%20fill%3D%22freeze%22%20attributeName%3D%22cx%22%20begin%3D%22SVG38aCdcdI.end%22%20dur%3D%220.001s%22%20values%3D%2220%3B4%22%2F%3E%3Canimate%20fill%3D%22freeze%22%20attributeName%3D%22r%22%20begin%3D%22SVG3PwDNd6F.end%22%20calcMode%3D%22spline%22%20dur%3D%220.5s%22%20keySplines%3D%22.36%2C.6%2C.31%2C1%22%20values%3D%220%3B3%22%2F%3E%3Canimate%20fill%3D%22freeze%22%20attributeName%3D%22cx%22%20begin%3D%22SVG6wCQhd9Q.end%22%20calcMode%3D%22spline%22%20dur%3D%220.5s%22%20keySplines%3D%22.36%2C.6%2C.31%2C1%22%20values%3D%224%3B12%22%2F%3E%3C%2Fcircle%3E%3Ccircle%20cx%3D%2220%22%20cy%3D%2212%22%20r%3D%223%22%20fill%3D%22currentColor%22%3E%3Canimate%20id%3D%22SVGwaWzveSq%22%20fill%3D%22freeze%22%20attributeName%3D%22r%22%20begin%3D%220%3BSVGUppsBdVN.end%22%20calcMode%3D%22spline%22%20dur%3D%220.5s%22%20keySplines%3D%22.36%2C.6%2C.31%2C1%22%20values%3D%223%3B0%22%2F%3E%3Canimate%20id%3D%22SVGqCgsydxJ%22%20fill%3D%22freeze%22%20attributeName%3D%22cx%22%20begin%3D%22SVGwaWzveSq.end%22%20dur%3D%220.001s%22%20values%3D%2220%3B4%22%2F%3E%3Canimate%20fill%3D%22freeze%22%20attributeName%3D%22r%22%20begin%3D%22SVGqCgsydxJ.end%22%20calcMode%3D%22spline%22%20dur%3D%220.5s%22%20keySplines%3D%22.36%2C.6%2C.31%2C1%22%20values%3D%220%3B3%22%2F%3E%3Canimate%20fill%3D%22freeze%22%20attributeName%3D%22cx%22%20begin%3D%22SVG3PwDNd6F.end%22%20calcMode%3D%22spline%22%20dur%3D%220.5s%22%20keySplines%3D%22.36%2C.6%2C.31%2C1%22%20values%3D%224%3B12%22%2F%3E%3Canimate%20fill%3D%22freeze%22%20attributeName%3D%22cx%22%20begin%3D%22SVG6wCQhd9Q.end%22%20calcMode%3D%22spline%22%20dur%3D%220.5s%22%20keySplines%3D%22.36%2C.6%2C.31%2C1%22%20values%3D%2212%3B20%22%2F%3E%3C%2Fcircle%3E%3C%2Fsvg%3E');
+	-webkit-mask-image: url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%3E%3Ccircle%20cx%3D%224%22%20cy%3D%2212%22%20r%3D%220%22%20fill%3D%22currentColor%22%3E%3Canimate%20fill%3D%22freeze%22%20attributeName%3D%22r%22%20begin%3D%220%3BSVGUppsBdVN.end%22%20calcMode%3D%22spline%22%20dur%3D%220.5s%22%20keySplines%3D%22.36%2C.6%2C.31%2C1%22%20values%3D%220%3B3%22%2F%3E%3Canimate%20fill%3D%22freeze%22%20attributeName%3D%22cx%22%20begin%3D%22SVGqCgsydxJ.end%22%20calcMode%3D%22spline%22%20dur%3D%220.5s%22%20keySplines%3D%22.36%2C.6%2C.31%2C1%22%20values%3D%224%3B12%22%2F%3E%3Canimate%20fill%3D%22freeze%22%20attributeName%3D%22cx%22%20begin%3D%22SVG3PwDNd6F.end%22%20calcMode%3D%22spline%22%20dur%3D%220.5s%22%20keySplines%3D%22.36%2C.6%2C.31%2C1%22%20values%3D%2212%3B20%22%2F%3E%3Canimate%20id%3D%22SVG3V8yEdYE%22%20fill%3D%22freeze%22%20attributeName%3D%22r%22%20begin%3D%22SVG6wCQhd9Q.end%22%20calcMode%3D%22spline%22%20dur%3D%220.5s%22%20keySplines%3D%22.36%2C.6%2C.31%2C1%22%20values%3D%223%3B0%22%2F%3E%3Canimate%20id%3D%22SVGUppsBdVN%22%20fill%3D%22freeze%22%20attributeName%3D%22cx%22%20begin%3D%22SVG3V8yEdYE.end%22%20dur%3D%220.001s%22%20values%3D%2220%3B4%22%2F%3E%3C%2Fcircle%3E%3Ccircle%20cx%3D%224%22%20cy%3D%2212%22%20r%3D%223%22%20fill%3D%22currentColor%22%3E%3Canimate%20fill%3D%22freeze%22%20attributeName%3D%22cx%22%20begin%3D%220%3BSVGUppsBdVN.end%22%20calcMode%3D%22spline%22%20dur%3D%220.5s%22%20keySplines%3D%22.36%2C.6%2C.31%2C1%22%20values%3D%224%3B12%22%2F%3E%3Canimate%20fill%3D%22freeze%22%20attributeName%3D%22cx%22%20begin%3D%22SVGqCgsydxJ.end%22%20calcMode%3D%22spline%22%20dur%3D%220.5s%22%20keySplines%3D%22.36%2C.6%2C.31%2C1%22%20values%3D%2212%3B20%22%2F%3E%3Canimate%20id%3D%22SVG4PgJdbds%22%20fill%3D%22freeze%22%20attributeName%3D%22r%22%20begin%3D%22SVG3PwDNd6F.end%22%20calcMode%3D%22spline%22%20dur%3D%220.5s%22%20keySplines%3D%22.36%2C.6%2C.31%2C1%22%20values%3D%223%3B0%22%2F%3E%3Canimate%20id%3D%22SVG6wCQhd9Q%22%20fill%3D%22freeze%22%20attributeName%3D%22cx%22%20begin%3D%22SVG4PgJdbds.end%22%20dur%3D%220.001s%22%20values%3D%2220%3B4%22%2F%3E%3Canimate%20fill%3D%22freeze%22%20attributeName%3D%22r%22%20begin%3D%22SVG6wCQhd9Q.end%22%20calcMode%3D%22spline%22%20dur%3D%220.5s%22%20keySplines%3D%22.36%2C.6%2C.31%2C1%22%20values%3D%220%3B3%22%2F%3E%3C%2Fcircle%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%223%22%20fill%3D%22currentColor%22%3E%3Canimate%20fill%3D%22freeze%22%20attributeName%3D%22cx%22%20begin%3D%220%3BSVGUppsBdVN.end%22%20calcMode%3D%22spline%22%20dur%3D%220.5s%22%20keySplines%3D%22.36%2C.6%2C.31%2C1%22%20values%3D%2212%3B20%22%2F%3E%3Canimate%20id%3D%22SVG38aCdcdI%22%20fill%3D%22freeze%22%20attributeName%3D%22r%22%20begin%3D%22SVGqCgsydxJ.end%22%20calcMode%3D%22spline%22%20dur%3D%220.5s%22%20keySplines%3D%22.36%2C.6%2C.31%2C1%22%20values%3D%223%3B0%22%2F%3E%3Canimate%20id%3D%22SVG3PwDNd6F%22%20fill%3D%22freeze%22%20attributeName%3D%22cx%22%20begin%3D%22SVG38aCdcdI.end%22%20dur%3D%220.001s%22%20values%3D%2220%3B4%22%2F%3E%3Canimate%20fill%3D%22freeze%22%20attributeName%3D%22r%22%20begin%3D%22SVG3PwDNd6F.end%22%20calcMode%3D%22spline%22%20dur%3D%220.5s%22%20keySplines%3D%22.36%2C.6%2C.31%2C1%22%20values%3D%220%3B3%22%2F%3E%3Canimate%20fill%3D%22freeze%22%20attributeName%3D%22cx%22%20begin%3D%22SVG6wCQhd9Q.end%22%20calcMode%3D%22spline%22%20dur%3D%220.5s%22%20keySplines%3D%22.36%2C.6%2C.31%2C1%22%20values%3D%224%3B12%22%2F%3E%3C%2Fcircle%3E%3Ccircle%20cx%3D%2220%22%20cy%3D%2212%22%20r%3D%223%22%20fill%3D%22currentColor%22%3E%3Canimate%20id%3D%22SVGwaWzveSq%22%20fill%3D%22freeze%22%20attributeName%3D%22r%22%20begin%3D%220%3BSVGUppsBdVN.end%22%20calcMode%3D%22spline%22%20dur%3D%220.5s%22%20keySplines%3D%22.36%2C.6%2C.31%2C1%22%20values%3D%223%3B0%22%2F%3E%3Canimate%20id%3D%22SVGqCgsydxJ%22%20fill%3D%22freeze%22%20attributeName%3D%22cx%22%20begin%3D%22SVGwaWzveSq.end%22%20dur%3D%220.001s%22%20values%3D%2220%3B4%22%2F%3E%3Canimate%20fill%3D%22freeze%22%20attributeName%3D%22r%22%20begin%3D%22SVGqCgsydxJ.end%22%20calcMode%3D%22spline%22%20dur%3D%220.5s%22%20keySplines%3D%22.36%2C.6%2C.31%2C1%22%20values%3D%220%3B3%22%2F%3E%3Canimate%20fill%3D%22freeze%22%20attributeName%3D%22cx%22%20begin%3D%22SVG3PwDNd6F.end%22%20calcMode%3D%22spline%22%20dur%3D%220.5s%22%20keySplines%3D%22.36%2C.6%2C.31%2C1%22%20values%3D%224%3B12%22%2F%3E%3Canimate%20fill%3D%22freeze%22%20attributeName%3D%22cx%22%20begin%3D%22SVG6wCQhd9Q.end%22%20calcMode%3D%22spline%22%20dur%3D%220.5s%22%20keySplines%3D%22.36%2C.6%2C.31%2C1%22%20values%3D%2212%3B20%22%2F%3E%3C%2Fcircle%3E%3C%2Fsvg%3E');
+}
+
+@plugin "daisyui/theme" {
+	name: 'light';
+	default: true;
+	color-scheme: light;
+
+	--color-base-100: #ffffff;
+	--color-base-200: #f9fafb;
+	--color-base-300: #f2f4f7;
+	--color-base-content: #101828;
+
+	--color-primary: #0089cd;
+	--color-primary-content: #ffffff;
+
+	--color-secondary: #0061a8;
+	--color-secondary-content: #ffffff;
+
+	--color-accent: #06b6d4;
+	--color-accent-content: #ffffff;
+
+	--color-neutral: #475467;
+	--color-neutral-content: #ffffff;
+
+	--color-info: #2e90fa;
+	--color-info-content: #ffffff;
+
+	--color-success: #17b26a;
+	--color-success-content: #ffffff;
+
+	--color-warning: #f79009;
+	--color-warning-content: #ffffff;
+
+	--color-error: #f04438;
+	--color-error-content: #ffffff;
+
+	--radius-selector: 0.5rem;
+	--radius-field: 0.5rem;
+	--radius-box: 0.75rem;
+	--size-selector: 0.25rem;
+	--size-field: 0.25rem;
+	--border: 1px;
+	--depth: 1;
+	--noise: 0;
+}
+
+@plugin "daisyui/theme" {
+	name: 'dark';
+	color-scheme: dark;
+
+	--color-base-100: #111111;
+	--color-base-200: oklch(19% 0 0);
+	--color-base-300: oklch(22% 0 0);
+	--color-base-content: oklch(87.609% 0 0);
+
+	--color-primary: oklch(64% 0.13 245);
+	--color-primary-content: #ffffff;
+
+	--color-secondary: oklch(64% 0.15 285);
+	--color-secondary-content: oklch(14.5% 0.035 285);
+
+	--color-accent: oklch(70% 0.15 30);
+	--color-accent-content: oklch(14.26% 0.033 30);
+
+	--color-neutral: #1e293b;
+	--color-neutral-content: #cbd5e1;
+
+	--color-info: #38bdf8;
+	--color-info-content: #04141f;
+
+	--color-success: #10b981;
+	--color-success-content: #04130c;
+
+	--color-warning: #f59e0b;
+	--color-warning-content: #1a1206;
+
+	--color-error: #f43f5e;
+	--color-error-content: #ffffff;
+
+	--radius-selector: 0.75rem;
+	--radius-field: 0.75rem;
+	--radius-box: 1rem;
+	--size-selector: 0.25rem;
+	--size-field: 0.25rem;
+	--border: 1px;
+	--depth: 1;
+	--noise: 0;
+}
