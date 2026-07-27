@@ -19,6 +19,8 @@
     type Entry,
   } from "../types";
 
+  import ArrowLeftIcon from "@lucide/svelte/icons/arrow-left";
+
   let {
     entry,
     related,
@@ -37,11 +39,14 @@
   );
 </script>
 
-<div class="mx-auto max-w-6xl px-4 pb-6">
-  <div class="card bg-base-200">
+<a href="{base}/requests" class="btn btn-ghost border-base-300 mb-5">
+  <ArrowLeftIcon class="size-4" />
+  Back
+</a>
+
+<div class="mx-auto max-w-6xl pb-6">
+  <div class="card bg-base-200 rounded-field overflow-hidden">
     <DetailHeader
-      backHref="{base}/requests"
-      backLabel="Requests"
       badgeLabel={ENTRY_TYPE_BADGE_LABELS.request}
       badgeClass={entryTypeClass("request")}
       title={entry.payload.path}
@@ -118,7 +123,7 @@
   </div>
 
   <!-- Request Headers -->
-  <div class="card mt-5 bg-base-200">
+  <div class="card mt-5 bg-base-200 rounded-field overflow-hidden">
     <div
       class="flex items-center justify-between border-b border-base-300 bg-base-300 px-4 py-3"
     >
@@ -128,7 +133,7 @@
   </div>
 
   <!-- Request Payload -->
-  <div class="card mt-5 bg-base-200">
+  <div class="card mt-5 bg-base-200 rounded-field overflow-hidden">
     <div
       class="flex items-center justify-between border-b border-base-300 bg-base-300 px-4 py-3"
     >
@@ -152,7 +157,7 @@
   </div>
 
   <!-- Response Headers -->
-  <div class="card mt-5 bg-base-200">
+  <div class="card mt-5 bg-base-200 rounded-field overflow-hidden">
     <div
       class="flex items-center justify-between border-b border-base-300 bg-base-300 px-4 py-3"
     >
@@ -162,7 +167,7 @@
   </div>
 
   <!-- Response -->
-  <div class="card mt-5 bg-base-200">
+  <div class="card mt-5 bg-base-200 rounded-field overflow-hidden">
     <div
       class="flex items-center justify-between border-b border-base-300 bg-base-300 px-4 py-3"
     >
@@ -186,7 +191,7 @@
   </div>
 
   <!-- Related entries -->
-  <div class="card mt-5 bg-base-200">
+  <div class="card mt-5 bg-base-200 rounded-field overflow-hidden">
     <div
       class="flex items-center justify-between border-b border-base-300 bg-base-300 px-4 py-3"
     >
