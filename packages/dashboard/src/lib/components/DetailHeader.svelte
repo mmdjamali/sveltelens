@@ -20,18 +20,40 @@
   } = $props();
 </script>
 
-<div class="grid grid-cols-[auto_1fr] items-center gap-x-3 border-b px-4 py-2.5">
-  <Button variant="ghost" size="icon-lg" class="row-span-2 shrink-0" href={backHref}>
-    <IconArrowLeft class="size-5" />
-    <span class="sr-only">Back to list</span>
-  </Button>
-  <div class="flex min-w-0 items-center gap-2">
-    <Badge variant="soft" class="tracking-wide uppercase {badgeClass}">{badgeLabel}</Badge>
-    {#if title}
-      <h2 class="text-foreground min-w-0 truncate text-sm font-medium" {title}>{title}</h2>
-    {/if}
-  </div>
-  <p class="text-muted-foreground col-start-2 mt-0.5 text-xs">
-    {timeAgo(timestamp)}{durationMs !== undefined ? ` · ${formatDuration(durationMs)}` : ""}
-  </p>
+<div class="card-header flex items-center justify-between border-b border-border bg-muted px-4 py-3">
+  <h2 class="m-0 text-sm font-semibold">
+    <a href={backHref} class="text-indigo-400 hover:text-indigo-300">← {backLabel}</a>
+    <span class="ml-2 font-normal text-muted-foreground">/</span>
+  </h2>
 </div>
+<table class="w-full border-collapse text-sm">
+  <tbody>
+    <tr class="border-b border-border">
+      <td class="text-muted-foreground w-44 px-4 py-2.5 align-top">Happened</td>
+      <td class="px-4 py-2.5">
+        {new Date(timestamp).toLocaleString()}
+        <span class="text-muted-foreground">({new Date(timestamp).toLocaleTimeString()})</span>
+      </td>
+    </tr>
+    <tr class="border-b border-border">
+      <td class="text-muted-foreground w-44 px-4 py-2.5 align-top">Type</td>
+      <td class="px-4 py-2.5">
+        <Badge variant="soft" class={badgeClass}>{badgeLabel}</Badge>
+      </td>
+    </tr>
+    {#if title}
+      <tr class="border-b border-border">
+        <td class="text-muted-foreground w-44 px-4 py-2.5 align-top">Title</td>
+        <td class="px-4 py-2.5 break-all font-mono text-xs">{title}</td>
+      </tr>
+    {/if}
+    {#if durationMs !== undefined && durationMs !== null}
+      <tr class="border-b border-border">
+        <td class="text-muted-foreground w-44 px-4 py-2.5 align-top">Duration</td>
+        <td class="px-4 py-2.5">
+          {durationMs}ms
+        </td>
+      </tr>
+    {/if}
+  </tbody>
+</table>

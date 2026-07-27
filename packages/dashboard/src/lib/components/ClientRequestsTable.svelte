@@ -45,7 +45,7 @@
         </Table.Cell>
       </Table.Row>
     {:else}
-      <Table.Row class="hover:bg-transparent">
+      <Table.Row>
         <Table.Cell colspan={5}>
           <EmptyState message="Make an outgoing HTTP call and it'll show up here." />
         </Table.Cell>

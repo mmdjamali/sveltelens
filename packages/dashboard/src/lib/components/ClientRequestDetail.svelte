@@ -52,50 +52,57 @@
     </div>
   </div>
 
-  <Tabs.Root bind:value={tab} class="flex min-h-0 flex-1 flex-col gap-0">
-    <div class="border-b px-4">
-      <Tabs.List variant="line" class="h-auto gap-5 p-0">
-        <Tabs.Trigger value="request-headers" class="px-0 py-2.5">Request Headers</Tabs.Trigger>
-        <Tabs.Trigger value="request-payload" class="px-0 py-2.5">Request Payload</Tabs.Trigger>
-        <Tabs.Trigger value="response-headers" class="px-0 py-2.5">Response Headers</Tabs.Trigger>
-        <Tabs.Trigger value="response" class="px-0 py-2.5">Response</Tabs.Trigger>
-      </Tabs.List>
+  <!-- Request Headers -->
+  <div class="card mt-5 overflow-hidden rounded-lg border border-border bg-card">
+    <div class="flex items-center justify-between border-b border-border bg-muted px-4 py-3">
+      <h2 class="m-0 text-sm font-semibold">Request Headers</h2>
     </div>
+    <KeyValueTable rows={Object.entries(entry.payload.requestHeaders)} />
+  </div>
 
-    <div class="min-h-0 flex-1 overflow-auto p-4">
-      <Tabs.Content value="request-headers">
-        <KeyValueTable rows={Object.entries(entry.payload.requestHeaders)} />
-      </Tabs.Content>
-
-      <Tabs.Content value="request-payload">
-        {#if entry.payload.requestBody}
-          {#if entry.payload.requestBody.truncated}
-            <p class="mb-2 text-xs text-amber-600 dark:text-amber-400">
-              truncated ({formatBytes(entry.payload.requestBody.size)})
-            </p>
-          {/if}
-          <BodyView text={entry.payload.requestBody.text} contentType={entry.payload.requestBody.contentType} />
-        {:else}
-          <p class="text-muted-foreground text-xs italic">no request body</p>
-        {/if}
-      </Tabs.Content>
-
-      <Tabs.Content value="response-headers">
-        <KeyValueTable rows={Object.entries(entry.payload.responseHeaders)} />
-      </Tabs.Content>
-
-      <Tabs.Content value="response">
-        {#if entry.payload.responseBody}
-          {#if entry.payload.responseBody.truncated}
-            <p class="mb-2 text-xs text-amber-600 dark:text-amber-400">
-              truncated ({formatBytes(entry.payload.responseBody.size)})
-            </p>
-          {/if}
-          <BodyView text={entry.payload.responseBody.text} contentType={entry.payload.responseBody.contentType} />
-        {:else}
-          <p class="text-muted-foreground text-xs italic">no response body</p>
-        {/if}
-      </Tabs.Content>
+  <!-- Request Payload -->
+  <div class="card mt-5 overflow-hidden rounded-lg border border-border bg-card">
+    <div class="flex items-center justify-between border-b border-border bg-muted px-4 py-3">
+      <h2 class="m-0 text-sm font-semibold">Request Payload</h2>
     </div>
-  </Tabs.Root>
+    <div class="p-4">
+      {#if entry.payload.requestBody}
+        {#if entry.payload.requestBody.truncated}
+          <p class="mb-2 text-xs text-amber-400">
+            truncated ({formatBytes(entry.payload.requestBody.size)})
+          </p>
+        {/if}
+        <BodyView text={entry.payload.requestBody.text} contentType={entry.payload.requestBody.contentType} />
+      {:else}
+        <p class="text-muted-foreground text-xs italic">no request body</p>
+      {/if}
+    </div>
+  </div>
+
+  <!-- Response Headers -->
+  <div class="card mt-5 overflow-hidden rounded-lg border border-border bg-card">
+    <div class="flex items-center justify-between border-b border-border bg-muted px-4 py-3">
+      <h2 class="m-0 text-sm font-semibold">Response Headers</h2>
+    </div>
+    <KeyValueTable rows={Object.entries(entry.payload.responseHeaders)} />
+  </div>
+
+  <!-- Response -->
+  <div class="card mt-5 overflow-hidden rounded-lg border border-border bg-card">
+    <div class="flex items-center justify-between border-b border-border bg-muted px-4 py-3">
+      <h2 class="m-0 text-sm font-semibold">Response</h2>
+    </div>
+    <div class="p-4">
+      {#if entry.payload.responseBody}
+        {#if entry.payload.responseBody.truncated}
+          <p class="mb-2 text-xs text-amber-400">
+            truncated ({formatBytes(entry.payload.responseBody.size)})
+          </p>
+        {/if}
+        <BodyView text={entry.payload.responseBody.text} contentType={entry.payload.responseBody.contentType} />
+      {:else}
+        <p class="text-muted-foreground text-xs italic">no response body</p>
+      {/if}
+    </div>
+  </div>
 </div>

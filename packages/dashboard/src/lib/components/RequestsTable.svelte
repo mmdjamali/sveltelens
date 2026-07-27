@@ -41,7 +41,7 @@
         </Table.Cell>
       </Table.Row>
     {:else}
-      <Table.Row class="hover:bg-transparent">
+      <Table.Row>
         <Table.Cell colspan={5}>
           <EmptyState message="Trigger a request in your app and it'll show up here." />
         </Table.Cell>
