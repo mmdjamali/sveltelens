@@ -1,4 +1,5 @@
 <script lang="ts">
+  import ArrowLeftIcon from "@lucide/svelte/icons/arrow-left";
   import { Badge } from "./ui/badge/index.js";
 
   let {
@@ -22,7 +23,10 @@
 
 <div class="flex items-center justify-between border-b border-base-300 bg-base-300 px-4 py-3">
   <h2 class="m-0 text-sm font-semibold">
-    <a href={backHref} class="text-primary hover:text-primary/80">← {backLabel}</a>
+    <a href={backHref} class="inline-flex items-center gap-1 text-primary hover:text-primary/80">
+      <ArrowLeftIcon class="size-4" />
+      {backLabel}
+    </a>
     <span class="ml-2 font-normal text-base-content/60">/</span>
   </h2>
 </div>
