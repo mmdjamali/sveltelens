@@ -11,8 +11,8 @@
   let { entries }: { entries: Extract<Entry, { type: "query" }>[] } = $props();
 </script>
 
-<Table.Root>
-  <Table.Header>
+<Table.Root class="rounded-field overflow-hidden bg-base-200">
+  <Table.Header class="bg-base-300">
     <Table.Row>
       <Table.Head class="text-base-content/60 pl-4 text-xs">SQL</Table.Head>
       <Table.Head class="text-base-content/60 w-24 text-xs">Time</Table.Head>

@@ -10,8 +10,8 @@
   let { entries }: { entries: Extract<Entry, { type: "client-request" }>[] } = $props();
 </script>
 
-<Table.Root>
-  <Table.Header>
+<Table.Root class="rounded-field overflow-hidden bg-base-200">
+  <Table.Header class="bg-base-300">
     <Table.Row>
       <Table.Head class="text-base-content/60 w-24 pl-4 text-xs">Method</Table.Head>
       <Table.Head class="text-base-content/60 text-xs">URI</Table.Head>
