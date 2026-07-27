@@ -37,7 +37,7 @@
   );
 </script>
 
-<div class="mx-auto max-w-[1140px] px-4 pt-6">
+<div class="mx-auto max-w-6xl px-4 pb-6">
   <div class="card bg-base-200">
     <DetailHeader
       backHref="{base}/requests"
