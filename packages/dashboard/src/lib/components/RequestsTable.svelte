@@ -32,7 +32,7 @@
         <Table.Cell class="text-foreground max-w-0 truncate py-0 font-mono text-xs" title={entry.payload.path}>
           {entry.payload.path}
         </Table.Cell>
-        <Table.Cell class="py-0">
+        <Table.Cell class="py-0 text-center">
           <Badge variant="soft" class={statusClass(entry.payload.status)}>{entry.payload.status}</Badge>
         </Table.Cell>
         <Table.Cell class="text-muted-foreground py-0 text-right text-xs">{formatDuration(entry.durationMs)}</Table.Cell>

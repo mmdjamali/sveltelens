@@ -32,7 +32,7 @@
         <Table.Cell class="text-foreground max-w-0 truncate py-0 font-mono text-xs" title={entry.payload.url}>
           {entry.payload.url}
         </Table.Cell>
-        <Table.Cell class="py-0">
+        <Table.Cell class="py-0 text-center">
           {#if entry.payload.status !== null}
             <Badge variant="soft" class={statusClass(entry.payload.status)}>{entry.payload.status}</Badge>
           {:else}

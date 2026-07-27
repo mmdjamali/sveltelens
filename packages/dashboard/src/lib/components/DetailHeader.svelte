@@ -11,6 +11,7 @@
     durationMs,
   }: {
     backHref: string;
+    backLabel: string;
     badgeLabel: string;
     badgeClass: string;
     title?: string;

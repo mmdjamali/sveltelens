@@ -42,9 +42,9 @@
             </td>
           </tr>
           {#if entry.payload.error}
-            <tr class="border-b last:border-0">
-              <td class="text-muted-foreground bg-muted/20 w-44 shrink-0 px-3 py-2 align-top font-medium">Error</td>
-              <td class="text-destructive px-3 py-2 break-all">{entry.payload.error}</td>
+            <tr class="border-b border-border">
+              <td class="text-muted-foreground w-44 px-4 py-2.5 align-top">Error</td>
+              <td class="text-destructive px-4 py-2.5 break-all">{entry.payload.error}</td>
             </tr>
           {/if}
         </tbody>

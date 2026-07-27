@@ -15,51 +15,68 @@
     store.init();
   });
 
-  // Every list route is "/<slug>"; every detail route is "/<slug>/[id]".
   const isDetail = $derived(page.route.id?.endsWith("/[id]") ?? false);
 </script>
 
-<Sidebar.Provider class="h-svh overflow-hidden">
-  <AppSidebar />
+<div class="min-h-screen bg-background">
+  <header class="border-b border-border">
+    <div class="mx-auto flex h-14 max-w-[1140px] items-center justify-between px-4">
+      <a href="{base}" class="flex items-center gap-3">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" class="size-7">
+          <path
+            class="fill-primary"
+            d="M0 40a39.87 39.87 0 0 1 11.72-28.28A40 40 0 1 1 0 40zm34 10a4 4 0 0 1-4-4v-2a2 2 0 1 0-4 0v2a4 4 0 0 1-4 4h-2a2 2 0 1 0 0 4h2a4 4 0 0 1 4 4v2a2 2 0 1 0 4 0v-2a4 4 0 0 1 4-4h2a2 2 0 1 0 0-4h-2zm24-24a6 6 0 0 1-6-6v-3a3 3 0 0 0-6 0v3a6 6 0 0 1-6 6h-3a3 3 0 0 0 0 6h3a6 6 0 0 1 6 6v3a3 3 0 0 0 6 0v-3a6 6 0 0 1 6-6h3a3 3 0 0 0 0-6h-3zm-4 36a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM21 28a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"
+          />
+        </svg>
+        <strong class="text-lg font-semibold">Sveltecope</strong>
+      </a>
 
-  <Sidebar.Inset class="min-w-0 overflow-hidden">
-    <header class="flex h-14 shrink-0 items-center gap-2 border-b px-4">
-      <Sidebar.Trigger class="-ml-1" />
-      <Separator orientation="vertical" class="mr-1 !h-4" />
       {#if !isDetail}
-        <div class="relative w-full max-w-xs">
-          <IconSearch
-            class="text-muted-foreground pointer-events-none absolute top-1/2 left-2.5 size-4 -translate-y-1/2"
-          />
-          <Input
-            class="h-10 pl-8"
-            placeholder="Search entries…"
-            bind:value={store.search}
-          />
+        <div class="flex items-center gap-2">
+          <button
+            class="btn-muted"
+            onclick={() => store.togglePause()}
+            title={store.paused ? "Resume recording" : "Pause recording"}
+          >
+            {#if store.paused}
+              <IconPlayerPlay class="size-4" />
+            {:else}
+              <IconPlayerPause class="size-4" />
+            {/if}
+          </button>
+          <button class="btn-muted" onclick={() => store.clear()} title="Clear entries">
+            <IconTrash class="size-4" />
+          </button>
         </div>
-        <Button variant="ghost" size="icon" class="ml-auto" onclick={() => store.togglePause()}>
-          {#if store.paused}
-            <IconPlayerPlay class="size-4" />
-            <span class="sr-only">Resume recording</span>
-          {:else}
-            <IconPlayerPause class="size-4" />
-            <span class="sr-only">Pause recording</span>
-          {/if}
-        </Button>
-        <Button
-          variant="ghost"
-          size="icon"
-          class="text-destructive hover:text-destructive hover:bg-destructive/10"
-          onclick={() => store.clear()}
-        >
-          <IconTrash class="size-4" />
-          <span class="sr-only">Clear entries</span>
-        </Button>
       {/if}
-    </header>
-
-    <div class="min-h-0 flex-1 overflow-auto">
-      {@render children()}
     </div>
-  </Sidebar.Inset>
-</Sidebar.Provider>
+  </header>
+
+  <div class="mx-auto flex max-w-[1140px] gap-0 px-4 pt-6">
+    <nav class="w-2/12 shrink-0">
+      <AppSidebar />
+    </nav>
+    <main class="w-10/12 min-w-0">
+      {@render children()}
+    </main>
+  </div>
+</div>
+
+<style>
+  .btn-muted {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    border-radius: 6px;
+    color: #9ca3af;
+    background: #1f2937;
+    border: 1px solid #4b5563;
+    cursor: pointer;
+    transition: color 0.15s, background 0.15s;
+  }
+  .btn-muted:hover {
+    color: #f3f4f6;
+    background: #374151;
+  }
+</style>
