@@ -43,9 +43,9 @@
             title={store.paused ? "Resume recording" : "Pause recording"}
           >
             {#if store.paused}
-              <IconPlayerPlay class="size-4" />
+              <IconPlayerPlay class="size-5" />
             {:else}
-              <IconPlayerPause class="size-4" />
+              <IconPlayerPause class="size-5" />
             {/if}
           </button>
           <button
@@ -53,7 +53,7 @@
             onclick={() => store.clear()}
             title="Clear entries"
           >
-            <IconTrash class="size-4" />
+            <IconTrash class="size-5" />
           </button>
         </div>
       {/if}
