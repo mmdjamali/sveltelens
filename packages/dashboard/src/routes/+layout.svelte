@@ -2,13 +2,9 @@
   import "../app.css";
   import { onMount } from "svelte";
   import { page } from "$app/state";
+  import { base } from "$app/paths";
   import { store } from "$lib/store.svelte";
   import AppSidebar from "$lib/components/Sidebar.svelte";
-  import * as Sidebar from "$lib/components/ui/sidebar/index.js";
-  import { Input } from "$lib/components/ui/input/index.js";
-  import { Button } from "$lib/components/ui/button/index.js";
-  import { Separator } from "$lib/components/ui/separator/index.js";
-  import IconSearch from "@tabler/icons-svelte/icons/search";
   import IconPlayerPause from "@tabler/icons-svelte/icons/player-pause";
   import IconPlayerPlay from "@tabler/icons-svelte/icons/player-play";
   import IconTrash from "@tabler/icons-svelte/icons/trash";
