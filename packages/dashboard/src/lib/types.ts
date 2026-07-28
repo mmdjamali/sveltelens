@@ -1,11 +1,11 @@
-import type { Icon } from '@tabler/icons-svelte';
+import { IconFileFunction, type Icon } from '@tabler/icons-svelte';
 import IconRoute from '@tabler/icons-svelte/icons/route';
 import IconWorld from '@tabler/icons-svelte/icons/world';
 import IconDatabase from '@tabler/icons-svelte/icons/database';
 import IconFileText from '@tabler/icons-svelte/icons/file-text';
 import IconAlertTriangle from '@tabler/icons-svelte/icons/alert-triangle';
 
-export type EntryType = 'request' | 'client-request' | 'query' | 'log' | 'exception';
+export type EntryType = 'request' | 'client-request' | 'query' | 'log' | 'exception' | 'action';
 
 export interface BodyCapture {
   contentType: string | null;
@@ -56,12 +56,29 @@ export interface ExceptionPayload {
   name: string;
 }
 
+export interface ActionPayload {
+  method: string;
+  path: string;
+  routeId: string | null;
+  actionName: string;
+  status: number;
+  hostname: string;
+  ip: string | null;
+  memoryUsageBytes: number | null;
+  requestHeaders: Record<string, string>;
+  responseHeaders: Record<string, string>;
+  requestBody: BodyCapture | null;
+  responseBody: BodyCapture | null;
+  location: string | null;
+}
+
 export type EntryPayload =
   | { type: 'request'; payload: RequestPayload }
   | { type: 'client-request'; payload: ClientRequestPayload }
   | { type: 'query'; payload: QueryPayload }
   | { type: 'log'; payload: LogPayload }
-  | { type: 'exception'; payload: ExceptionPayload };
+  | { type: 'exception'; payload: ExceptionPayload }
+  | { type: 'action'; payload: ActionPayload };
 
 export type Entry = {
   id: string;
@@ -71,7 +88,7 @@ export type Entry = {
   offsetMs: number | null;
 } & EntryPayload;
 
-export const ENTRY_TYPES: EntryType[] = ['request', 'query', 'client-request', 'log', 'exception'];
+export const ENTRY_TYPES: EntryType[] = ['request', 'action', 'query', 'client-request', 'log', 'exception'];
 
 export const ENTRY_TYPE_LABELS: Record<EntryType, string> = {
   request: 'Requests',
@@ -79,6 +96,7 @@ export const ENTRY_TYPE_LABELS: Record<EntryType, string> = {
   query: 'Queries',
   log: 'Logs',
   exception: 'Exceptions',
+  action: 'Actions',
 };
 
 // URL slugs match Telescope's own routes exactly (plural, "client-requests" despite the
@@ -89,6 +107,7 @@ export const ENTRY_TYPE_SLUGS: Record<EntryType, string> = {
   query: 'queries',
   log: 'logs',
   exception: 'exceptions',
+  action: 'actions',
 };
 
 export const SLUG_TO_ENTRY_TYPE: Record<string, EntryType> = Object.fromEntries(
@@ -102,6 +121,7 @@ export const ENTRY_TYPE_BADGE_LABELS: Record<EntryType, string> = {
   query: 'Query',
   log: 'Log',
   exception: 'Exception',
+  action: 'Action',
 };
 
 export const ENTRY_TYPE_ICONS: Record<EntryType, Icon> = {
@@ -110,4 +130,5 @@ export const ENTRY_TYPE_ICONS: Record<EntryType, Icon> = {
   query: IconDatabase,
   log: IconFileText,
   exception: IconAlertTriangle,
+  action: IconFileFunction,
 };

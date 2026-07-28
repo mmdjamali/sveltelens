@@ -59,6 +59,7 @@ const ENTRY_TYPE_CLASSES: Record<EntryType, string> = {
   query: AMBER,
   log: EMERALD,
   exception: RED,
+  action: VIOLET,
 };
 
 export function entryTypeClass(type: EntryType): string {
@@ -72,6 +73,7 @@ const ENTRY_TYPE_BAR_CLASSES: Record<EntryType, string> = {
   query: 'bg-amber-500',
   log: 'bg-emerald-500',
   exception: 'bg-red-500',
+  action: 'bg-violet-500',
 };
 
 export function entryTypeBarClass(type: EntryType): string {
@@ -81,6 +83,7 @@ export function entryTypeBarClass(type: EntryType): string {
 // The "verb" badge next to the type badge: HTTP method, log level, or exception name.
 export function entryVerb(entry: Entry): string | null {
   if (entry.type === 'request' || entry.type === 'client-request') return entry.payload.method;
+  if (entry.type === 'action') return entry.payload.actionName.toUpperCase();
   // 'log' level is redundant with the type badge, which already reads "LOG".
   if (entry.type === 'log') return entry.payload.level === 'log' ? null : entry.payload.level.toUpperCase();
   if (entry.type === 'exception') return entry.payload.name;
@@ -90,12 +93,13 @@ export function entryVerb(entry: Entry): string | null {
 export function entryVerbClass(entry: Entry): string {
   if (entry.type === 'log') return levelClass(entry.payload.level);
   if (entry.type === 'exception') return entryTypeClass('exception');
+  if (entry.type === 'action') return methodClass(entry.payload.method);
   if (entry.type === 'request' || entry.type === 'client-request') return methodClass(entry.payload.method);
   return NEUTRAL;
 }
 
 export function entryStatus(entry: Entry): number | null {
-  if (entry.type === 'request' || entry.type === 'client-request') return entry.payload.status;
+  if (entry.type === 'request' || entry.type === 'client-request' || entry.type === 'action') return entry.payload.status;
   return null;
 }
 
@@ -118,6 +122,8 @@ export function entrySummary(entry: Entry): string {
       return stripAnsi(entry.payload.message);
     case 'exception':
       return `${entry.payload.name}: ${entry.payload.message}`;
+    case 'action':
+      return `${entry.payload.actionName} — ${entry.payload.path}`;
   }
 }
 
@@ -149,6 +155,9 @@ export function timelineSummary(entries: Entry[]): string {
       `${calls.length} http ${calls.length === 1 ? 'call' : 'calls'}${known.length ? ` · ${formatDuration(httpMs)}` : ''}`
     );
   }
+
+  const actions = entries.filter((e) => e.type === 'action').length;
+  if (actions) parts.push(`${actions} ${actions === 1 ? 'action' : 'actions'}`);
 
   const logs = entries.filter((e) => e.type === 'log').length;
   if (logs) parts.push(`${logs} ${logs === 1 ? 'log' : 'logs'}`);
