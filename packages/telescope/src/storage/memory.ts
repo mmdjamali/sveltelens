@@ -1,6 +1,6 @@
 import type { Entry, EntryType, ListFilter, Storage } from '../types.js';
 
-const ENTRY_TYPES: EntryType[] = ['request', 'client-request', 'query', 'log', 'exception'];
+const ENTRY_TYPES: EntryType[] = ['request', 'client-request', 'query', 'log', 'exception', 'action'];
 
 /** Fixed-capacity FIFO buffer; oldest entries drop silently once full. */
 export class MemoryStorage implements Storage {

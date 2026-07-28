@@ -1,4 +1,4 @@
-export type EntryType = 'request' | 'client-request' | 'query' | 'log' | 'exception';
+export type EntryType = 'request' | 'client-request' | 'query' | 'log' | 'exception' | 'action';
 
 export interface RequestPayload {
   method: string;
@@ -51,12 +51,31 @@ export interface BodyCapture {
   text: string | null;
 }
 
+export interface ActionPayload {
+  method: string;
+  path: string;
+  routeId: string | null;
+  actionName: string;
+  status: number;
+  hostname: string;
+  ip: string | null;
+  /** process.memoryUsage().heapUsed at response time, in bytes. */
+  memoryUsageBytes: number | null;
+  requestHeaders: Record<string, string>;
+  responseHeaders: Record<string, string>;
+  requestBody: BodyCapture | null;
+  responseBody: BodyCapture | null;
+  /** Redirect location for successful actions. */
+  location: string | null;
+}
+
 export type EntryPayload =
   | { type: 'request'; payload: RequestPayload }
   | { type: 'client-request'; payload: ClientRequestPayload }
   | { type: 'query'; payload: QueryPayload }
   | { type: 'log'; payload: LogPayload }
-  | { type: 'exception'; payload: ExceptionPayload };
+  | { type: 'exception'; payload: ExceptionPayload }
+  | { type: 'action'; payload: ActionPayload };
 
 export type Entry = {
   id: string;

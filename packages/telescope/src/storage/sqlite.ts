@@ -5,7 +5,7 @@ import { createRequire } from 'node:module';
 
 const require = createRequire(import.meta.url);
 
-const ENTRY_TYPES: EntryType[] = ['request', 'client-request', 'query', 'log', 'exception'];
+const ENTRY_TYPES: EntryType[] = ['request', 'client-request', 'query', 'log', 'exception', 'action'];
 
 interface Row {
   id: string;
