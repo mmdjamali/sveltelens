@@ -4,14 +4,19 @@
   import DetailHeader from "./DetailHeader.svelte";
   import type { Entry } from "../types";
 
+  import ArrowLeftIcon from "@lucide/svelte/icons/arrow-left";
+
   let { entry }: { entry: Extract<Entry, { type: "log" }> } = $props();
 </script>
 
-<div class="mx-auto max-w-[1140px] px-4 pt-6">
-  <div class="card bg-base-200">
+<a href="{base}/logs" class="btn btn-ghost border-base-300 mb-5">
+  <ArrowLeftIcon class="size-4" />
+  Back
+</a>
+
+<div class="mx-auto max-w-6xl px-4 pb-6">
+  <div class="card bg-base-200 rounded-field overflow-hidden">
     <DetailHeader
-      backHref="{base}/logs"
-      backLabel="Logs"
       badgeLabel={entry.payload.level.toUpperCase()}
       badgeClass={levelClass(entry.payload.level)}
       timestamp={entry.timestamp}

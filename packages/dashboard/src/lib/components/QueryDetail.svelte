@@ -7,14 +7,19 @@
   import { Badge } from "./ui/badge/index.js";
   import { ENTRY_TYPE_BADGE_LABELS, type Entry } from "../types";
 
+  import ArrowLeftIcon from "@lucide/svelte/icons/arrow-left";
+
   let { entry }: { entry: Extract<Entry, { type: "query" }> } = $props();
 </script>
 
-<div class="mx-auto max-w-[1140px] px-4 pt-6">
-  <div class="card bg-base-200">
+<a href="{base}/queries" class="btn btn-ghost border-base-300 mb-5">
+  <ArrowLeftIcon class="size-4" />
+  Back
+</a>
+
+<div class="mx-auto max-w-6xl px-4 pb-6">
+  <div class="card bg-base-200 rounded-field overflow-hidden">
     <DetailHeader
-      backHref="{base}/queries"
-      backLabel="Queries"
       badgeLabel={ENTRY_TYPE_BADGE_LABELS.query}
       badgeClass={entryTypeClass("query")}
       timestamp={entry.timestamp}
