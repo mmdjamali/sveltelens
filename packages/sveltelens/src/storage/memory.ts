@@ -1,4 +1,5 @@
-import type { Entry, EntryType, ListFilter, Storage } from '../types.js';
+import type { Entry, EntryType } from '../types.js';
+import type { ListFilter, Storage } from './types.js';
 
 const ENTRY_TYPES: EntryType[] = ['request', 'client-request', 'query', 'log', 'exception', 'action'];
 

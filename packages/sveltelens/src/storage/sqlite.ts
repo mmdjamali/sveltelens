@@ -1,4 +1,5 @@
-import type { Entry, EntryType, ListFilter, Storage } from '../types.js';
+import type { Entry, EntryType } from '../types.js';
+import type { ListFilter, Storage } from './types.js';
 import { mkdirSync } from 'node:fs';
 import { dirname } from 'node:path';
 import { createRequire } from 'node:module';

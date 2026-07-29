@@ -1,4 +1,5 @@
-import type { Storage, SveltelensConfig } from '../types.js';
+import type { SveltelensConfig } from '../config.js';
+import type { Storage } from './types.js';
 import { MemoryStorage } from './memory.js';
 import { createRequire } from 'node:module';
 

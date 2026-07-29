@@ -3,8 +3,7 @@ import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import fs from 'node:fs';
 import sirv from 'sirv';
-import type { SveltelensConfig } from './types.js';
-import { resolveConfig } from './config.js';
+import { resolveConfig, type SveltelensConfig } from './config.js';
 import { createStorage } from './storage/index.js';
 import { Recorder } from './recorder.js';
 import { installInterceptors } from './intercept/index.js';
@@ -95,4 +94,4 @@ export function sveltelens(userConfig: SveltelensConfig = {}): Plugin {
   };
 }
 
-export type { SveltelensConfig } from './types.js';
+export type { SveltelensConfig } from './config.js';

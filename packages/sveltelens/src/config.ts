@@ -1,4 +1,13 @@
-import type { SveltelensConfig } from './types.js';
+/** User-facing plugin options. Lives here, next to the defaults that fill them in. */
+export interface SveltelensConfig {
+  enabled?: boolean;
+  path?: string;
+  storage?: 'memory' | 'sqlite';
+  sqlitePath?: string;
+  maxEntries?: number;
+  ignore?: (string | RegExp)[];
+  redactHeaders?: string[];
+}
 
 export const DEFAULT_PATH = '/__sveltelens';
 export const DEFAULT_REDACT_HEADERS = ['authorization', 'cookie'];

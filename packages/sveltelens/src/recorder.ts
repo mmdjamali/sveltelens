@@ -1,5 +1,6 @@
 import { EventEmitter } from 'node:events';
-import type { Entry, EntryPayload, Storage } from './types.js';
+import type { Entry, EntryPayload } from './types.js';
+import type { Storage } from './storage/types.js';
 import { generateId } from './utils.js';
 import { currentRequestId, currentRequestStart } from './context.js';
 

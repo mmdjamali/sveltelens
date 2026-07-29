@@ -1,5 +1,5 @@
 import type { IncomingMessage, ServerResponse } from 'node:http';
-import type { Storage } from '../types.js';
+import type { Storage } from '../storage/types.js';
 import type { Recorder } from '../recorder.js';
 
 type NextFn = (err?: unknown) => void;
