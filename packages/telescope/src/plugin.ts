@@ -1,6 +1,7 @@
 import type { Plugin, ViteDevServer } from 'vite';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
+import fs from 'node:fs';
 import sirv from 'sirv';
 import type { TelescopeConfig } from './types.js';
 import { resolveConfig } from './config.js';
@@ -13,6 +14,29 @@ import { setTelescopeState } from './state.js';
 
 const currentDir = path.dirname(fileURLToPath(import.meta.url));
 const DASHBOARD_DIST = path.join(currentDir, '../dashboard-dist');
+
+/**
+ * The dashboard ships as a static SPA shell that assumes it is loaded at exactly one
+ * level below the mount path: its asset URLs are relative (`./_app/...`) and SvelteKit
+ * derives the router base from the document's own depth (`new URL(".", location)`).
+ * Both hold for the prerendered list pages, but not for a directly-loaded nested route
+ * like `/requests/:id` — the extra segment resolves assets to `/requests/_app/...` and
+ * boots the router with base `/requests`, giving a 404 and links like
+ * `/__telescope/requests/requests`. Pin both to the mount path so any depth works.
+ */
+export function pinShellToMountPath(html: string, mountPath: string): string {
+  const base = mountPath.replace(/\/+$/, '');
+  const pinned = `base: ${JSON.stringify(base)}`;
+  const patched = html
+    .replace('<head>', `<head>\n\t<base href="${base}/">`)
+    .replace(/base: new URL\("\.", ?location\)\.pathname\.slice\(0, ?-1\)/, pinned);
+
+  if (!patched.includes(pinned)) {
+    // eslint-disable-next-line no-console
+    console.warn('[sveltecope] could not pin the dashboard router base — nested routes may 404 on direct load');
+  }
+  return patched;
+}
 
 export function telescope(userConfig: TelescopeConfig = {}): Plugin {
   const config = resolveConfig(userConfig);
@@ -48,7 +72,18 @@ export function telescope(userConfig: TelescopeConfig = {}): Plugin {
         next();
       });
 
-      server.middlewares.use(config.path, sirv(DASHBOARD_DIST, { dev: true, single: true, etag: true }));
+      server.middlewares.use(config.path, sirv(DASHBOARD_DIST, { dev: true, etag: true }));
+
+      // SPA fallback for routes with no matching static file (e.g. /requests/:id).
+      const shellHtml = pinShellToMountPath(
+        fs.readFileSync(path.join(DASHBOARD_DIST, 'index.html'), 'utf-8'),
+        config.path
+      );
+      server.middlewares.use(config.path, (_req, res) => {
+        res.statusCode = 200;
+        res.setHeader('content-type', 'text/html');
+        res.end(shellHtml);
+      });
 
       server.httpServer?.once('listening', () => {
         const address = server.httpServer?.address();
