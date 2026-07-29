@@ -14,7 +14,7 @@
   Back
 </a>
 
-<div class="mx-auto max-w-6xl px-4 pb-6">
+<div class="mx-auto max-w-6xl pb-6">
   <div class="card bg-base-200 rounded-field overflow-hidden">
     <DetailHeader
       badgeLabel={entry.payload.level.toUpperCase()}
