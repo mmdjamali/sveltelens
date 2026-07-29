@@ -1,16 +1,16 @@
-import type { TelescopeConfig } from './types.js';
+import type { SveltelensConfig } from './types.js';
 
-export const DEFAULT_PATH = '/__telescope';
+export const DEFAULT_PATH = '/__sveltelens';
 export const DEFAULT_REDACT_HEADERS = ['authorization', 'cookie'];
 export const DEFAULT_MAX_ENTRIES = 1000;
-export const DEFAULT_IGNORE = [DEFAULT_PATH, '/__telescope/*', '/@vite/*', '/@fs/*', '/@id/*', '/__vite_ping', '/node_modules/*'];
+export const DEFAULT_IGNORE = [DEFAULT_PATH, '/__sveltelens/*', '/@vite/*', '/@fs/*', '/@id/*', '/__vite_ping', '/node_modules/*'];
 
 export type ResolvedConfig = Required<
-  Pick<TelescopeConfig, 'enabled' | 'path' | 'maxEntries' | 'ignore' | 'redactHeaders'>
+  Pick<SveltelensConfig, 'enabled' | 'path' | 'maxEntries' | 'ignore' | 'redactHeaders'>
 > &
-  TelescopeConfig;
+  SveltelensConfig;
 
-export function resolveConfig(config: TelescopeConfig = {}): ResolvedConfig {
+export function resolveConfig(config: SveltelensConfig = {}): ResolvedConfig {
   const path = config.path ?? DEFAULT_PATH;
   return {
     ...config,

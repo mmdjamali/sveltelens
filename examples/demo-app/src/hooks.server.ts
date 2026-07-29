@@ -1,3 +1,3 @@
-import { telescopeHandle } from 'sveltecope/hook';
+import { sveltelensHandle } from 'sveltelens/hook';
 
-export const handle = telescopeHandle;
+export const handle = sveltelensHandle;

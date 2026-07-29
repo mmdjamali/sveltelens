@@ -15,7 +15,7 @@
 
 <div class="mx-auto max-w-lg px-4 py-10">
   <div class="mb-8">
-    <h1 class="text-2xl font-bold">sveltecope demo</h1>
+    <h1 class="text-2xl font-bold">sveltelens demo</h1>
     <p class="text-base-content/40 mt-1 text-xs">
       Mock API ping: <code class="font-mono">{JSON.stringify(data.ping)}</code>
     </p>
@@ -76,7 +76,7 @@
   </div>
 
   <p class="text-base-content/30 mt-10 text-center text-xs">
-    Open <a href="/__telescope" class="link link-hover text-primary">/__telescope</a>
+    Open <a href="/__sveltelens" class="link link-hover text-primary">/__sveltelens</a>
     to see captured actions, requests, queries, and logs.
   </p>
 </div>

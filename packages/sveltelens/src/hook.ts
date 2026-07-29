@@ -1,6 +1,6 @@
 import os from 'node:os';
 import type { Handle } from '@sveltejs/kit';
-import { getTelescopeState } from './state.js';
+import { getSveltelensState } from './state.js';
 import { requestContext } from './context.js';
 import { generateId, redactHeaders, headersToObject, captureBody, matchesIgnore } from './utils.js';
 import { recordException } from './intercept/exceptions.js';
@@ -31,8 +31,8 @@ function isFormAction(method: string, contentType: string | null, url: URL): boo
 }
 
 /** No-op passthrough when the vite plugin isn't active (e.g. production build). */
-export const telescopeHandle: Handle = async ({ event, resolve }) => {
-  const state = getTelescopeState();
+export const sveltelensHandle: Handle = async ({ event, resolve }) => {
+  const state = getSveltelensState();
   if (!state || !state.config.enabled) return resolve(event);
 
   const { recorder, config } = state;

@@ -101,7 +101,7 @@ export interface Storage {
   counts(): Record<EntryType, number>;
 }
 
-export interface TelescopeConfig {
+export interface SveltelensConfig {
   enabled?: boolean;
   path?: string;
   storage?: 'memory' | 'sqlite';

@@ -21,17 +21,17 @@ describe('pinShellToMountPath', () => {
   const shell = fs.readFileSync(DASHBOARD_INDEX, 'utf-8');
 
   it('pins the SvelteKit router base to the mount path', () => {
-    const patched = pinShellToMountPath(shell, '/__telescope');
+    const patched = pinShellToMountPath(shell, '/__sveltelens');
 
-    expect(patched).toContain('base: "/__telescope"');
+    expect(patched).toContain('base: "/__sveltelens"');
     expect(patched).not.toContain('new URL(".", location)');
   });
 
   it('resolves assets to the mount root at every route depth', () => {
-    const patched = pinShellToMountPath(shell, '/__telescope');
+    const patched = pinShellToMountPath(shell, '/__sveltelens');
 
-    for (const url of ['/__telescope/', '/__telescope/requests', '/__telescope/requests/abc123']) {
-      expect(resolveAsset(patched, url)).toBe('/__telescope/_app/immutable/entry/start.js');
+    for (const url of ['/__sveltelens/', '/__sveltelens/requests', '/__sveltelens/requests/abc123']) {
+      expect(resolveAsset(patched, url)).toBe('/__sveltelens/_app/immutable/entry/start.js');
     }
   });
 
@@ -45,7 +45,7 @@ describe('pinShellToMountPath', () => {
     const original = console.warn;
     console.warn = (...args: unknown[]) => warnings.push(args[0]);
     try {
-      pinShellToMountPath('<head></head>', '/__telescope');
+      pinShellToMountPath('<head></head>', '/__sveltelens');
     } finally {
       console.warn = original;
     }

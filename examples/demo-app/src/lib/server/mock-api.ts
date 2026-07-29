@@ -3,7 +3,7 @@ import http from 'node:http';
 export const MOCK_API_PORT = 4310;
 
 // ponytail: module-level singleton guard, survives Vite HMR reloading this module
-const globalKey = '__TELESCOPE_DEMO_MOCK_SERVER__';
+const globalKey = '__SVELTELENS_DEMO_MOCK_SERVER__';
 const g = globalThis as typeof globalThis & { [globalKey]?: http.Server };
 
 if (!g[globalKey]) {

@@ -14,7 +14,7 @@ function sendJson(res: ServerResponse, status: number, body: unknown): void {
 export function createApiMiddleware(storage: Storage, recorder: Recorder, basePath: string) {
   const apiPrefix = `${basePath}/api`;
 
-  return function telescopeApiMiddleware(req: IncomingMessage, res: ServerResponse, next: NextFn) {
+  return function sveltelensApiMiddleware(req: IncomingMessage, res: ServerResponse, next: NextFn) {
     if (!req.url || !req.url.startsWith(apiPrefix)) return next();
 
     const url = new URL(req.url, 'http://localhost');

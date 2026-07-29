@@ -5,7 +5,7 @@ function emptyCounts(): Record<EntryType, number> {
   return Object.fromEntries(ENTRY_TYPES.map((t) => [t, 0])) as Record<EntryType, number>;
 }
 
-class TelescopeStore {
+class SveltelensStore {
   entries = $state<Entry[]>([]);
   counts = $state<Record<EntryType, number>>(emptyCounts());
   paused = $state(false);
@@ -62,4 +62,4 @@ class TelescopeStore {
   }
 }
 
-export const store = new TelescopeStore();
+export const store = new SveltelensStore();

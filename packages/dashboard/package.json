@@ -1,5 +1,5 @@
 {
-  "name": "telescope-dashboard",
+  "name": "@sveltelens/dashboard",
   "private": true,
   "version": "0.0.0",
   "type": "module",

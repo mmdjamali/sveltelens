@@ -3,7 +3,7 @@ import { installHttpClientInterceptor } from './http-client.js';
 import { installConsoleInterceptor } from './console.js';
 import { installExceptionInterceptor } from './exceptions.js';
 
-const GLOBAL_KEY = '__TELESCOPE_INTERCEPTORS_INSTALLED__';
+const GLOBAL_KEY = '__SVELTELENS_INTERCEPTORS_INSTALLED__';
 
 /** Idempotent: Vite HMR can re-execute plugin setup, but interceptors must patch globals once. */
 export function installInterceptors(recorder: Recorder, redactHeaders: string[]): void {

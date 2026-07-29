@@ -1,5 +1,5 @@
 {
-  "name": "sveltecope-monorepo",
+  "name": "sveltelens-monorepo",
   "private": true,
   "version": "0.0.0",
   "workspaces": [
@@ -8,10 +8,10 @@
   ],
   "scripts": {
     "build:dashboard": "cd packages/dashboard && bun run build",
-    "build:package": "cd packages/telescope && bun run build",
+    "build:package": "cd packages/sveltelens && bun run build",
     "build": "bun run build:dashboard && bun run build:package",
     "dev:demo": "cd examples/demo-app && bun run dev",
-    "test": "cd packages/telescope && bun run test"
+    "test": "cd packages/sveltelens && bun run test"
   },
   "devDependencies": {
     "node-gyp": "^11.0.0",

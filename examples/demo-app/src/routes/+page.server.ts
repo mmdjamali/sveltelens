@@ -39,7 +39,7 @@ export const actions = {
   reset: async () => {
     await db.delete(todos).run();
     await db.insert(todos).values({ title: 'Write docs', done: false });
-    await db.insert(todos).values({ title: 'Ship telescope', done: true });
+    await db.insert(todos).values({ title: 'Ship sveltelens', done: true });
     return { success: true };
   },
 } satisfies Actions;

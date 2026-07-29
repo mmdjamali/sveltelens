@@ -1,5 +1,5 @@
 {
-  "name": "sveltecope",
+  "name": "sveltelens",
   "version": "0.1.0",
   "description": "Laravel Telescope-style local developer observability dashboard for SvelteKit",
   "type": "module",

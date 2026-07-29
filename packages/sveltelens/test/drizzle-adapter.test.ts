@@ -2,21 +2,21 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import Database from 'better-sqlite3';
 import { MemoryStorage } from '../src/storage/memory.js';
 import { Recorder } from '../src/recorder.js';
-import { setTelescopeState } from '../src/state.js';
+import { setSveltelensState } from '../src/state.js';
 import { resolveConfig } from '../src/config.js';
-import { telescopeBetterSqlite3 } from '../src/adapters/drizzle.js';
+import { sveltelensBetterSqlite3 } from '../src/adapters/drizzle.js';
 import type { QueryPayload } from '../src/types.js';
 
-describe('telescopeBetterSqlite3', () => {
+describe('sveltelensBetterSqlite3', () => {
   let storage: MemoryStorage;
 
   beforeEach(() => {
     storage = new MemoryStorage(50);
-    setTelescopeState({ recorder: new Recorder(storage), config: resolveConfig() });
+    setSveltelensState({ recorder: new Recorder(storage), config: resolveConfig() });
   });
 
   function makeDb() {
-    const sqlite = telescopeBetterSqlite3(new Database(':memory:'));
+    const sqlite = sveltelensBetterSqlite3(new Database(':memory:'));
     sqlite.exec('CREATE TABLE todos (id INTEGER PRIMARY KEY, title TEXT NOT NULL)');
     return sqlite;
   }
@@ -38,8 +38,8 @@ describe('telescopeBetterSqlite3', () => {
     expect(insertPayload.params).toEqual(['write docs']);
   });
 
-  it('does not record once telescope is disabled', () => {
-    setTelescopeState({ recorder: new Recorder(storage), config: resolveConfig({ enabled: false }) });
+  it('does not record once sveltelens is disabled', () => {
+    setSveltelensState({ recorder: new Recorder(storage), config: resolveConfig({ enabled: false }) });
     const sqlite = makeDb();
     sqlite.prepare('SELECT 1').get();
     expect(storage.list({ type: 'query' }).entries).toHaveLength(0);

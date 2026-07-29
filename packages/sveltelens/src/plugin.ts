@@ -3,14 +3,14 @@ import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import fs from 'node:fs';
 import sirv from 'sirv';
-import type { TelescopeConfig } from './types.js';
+import type { SveltelensConfig } from './types.js';
 import { resolveConfig } from './config.js';
 import { createStorage } from './storage/index.js';
 import { Recorder } from './recorder.js';
 import { installInterceptors } from './intercept/index.js';
 import { createApiMiddleware } from './api/rest.js';
 import { installStreamServer } from './api/ws.js';
-import { setTelescopeState } from './state.js';
+import { setSveltelensState } from './state.js';
 
 const currentDir = path.dirname(fileURLToPath(import.meta.url));
 const DASHBOARD_DIST = path.join(currentDir, '../dashboard-dist');
@@ -22,7 +22,7 @@ const DASHBOARD_DIST = path.join(currentDir, '../dashboard-dist');
  * Both hold for the prerendered list pages, but not for a directly-loaded nested route
  * like `/requests/:id` — the extra segment resolves assets to `/requests/_app/...` and
  * boots the router with base `/requests`, giving a 404 and links like
- * `/__telescope/requests/requests`. Pin both to the mount path so any depth works.
+ * `/__sveltelens/requests/requests`. Pin both to the mount path so any depth works.
  */
 export function pinShellToMountPath(html: string, mountPath: string): string {
   const base = mountPath.replace(/\/+$/, '');
@@ -33,23 +33,23 @@ export function pinShellToMountPath(html: string, mountPath: string): string {
 
   if (!patched.includes(pinned)) {
     // eslint-disable-next-line no-console
-    console.warn('[sveltecope] could not pin the dashboard router base — nested routes may 404 on direct load');
+    console.warn('[sveltelens] could not pin the dashboard router base — nested routes may 404 on direct load');
   }
   return patched;
 }
 
-export function telescope(userConfig: TelescopeConfig = {}): Plugin {
+export function sveltelens(userConfig: SveltelensConfig = {}): Plugin {
   const config = resolveConfig(userConfig);
 
   return {
-    name: 'sveltecope',
+    name: 'sveltelens',
     apply: 'serve',
     configureServer(server: ViteDevServer) {
       if (!config.enabled) return;
 
       const storage = createStorage(config);
       const recorder = new Recorder(storage);
-      setTelescopeState({ recorder, config });
+      setSveltelensState({ recorder, config });
       installInterceptors(recorder, config.redactHeaders);
 
       let uninstallStream: (() => void) | null = null;
@@ -89,10 +89,10 @@ export function telescope(userConfig: TelescopeConfig = {}): Plugin {
         const address = server.httpServer?.address();
         const port = typeof address === 'object' && address ? address.port : '';
         // eslint-disable-next-line no-console
-        console.log(`  \x1b[35m➜\x1b[0m  Telescope:  \x1b[1mhttp://localhost:${port}${config.path}\x1b[0m`);
+        console.log(`  \x1b[35m➜\x1b[0m  Sveltelens:  \x1b[1mhttp://localhost:${port}${config.path}\x1b[0m`);
       });
     },
   };
 }
 
-export type { TelescopeConfig } from './types.js';
+export type { SveltelensConfig } from './types.js';

@@ -12,7 +12,7 @@ export interface RequestContext {
 // AsyncLocalStorage would silently split into unrelated stores per instance,
 // breaking requestId correlation. A globalThis singleton guarantees one store
 // process-wide regardless of how many times the module gets re-evaluated.
-const globalKey = '__TELESCOPE_REQUEST_CONTEXT__';
+const globalKey = '__SVELTELENS_REQUEST_CONTEXT__';
 const g = globalThis as typeof globalThis & { [globalKey]?: AsyncLocalStorage<RequestContext> };
 
 export const requestContext: AsyncLocalStorage<RequestContext> =

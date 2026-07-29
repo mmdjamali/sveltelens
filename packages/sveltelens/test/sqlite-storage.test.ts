@@ -25,7 +25,7 @@ describe('SqliteStorage', () => {
   });
 
   it('persists, lists, and clears entries on disk', () => {
-    dir = mkdtempSync(path.join(tmpdir(), 'telescope-sqlite-'));
+    dir = mkdtempSync(path.join(tmpdir(), 'sveltelens-sqlite-'));
     const dbPath = path.join(dir, 'db.sqlite');
     const storage = new SqliteStorage(dbPath, 10);
 
@@ -41,7 +41,7 @@ describe('SqliteStorage', () => {
   });
 
   it('evicts oldest rows once maxEntries is exceeded', () => {
-    dir = mkdtempSync(path.join(tmpdir(), 'telescope-sqlite-'));
+    dir = mkdtempSync(path.join(tmpdir(), 'sveltelens-sqlite-'));
     const storage = new SqliteStorage(path.join(dir, 'db.sqlite'), 2);
     storage.add(makeEntry('a'));
     storage.add(makeEntry('b'));

@@ -4,6 +4,6 @@ build/
 .svelte-kit/
 **/dashboard-dist/*
 !**/dashboard-dist/.gitkeep
-.telescope/
+.sveltelens/
 *.log
 .DS_Store
