@@ -13,8 +13,10 @@
   "scripts": {
     "build:dashboard": "cd packages/dashboard && bun run build",
     "build:package": "cd packages/sveltelens && bun run build",
-    "build": "bun run build:dashboard && bun run build:package",
+    "build:docs": "cd packages/docs && bun run build",
+    "build": "bun run build:dashboard && bun run build:package && bun run build:docs",
     "dev:demo": "cd examples/demo-app && bun run dev",
+    "dev:docs": "cd packages/docs && bun run dev",
     "test:package": "cd packages/sveltelens && bun run test",
     "test:dashboard": "cd packages/dashboard && bun run test",
     "test": "bun run test:package && bun run test:dashboard"

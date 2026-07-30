@@ -1,0 +1,39 @@
+/**
+ * Palette mirrors packages/dashboard/src/app.css's dark theme so the docs
+ * site and the dashboard feel like the same product.
+ */
+:root {
+  --vp-font-family-base:
+    'Geist Variable', ui-sans-serif, system-ui, sans-serif;
+  --vp-font-family-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  --vp-c-brand-1: oklch(63% 0.19 35);
+  --vp-c-brand-2: oklch(58% 0.19 35);
+  --vp-c-brand-3: oklch(68% 0.19 35);
+  --vp-c-brand-soft: oklch(63% 0.19 35 / 16%);
+}
+
+:root.dark {
+  --vp-c-bg: #111111;
+  --vp-c-bg-alt: #0a0a0a;
+  --vp-c-bg-elv: oklch(19% 0 0);
+  --vp-c-bg-soft: oklch(19% 0 0);
+
+  --vp-c-text-1: oklch(87.609% 0 0);
+  --vp-c-text-2: oklch(87.609% 0 0 / 78%);
+  --vp-c-text-3: oklch(87.609% 0 0 / 56%);
+
+  --vp-c-divider: oklch(22% 0 0);
+  --vp-c-gutter: oklch(22% 0 0);
+}
+
+.VPHero .name {
+  background: -webkit-linear-gradient(
+    120deg,
+    var(--vp-c-brand-3) 20%,
+    var(--vp-c-brand-1)
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
