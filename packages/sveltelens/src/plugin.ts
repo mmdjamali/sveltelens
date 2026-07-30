@@ -31,7 +31,6 @@ export function pinShellToMountPath(html: string, mountPath: string): string {
     .replace(/base: new URL\("\.", ?location\)\.pathname\.slice\(0, ?-1\)/, pinned);
 
   if (!patched.includes(pinned)) {
-    // eslint-disable-next-line no-console
     console.warn('[sveltelens] could not pin the dashboard router base — nested routes may 404 on direct load');
   }
   return patched;
@@ -87,7 +86,6 @@ export function sveltelens(userConfig: SveltelensConfig = {}): Plugin {
       server.httpServer?.once('listening', () => {
         const address = server.httpServer?.address();
         const port = typeof address === 'object' && address ? address.port : '';
-        // eslint-disable-next-line no-console
         console.log(`  \x1b[35m➜\x1b[0m  Sveltelens:  \x1b[1mhttp://localhost:${port}${config.path}\x1b[0m`);
       });
     },

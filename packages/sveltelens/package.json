@@ -4,6 +4,9 @@
   "description": "Laravel Telescope-style local developer observability dashboard for SvelteKit",
   "type": "module",
   "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
   "files": [
     "dist",
     "dashboard-dist"

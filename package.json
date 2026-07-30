@@ -6,6 +6,10 @@
     "packages/*",
     "examples/*"
   ],
+  "packageManager": "bun@1.3.14",
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "build:dashboard": "cd packages/dashboard && bun run build",
     "build:package": "cd packages/sveltelens && bun run build",
