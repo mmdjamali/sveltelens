@@ -4,7 +4,6 @@ layout: home
 hero:
   name: Sveltelens
   text: Observability for SvelteKit, dev-only.
-  tagline: A local developer dashboard inspired by Laravel Telescope — captures requests, outgoing HTTP, DB queries, logs, and exceptions no matter what libraries your app uses.
   actions:
     - theme: brand
       text: Get Started
