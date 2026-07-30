@@ -4,10 +4,10 @@ import { MemoryStorage } from '../src/storage/memory.js';
 import { Recorder } from '../src/recorder.js';
 import { setSveltelensState } from '../src/state.js';
 import { resolveConfig } from '../src/config.js';
-import { sveltelensBetterSqlite3 } from '../src/adapters/drizzle.js';
+import { betterSqlite3 } from '../src/adapters/sqlite.js';
 import type { QueryPayload } from '../src/types.js';
 
-describe('sveltelensBetterSqlite3', () => {
+describe('betterSqlite3', () => {
   let storage: MemoryStorage;
 
   beforeEach(() => {
@@ -16,7 +16,7 @@ describe('sveltelensBetterSqlite3', () => {
   });
 
   function makeDb() {
-    const sqlite = sveltelensBetterSqlite3(new Database(':memory:'));
+    const sqlite = betterSqlite3(new Database(':memory:'));
     sqlite.exec('CREATE TABLE todos (id INTEGER PRIMARY KEY, title TEXT NOT NULL)');
     return sqlite;
   }

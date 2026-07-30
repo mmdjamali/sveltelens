@@ -4,7 +4,7 @@ export default defineConfig({
   entry: {
     index: 'src/index.ts',
     hook: 'src/hook.ts',
-    'adapters/drizzle': 'src/adapters/drizzle.ts',
+    'adapters/sqlite': 'src/adapters/sqlite.ts',
   },
   format: ['esm', 'cjs'],
   dts: true,

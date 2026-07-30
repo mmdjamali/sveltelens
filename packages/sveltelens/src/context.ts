@@ -7,7 +7,7 @@ export interface RequestContext {
 }
 
 // Backed by globalThis: Vite's SSR module graph can load this package's
-// different entry points (., ./hook, ./adapters/drizzle) through separate
+// different entry points (., ./hook, ./adapters/sqlite) through separate
 // resolution paths, producing distinct module instances. A plain module-level
 // AsyncLocalStorage would silently split into unrelated stores per instance,
 // breaking requestId correlation. A globalThis singleton guarantees one store

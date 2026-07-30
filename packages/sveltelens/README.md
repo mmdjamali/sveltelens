@@ -77,23 +77,34 @@ Request and response bodies are truncated at 64KB and binary bodies are never st
 
 ## Adapters
 
-### Drizzle
+Adapters wrap the *database driver*, not the ORM on top of it — so one adapter covers
+Drizzle, Kysely, and raw SQL alike, and it sees each query finish rather than only start.
+
+### SQLite
 
 ```ts
-import { drizzle } from 'drizzle-orm/better-sqlite3';
-import { sveltelensBetterSqlite3 } from 'sveltelens/adapters/drizzle';
+import Database from 'better-sqlite3';
+import { betterSqlite3 } from 'sveltelens/adapters/sqlite';
 
-export const db = drizzle(sveltelensBetterSqlite3(sqlite));
+const sqlite = betterSqlite3(new Database('app.db'));
 ```
 
-`sveltelensBetterSqlite3` wraps the better-sqlite3 `Database` itself, so recorded queries get a
-real `durationMs`. There's also `sveltelensDrizzleLogger()`, passed as drizzle's `logger` option —
-but Drizzle calls that hook *before* the driver runs the query, so its entries never have a
-duration; only reach for it with drivers `sveltelensBetterSqlite3` doesn't cover.
+Every prepared statement's `run`/`get`/`all` is timed and recorded with a real `durationMs`.
+Pass the wrapped database wherever you'd pass the original — `drizzle(sqlite)`, and so on.
 
 ### Everything else
 
-Anything that talks HTTP (PocketBase, Supabase, a REST API client, `fetch`) is already captured by the outgoing-HTTP interceptor with no adapter needed. Writing a new adapter for a non-HTTP data source just means calling into the recorder the same way `sveltelensDrizzleLogger` does — record a `query`-typed entry from wherever your library exposes a query/logging hook.
+Anything that talks HTTP (PocketBase, Supabase, a REST API client, `fetch`) is already captured
+by the outgoing-HTTP interceptor with no adapter needed. For a non-HTTP data source without a
+shipped adapter, call `recordQuery` from wherever your library exposes the SQL:
+
+```ts
+import { recordQuery } from 'sveltelens';
+
+recordQuery({ sql, params, durationMs, connection: 'primary' });
+```
+
+It's a no-op when the plugin isn't running, so it's safe to leave in place.
 
 ## Example
 

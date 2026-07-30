@@ -1,7 +1,7 @@
 import Database from 'better-sqlite3';
 import { drizzle } from 'drizzle-orm/better-sqlite3';
 import { sqliteTable, integer, text } from 'drizzle-orm/sqlite-core';
-import { sveltelensBetterSqlite3 } from 'sveltelens/adapters/drizzle';
+import { betterSqlite3 } from 'sveltelens/adapters/sqlite';
 
 export const todos = sqliteTable('todos', {
   id: integer('id').primaryKey({ autoIncrement: true }),
@@ -9,7 +9,7 @@ export const todos = sqliteTable('todos', {
   done: integer('done', { mode: 'boolean' }).notNull().default(false),
 });
 
-const sqlite = sveltelensBetterSqlite3(new Database(':memory:'));
+const sqlite = betterSqlite3(new Database(':memory:'));
 sqlite.exec(
   `CREATE TABLE todos (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL, done INTEGER NOT NULL DEFAULT 0)`
 );

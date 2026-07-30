@@ -19,10 +19,10 @@
       "import": "./dist/hook.js",
       "require": "./dist/hook.cjs"
     },
-    "./adapters/drizzle": {
-      "types": "./dist/adapters/drizzle.d.ts",
-      "import": "./dist/adapters/drizzle.js",
-      "require": "./dist/adapters/drizzle.cjs"
+    "./adapters/sqlite": {
+      "types": "./dist/adapters/sqlite.d.ts",
+      "import": "./dist/adapters/sqlite.js",
+      "require": "./dist/adapters/sqlite.cjs"
     }
   },
   "scripts": {

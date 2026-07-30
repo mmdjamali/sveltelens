@@ -1,6 +1,9 @@
 export { sveltelens } from './plugin.js';
 export type { SveltelensConfig } from './config.js';
 
+/** The escape hatch for data sources without a shipped adapter — see `src/adapters`. */
+export { recordQuery } from './record.js';
+
 /**
  * The wire format, re-exported for anyone reading captured entries — the
  * dashboard, or a user inspecting them directly. Storage and ListFilter stay
