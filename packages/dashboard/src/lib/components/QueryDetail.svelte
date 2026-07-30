@@ -1,37 +1,26 @@
 <script lang="ts">
-  import { base } from "$app/paths";
-  import { formatDuration, entryTypeClass, interpolateSql, durationClass } from "../format";
+  import { formatDuration, interpolateSql, durationClass } from "../format";
   import { highlight } from "../highlight";
-  import DetailHeader from "./DetailHeader.svelte";
-  import BodyView from "./BodyView.svelte";
-  import { Badge } from "./ui/badge/index.js";
-  import { ENTRY_TYPE_META } from "../entry-types";
   import type { Entry } from "../types";
-
-  import ArrowLeftIcon from "@lucide/svelte/icons/arrow-left";
+  import { Badge } from "./ui/badge/index.js";
+  import DetailShell from "./DetailShell.svelte";
+  import BodyView from "./BodyView.svelte";
 
   let { entry }: { entry: Extract<Entry, { type: "query" }> } = $props();
 </script>
 
-<a href="{base}/queries" class="btn btn-ghost border-base-300 mb-5">
-  <ArrowLeftIcon class="size-4" />
-  Back
-</a>
-
-<div class="mx-auto max-w-6xl pb-6">
-  <div class="card bg-base-200 rounded-field overflow-hidden">
-    <DetailHeader
-      badgeLabel={ENTRY_TYPE_META.query.badgeLabel}
-      badgeClass={entryTypeClass("query")}
-      timestamp={entry.timestamp}
-      durationMs={entry.durationMs}
-    />
+<DetailShell {entry}>
+  {#snippet overview()}
     <div class="p-4">
       <div class="mb-4 flex items-center gap-2">
         {#if entry.payload.connection}
-          <Badge variant="soft" class="bg-base-300 text-base-content/60">{entry.payload.connection}</Badge>
+          <Badge variant="soft" class="bg-base-300 text-base-content/60"
+            >{entry.payload.connection}</Badge
+          >
         {/if}
-        <Badge variant="soft" class={durationClass(entry.durationMs)}>{formatDuration(entry.durationMs)}</Badge>
+        <Badge variant="soft" class={durationClass(entry.durationMs)}
+          >{formatDuration(entry.durationMs)}</Badge
+        >
       </div>
 
       <pre
@@ -41,9 +30,11 @@
         )}</pre>
 
       {#if entry.payload.params.length}
-        <h3 class="text-base-content/60 mt-4 mb-1.5 text-xs font-medium">Bindings</h3>
+        <h3 class="text-base-content/60 mt-4 mb-1.5 text-xs font-medium">
+          Bindings
+        </h3>
         <BodyView text={JSON.stringify(entry.payload.params)} />
       {/if}
     </div>
-  </div>
-</div>
+  {/snippet}
+</DetailShell>
