@@ -2,8 +2,12 @@
   import { levelClass, stripAnsi } from "../format";
   import type { Entry } from "../types";
   import DetailShell from "./DetailShell.svelte";
+  import RelatedList from "./RelatedList.svelte";
 
-  let { entry }: { entry: Extract<Entry, { type: "log" }> } = $props();
+  let {
+    entry,
+    related,
+  }: { entry: Extract<Entry, { type: "log" }>; related: Entry[] } = $props();
 </script>
 
 <DetailShell
@@ -26,4 +30,6 @@
       <p class="text-base-content/60 text-xs italic">no context captured</p>
     </div>
   {/snippet}
+
+  <RelatedList {entry} {related} />
 </DetailShell>

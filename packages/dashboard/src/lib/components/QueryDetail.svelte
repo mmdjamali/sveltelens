@@ -5,8 +5,13 @@
   import { Badge } from "./ui/badge/index.js";
   import DetailShell from "./DetailShell.svelte";
   import BodyView from "./BodyView.svelte";
+  import RelatedList from "./RelatedList.svelte";
 
-  let { entry }: { entry: Extract<Entry, { type: "query" }> } = $props();
+  let {
+    entry,
+    related,
+  }: { entry: Extract<Entry, { type: "query" }>; related: Entry[] } =
+    $props();
 </script>
 
 <DetailShell {entry}>
@@ -37,4 +42,6 @@
       {/if}
     </div>
   {/snippet}
+
+  <RelatedList {entry} {related} />
 </DetailShell>

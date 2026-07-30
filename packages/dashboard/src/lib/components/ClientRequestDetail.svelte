@@ -8,8 +8,12 @@
   import OverviewRow from "./OverviewRow.svelte";
   import BodySection from "./BodySection.svelte";
   import KeyValueTable from "./KeyValueTable.svelte";
+  import RelatedList from "./RelatedList.svelte";
 
-  let { entry }: { entry: Extract<Entry, { type: "client-request" }> } =
+  let {
+    entry,
+    related,
+  }: { entry: Extract<Entry, { type: "client-request" }>; related: Entry[] } =
     $props();
 </script>
 
@@ -57,4 +61,6 @@
     body={entry.payload.responseBody}
     emptyMessage="no response body"
   />
+
+  <RelatedList {entry} {related} />
 </DetailShell>

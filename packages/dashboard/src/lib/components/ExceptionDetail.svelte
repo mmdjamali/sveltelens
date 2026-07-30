@@ -9,6 +9,7 @@
   import type { Entry } from "../types";
   import { Badge } from "./ui/badge/index.js";
   import DetailShell from "./DetailShell.svelte";
+  import RelatedList from "./RelatedList.svelte";
 
   let {
     entry,
@@ -71,4 +72,6 @@
       {/if}
     </div>
   {/snippet}
+
+  <RelatedList {entry} {related} />
 </DetailShell>
