@@ -2,7 +2,7 @@
 layout: home
 
 hero:
-  name: Sveltelens
+  name: Svelte<span class="accent">Lens</span>
   text: Observability for SvelteKit, dev-only.
   actions:
     - theme: brand

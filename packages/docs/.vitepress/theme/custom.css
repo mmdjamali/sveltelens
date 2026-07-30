@@ -28,6 +28,10 @@
 }
 
 .VPHero .name {
+  color: var(--vp-c-text-1);
+}
+
+.VPHero .name .accent {
   background: -webkit-linear-gradient(
     120deg,
     var(--vp-c-brand-3) 20%,
