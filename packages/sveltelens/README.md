@@ -32,86 +32,11 @@ export const handle = sequence(sveltelensHandle /*, ...your other hooks */);
 export const handleError = sveltelensHandleError;
 ```
 
-`sveltelensHandleError` is optional but recommended: SvelteKit resolves `load` errors into an error page internally, so they never reach `sveltelensHandle`'s catch — `handleError` is the only hook SvelteKit calls for them. If you already have a `handleError`, call `sveltelensHandleError(input)` from it instead of assigning it directly.
+Run `npm run dev` and open `http://localhost:5173/__sveltelens`.
 
-Run `npm run dev` and open **http://localhost:5173/__sveltelens**.
+## Docs
 
-Nothing runs in production builds — the plugin is dev-only (`apply: 'serve'`), and `sveltelensHandle` becomes a no-op passthrough when the plugin isn't active, so it's safe to leave the import in place.
-
-## How it works
-
-Sveltelens patches Node platform primitives inside the Vite dev server process, so it sees everything regardless of which libraries your app uses:
-
-| Data | How it's captured |
-|---|---|
-| Incoming requests | `sveltelensHandle` wraps `resolve()` in `AsyncLocalStorage`, recording method, path, route id, status, duration, headers, and truncated bodies. |
-| Outgoing HTTP | Subscribes to undici's `diagnostics_channel` events and patches `globalThis.fetch`, so plain `fetch`, `axios`, `got`, and SDKs like the PocketBase client are all captured without an adapter. |
-| Exceptions | `process.on('uncaughtException'/'unhandledRejection')`, errors caught in the handle hook, and `sveltelensHandleError` for errors thrown in `load`. |
-| Logs | `console.log/info/warn/error/debug` are patched server-side. |
-| DB queries | Optional thin adapters (see below) — most ORMs and clients that go over HTTP are already covered by the outgoing-HTTP interceptor. |
-
-Every entry carries a `requestId` from `AsyncLocalStorage` when one is available, so the dashboard's **Related** tab can show every query, outgoing call, and log line that happened during a single request — even though none of those libraries know Sveltelens exists.
-
-## Config
-
-```ts
-sveltelens({
-  enabled: true,              // set false to fully disable
-  path: '/__sveltelens',       // where the dashboard + API mount
-  storage: 'memory',          // 'memory' | 'sqlite'
-  sqlitePath: '.sveltelens/db.sqlite',
-  maxEntries: 1000,           // ring buffer size
-  ignore: [...],              // extra glob/regex route patterns to skip
-  redactHeaders: ['authorization', 'cookie'],
-})
-```
-
-| Option | Default | Description |
-|---|---|---|
-| `enabled` | `true` | Disable entirely without removing the plugin. |
-| `path` | `/__sveltelens` | Mount path for the dashboard and its API. |
-| `storage` | `'memory'` | `'memory'` uses an in-process ring buffer. `'sqlite'` persists to disk via `better-sqlite3` (lazily required — not a hard dependency). |
-| `sqlitePath` | `.sveltelens/db.sqlite` | Only used when `storage: 'sqlite'`. |
-| `maxEntries` | `1000` | Max entries kept (oldest evicted first). |
-| `ignore` | vite/sveltelens internals | Extra route patterns (string prefix, `*` glob, or `RegExp`) to exclude from capture. |
-| `redactHeaders` | `['authorization', 'cookie']` | Header names replaced with `[redacted]` in captured requests. |
-
-Request and response bodies are truncated at 64KB and binary bodies are never stored (only size + content-type are recorded).
-
-## Adapters
-
-Adapters wrap the *database driver*, not the ORM on top of it — so one adapter covers
-Drizzle, Kysely, and raw SQL alike, and it sees each query finish rather than only start.
-
-### SQLite
-
-```ts
-import Database from 'better-sqlite3';
-import { betterSqlite3 } from 'sveltelens/adapters/sqlite';
-
-const sqlite = betterSqlite3(new Database('app.db'));
-```
-
-Every prepared statement's `run`/`get`/`all` is timed and recorded with a real `durationMs`.
-Pass the wrapped database wherever you'd pass the original — `drizzle(sqlite)`, and so on.
-
-### Everything else
-
-Anything that talks HTTP (PocketBase, Supabase, a REST API client, `fetch`) is already captured
-by the outgoing-HTTP interceptor with no adapter needed. For a non-HTTP data source without a
-shipped adapter, call `recordQuery` from wherever your library exposes the SQL:
-
-```ts
-import { recordQuery } from 'sveltelens';
-
-recordQuery({ sql, params, durationMs, connection: 'primary' });
-```
-
-It's a no-op when the plugin isn't running, so it's safe to leave in place.
-
-## Example
-
-See `examples/demo-app` in this repo for a working SvelteKit app wired up with Drizzle + an outgoing `fetch` call.
+Full guide — configuration, how it works, adapters — lives in [`packages/docs`](https://github.com/mmdjamali/sveltescope/tree/main/packages/docs) in this repo. Run `bun run dev:docs` from the repo root to browse it locally.
 
 ## License
 
