@@ -28,6 +28,8 @@ export interface EntryTypeMeta {
   /** Singular, for the badge on one entry. */
   badgeLabel: string;
   icon: Icon;
+  /** Shown on the list page when nothing of this type has been captured yet. */
+  emptyMessage: string;
   /**
    * The list table and the detail view. Loosely typed on purpose: a route that
    * looks these up by slug can't prove to TypeScript which member of the Entry
@@ -44,6 +46,7 @@ export const ENTRY_TYPE_META: Record<EntryType, EntryTypeMeta> = {
     label: 'Requests',
     badgeLabel: 'Request',
     icon: IconRoute,
+    emptyMessage: "Trigger a request in your app and it'll show up here.",
     table: RequestsTable,
     detail: RequestDetail,
   },
@@ -52,6 +55,7 @@ export const ENTRY_TYPE_META: Record<EntryType, EntryTypeMeta> = {
     label: 'Actions',
     badgeLabel: 'Action',
     icon: IconFileFunction,
+    emptyMessage: "Submit a form action in your app and it'll show up here.",
     table: ActionsTable,
     detail: ActionDetail,
   },
@@ -60,6 +64,7 @@ export const ENTRY_TYPE_META: Record<EntryType, EntryTypeMeta> = {
     label: 'Queries',
     badgeLabel: 'Query',
     icon: IconDatabase,
+    emptyMessage: "Run a query in your app and it'll show up here.",
     table: QueriesTable,
     detail: QueryDetail,
   },
@@ -68,6 +73,7 @@ export const ENTRY_TYPE_META: Record<EntryType, EntryTypeMeta> = {
     label: 'HTTP Client',
     badgeLabel: 'HTTP Client',
     icon: IconWorld,
+    emptyMessage: "Make an outgoing HTTP call and it'll show up here.",
     table: ClientRequestsTable,
     detail: ClientRequestDetail,
   },
@@ -76,6 +82,7 @@ export const ENTRY_TYPE_META: Record<EntryType, EntryTypeMeta> = {
     label: 'Logs',
     badgeLabel: 'Log',
     icon: IconFileText,
+    emptyMessage: "Log something from your app and it'll show up here.",
     table: LogsTable,
     detail: LogDetail,
   },
@@ -84,6 +91,7 @@ export const ENTRY_TYPE_META: Record<EntryType, EntryTypeMeta> = {
     label: 'Exceptions',
     badgeLabel: 'Exception',
     icon: IconAlertTriangle,
+    emptyMessage: "Throw an exception in your app and it'll show up here.",
     table: ExceptionsTable,
     detail: ExceptionDetail,
   },
