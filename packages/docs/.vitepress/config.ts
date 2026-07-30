@@ -1,7 +1,7 @@
 import { defineConfig } from 'vitepress';
 
 export default defineConfig({
-  title: 'Sveltelens',
+  title: 'SvelteLens',
   description: 'A local developer observability dashboard for SvelteKit, inspired by Laravel Telescope.',
   appearance: 'force-dark',
   cleanUrls: true,
