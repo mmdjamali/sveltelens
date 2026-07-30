@@ -25,11 +25,14 @@ export default defineConfig({
 **2. Add the hook** to `src/hooks.server.ts`:
 
 ```ts
-import { sveltelensHandle } from 'sveltelens/hook';
+import { sveltelensHandle, sveltelensHandleError } from 'sveltelens/hook';
 import { sequence } from '@sveltejs/kit/hooks';
 
 export const handle = sequence(sveltelensHandle /*, ...your other hooks */);
+export const handleError = sveltelensHandleError;
 ```
+
+`sveltelensHandleError` is optional but recommended: SvelteKit resolves `load` errors into an error page internally, so they never reach `sveltelensHandle`'s catch — `handleError` is the only hook SvelteKit calls for them. If you already have a `handleError`, call `sveltelensHandleError(input)` from it instead of assigning it directly.
 
 Run `npm run dev` and open **http://localhost:5173/__sveltelens**.
 
@@ -43,7 +46,7 @@ Sveltelens patches Node platform primitives inside the Vite dev server process, 
 |---|---|
 | Incoming requests | `sveltelensHandle` wraps `resolve()` in `AsyncLocalStorage`, recording method, path, route id, status, duration, headers, and truncated bodies. |
 | Outgoing HTTP | Subscribes to undici's `diagnostics_channel` events and patches `globalThis.fetch`, so plain `fetch`, `axios`, `got`, and SDKs like the PocketBase client are all captured without an adapter. |
-| Exceptions | `process.on('uncaughtException'/'unhandledRejection')`, plus errors caught in the handle hook. |
+| Exceptions | `process.on('uncaughtException'/'unhandledRejection')`, errors caught in the handle hook, and `sveltelensHandleError` for errors thrown in `load`. |
 | Logs | `console.log/info/warn/error/debug` are patched server-side. |
 | DB queries | Optional thin adapters (see below) — most ORMs and clients that go over HTTP are already covered by the outgoing-HTTP interceptor. |
 

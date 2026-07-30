@@ -1,5 +1,5 @@
 import os from 'node:os';
-import type { Handle } from '@sveltejs/kit';
+import type { Handle, HandleServerError } from '@sveltejs/kit';
 import { getSveltelensState } from './state.js';
 import { requestContext } from './context.js';
 import { generateId, redactHeaders, headersToObject, captureBody, matchesIgnore } from './utils.js';
@@ -159,4 +159,19 @@ export const sveltelensHandle: Handle = async ({ event, resolve }) => {
       throw err;
     }
   });
+};
+
+/**
+ * SvelteKit swallows errors thrown inside `load` (and other unexpected
+ * errors) before they reach `sveltelensHandle`'s catch — `resolve()` returns
+ * an error page instead of rejecting. `handleError` is the hook SvelteKit
+ * calls for exactly those errors, so it's the only place left to record them.
+ *
+ * `export const handleError = sveltelensHandleError;` — or call it first if
+ * you already have your own `handleError`.
+ */
+export const sveltelensHandleError: HandleServerError = ({ error }) => {
+  const state = getSveltelensState();
+  if (!state || !state.config.enabled) return;
+  recordException(state.recorder, error instanceof Error ? error : new Error(String(error)));
 };
