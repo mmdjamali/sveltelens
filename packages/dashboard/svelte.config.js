@@ -10,11 +10,17 @@ const config = {
       assets: 'build',
       fallback: undefined,
       precompress: false,
-      // Only `/` is prerendered; sirv (single: true) serves that index.html for the
-      // dynamic routes. A real `fallback` page would emit absolute /_app/ URLs, which
-      // break under the configurable mount path — the prerendered page uses relative ones.
+      // Only `/` is prerendered. The plugin serves that index.html for every dynamic
+      // route, rewriting it to pin both the asset base and SvelteKit's router base to
+      // the configured mount path — see pinShellToMountPath. A real `fallback` page
+      // would emit absolute /_app/ URLs, which break under a configurable mount path.
       strict: false,
     }),
+    // The wire format is owned by the package that produces it. Type-only, so this
+    // never resolves at runtime — but Vite needs the alias to agree with TypeScript.
+    alias: {
+      sveltelens: '../sveltelens/src/index.ts',
+    },
   },
 };
 

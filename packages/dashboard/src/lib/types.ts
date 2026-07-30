@@ -5,88 +5,25 @@ import IconDatabase from '@tabler/icons-svelte/icons/database';
 import IconFileText from '@tabler/icons-svelte/icons/file-text';
 import IconAlertTriangle from '@tabler/icons-svelte/icons/alert-triangle';
 
-export type EntryType = 'request' | 'client-request' | 'query' | 'log' | 'exception' | 'action';
+import type { EntryType } from 'sveltelens';
 
-export interface BodyCapture {
-  contentType: string | null;
-  size: number;
-  truncated: boolean;
-  text: string | null;
-}
-
-export interface RequestPayload {
-  method: string;
-  path: string;
-  routeId: string | null;
-  status: number;
-  hostname: string;
-  ip: string | null;
-  memoryUsageBytes: number | null;
-  requestHeaders: Record<string, string>;
-  responseHeaders: Record<string, string>;
-  requestBody: BodyCapture | null;
-  responseBody: BodyCapture | null;
-}
-
-export interface ClientRequestPayload {
-  method: string;
-  url: string;
-  status: number | null;
-  requestHeaders: Record<string, string>;
-  responseHeaders: Record<string, string>;
-  requestBody: BodyCapture | null;
-  responseBody: BodyCapture | null;
-  error: string | null;
-}
-
-export interface QueryPayload {
-  sql: string;
-  params: unknown[];
-  connection: string | null;
-}
-
-export interface LogPayload {
-  level: 'log' | 'info' | 'warn' | 'error' | 'debug';
-  message: string;
-}
-
-export interface ExceptionPayload {
-  message: string;
-  stack: string | null;
-  name: string;
-}
-
-export interface ActionPayload {
-  method: string;
-  path: string;
-  routeId: string | null;
-  actionName: string;
-  status: number;
-  hostname: string;
-  ip: string | null;
-  memoryUsageBytes: number | null;
-  requestHeaders: Record<string, string>;
-  responseHeaders: Record<string, string>;
-  requestBody: BodyCapture | null;
-  responseBody: BodyCapture | null;
-  location: string | null;
-}
-
-export type EntryPayload =
-  | { type: 'request'; payload: RequestPayload }
-  | { type: 'client-request'; payload: ClientRequestPayload }
-  | { type: 'query'; payload: QueryPayload }
-  | { type: 'log'; payload: LogPayload }
-  | { type: 'exception'; payload: ExceptionPayload }
-  | { type: 'action'; payload: ActionPayload };
-
-export type Entry = {
-  id: string;
-  requestId: string | null;
-  timestamp: number;
-  durationMs: number | null;
-  offsetMs: number | null;
-} & EntryPayload;
+/**
+ * The wire format is defined by the package that produces it — re-exported here
+ * so the dashboard has one import for "an entry and how we present it". This
+ * file owns only the presentation side.
+ */
+export type {
+  Entry,
+  EntryType,
+  EntryPayload,
+  BodyCapture,
+  RequestPayload,
+  ActionPayload,
+  ClientRequestPayload,
+  QueryPayload,
+  LogPayload,
+  ExceptionPayload,
+} from 'sveltelens';
 
 export const ENTRY_TYPES: EntryType[] = ['request', 'action', 'query', 'client-request', 'log', 'exception'];
 
