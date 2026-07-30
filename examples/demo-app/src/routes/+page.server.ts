@@ -1,3 +1,4 @@
+import { fail } from '@sveltejs/kit';
 import type { PageServerLoad, Actions } from './$types';
 import { db, todos } from '$lib/server/db';
 import { MOCK_API_PORT } from '$lib/server/mock-api';
@@ -15,7 +16,7 @@ export const actions = {
   create: async ({ request }) => {
     const data = await request.formData();
     const title = data.get('title') as string;
-    if (!title?.trim()) return { error: 'Title is required' };
+    if (!title?.trim()) return fail(422, { error: 'Title is required' });
     await db.insert(todos).values({ title: title.trim(), done: false });
     return { success: true };
   },

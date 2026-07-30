@@ -30,7 +30,6 @@
         type="text"
         name="title"
         placeholder="What needs doing?"
-        required
         class="input input-bordered input-sm flex-1"
       />
       <button class="btn btn-primary btn-sm">Add</button>
