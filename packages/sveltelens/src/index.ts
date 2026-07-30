@@ -17,6 +17,7 @@ export type {
   BodyCapture,
   RequestPayload,
   ActionPayload,
+  ActionResultType,
   ClientRequestPayload,
   QueryPayload,
   LogPayload,

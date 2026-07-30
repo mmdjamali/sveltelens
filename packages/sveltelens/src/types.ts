@@ -29,11 +29,23 @@ export interface RequestPayload {
   responseBody: BodyCapture | null;
 }
 
+/** SvelteKit's own ActionResult tag — null when we can't recover it (full-page, non-JS submits). */
+export type ActionResultType = 'success' | 'failure' | 'redirect' | 'error';
+
 /** A form action is a request plus which action ran and where it redirected. */
 export interface ActionPayload extends RequestPayload {
   actionName: string;
   /** Redirect location for successful actions. */
   location: string | null;
+  /**
+   * SvelteKit's own result type, when known. For use:enhance/fetch submits, SvelteKit
+   * wraps the ActionResult in a JSON body and only forwards its real HTTP status for
+   * `error` — success/failure/redirect all come back over HTTP 200, so `status` and
+   * `location` above are parsed out of that body rather than trusted from the response.
+   * Full-page (non-JS) submits don't have this wrapper, so resultType is null there
+   * even though status/location are accurate.
+   */
+  resultType: ActionResultType | null;
 }
 
 export interface ClientRequestPayload {
