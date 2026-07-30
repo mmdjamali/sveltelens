@@ -1,20 +1,16 @@
 <script lang="ts">
   import { base } from "$app/paths";
   import { page } from "$app/state";
-  import {
-    ENTRY_TYPES,
-    ENTRY_TYPE_LABELS,
-    ENTRY_TYPE_ICONS,
-    ENTRY_TYPE_SLUGS,
-  } from "../types";
+  import { ENTRY_TYPES, ENTRY_TYPE_META } from "../entry-types";
 
-  const current = $derived(page.route.id?.split("/")[1] ?? null);
+  const current = $derived(page.params.type ?? null);
 </script>
 
 <ul class="flex flex-col gap-0.5">
   {#each ENTRY_TYPES as type (type)}
-    {@const Icon = ENTRY_TYPE_ICONS[type]}
-    {@const slug = ENTRY_TYPE_SLUGS[type]}
+    {@const meta = ENTRY_TYPE_META[type]}
+    {@const Icon = meta.icon}
+    {@const slug = meta.slug}
     {@const active = current === slug}
     <li>
       <a
@@ -28,7 +24,7 @@
             ? 'text-primary'
             : 'text-base-content opacity-60'}"
         />
-        <span>{ENTRY_TYPE_LABELS[type]}</span>
+        <span>{meta.label}</span>
       </a>
     </li>
   {/each}

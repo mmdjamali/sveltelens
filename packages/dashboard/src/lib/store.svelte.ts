@@ -1,5 +1,6 @@
 import { fetchEntries, fetchCounts, clearEntries, connectStream, fetchPaused, setPaused } from './api';
-import { ENTRY_TYPES, type Entry, type EntryType } from './types';
+import { ENTRY_TYPES } from './entry-types';
+import type { Entry, EntryType } from './types';
 
 function emptyCounts(): Record<EntryType, number> {
   return Object.fromEntries(ENTRY_TYPES.map((t) => [t, 0])) as Record<EntryType, number>;

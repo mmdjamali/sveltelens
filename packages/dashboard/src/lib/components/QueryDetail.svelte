@@ -5,7 +5,8 @@
   import DetailHeader from "./DetailHeader.svelte";
   import BodyView from "./BodyView.svelte";
   import { Badge } from "./ui/badge/index.js";
-  import { ENTRY_TYPE_BADGE_LABELS, type Entry } from "../types";
+  import { ENTRY_TYPE_META } from "../entry-types";
+  import type { Entry } from "../types";
 
   import ArrowLeftIcon from "@lucide/svelte/icons/arrow-left";
 
@@ -20,7 +21,7 @@
 <div class="mx-auto max-w-6xl pb-6">
   <div class="card bg-base-200 rounded-field overflow-hidden">
     <DetailHeader
-      badgeLabel={ENTRY_TYPE_BADGE_LABELS.query}
+      badgeLabel={ENTRY_TYPE_META.query.badgeLabel}
       badgeClass={entryTypeClass("query")}
       timestamp={entry.timestamp}
       durationMs={entry.durationMs}

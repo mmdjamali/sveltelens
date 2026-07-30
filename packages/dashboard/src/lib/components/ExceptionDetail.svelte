@@ -9,8 +9,15 @@
 
   let {
     entry,
-    requestEntry,
-  }: { entry: Extract<Entry, { type: "exception" }>; requestEntry: Extract<Entry, { type: "request" }> | null } = $props();
+    related,
+  }: { entry: Extract<Entry, { type: "exception" }>; related: Entry[] } = $props();
+
+  // The request this was thrown during, picked out of everything captured alongside it.
+  const requestEntry = $derived(
+    related.find((e) => e.type === "request") as
+      | Extract<Entry, { type: "request" }>
+      | undefined,
+  );
 
   const location = $derived(exceptionLocation(entry.payload.stack));
 </script>

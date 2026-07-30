@@ -13,11 +13,8 @@
   import KeyValueTable from "./KeyValueTable.svelte";
   import BodyView from "./BodyView.svelte";
   import { Badge } from "./ui/badge/index.js";
-  import {
-    ENTRY_TYPE_BADGE_LABELS,
-    ENTRY_TYPE_SLUGS,
-    type Entry,
-  } from "../types";
+  import { ENTRY_TYPE_META } from "../entry-types";
+  import type { Entry } from "../types";
 
   import ArrowLeftIcon from "@lucide/svelte/icons/arrow-left";
 
@@ -47,7 +44,7 @@
 <div class="mx-auto max-w-6xl pb-6">
   <div class="card bg-base-200 rounded-field overflow-hidden">
     <DetailHeader
-      badgeLabel={ENTRY_TYPE_BADGE_LABELS.action}
+      badgeLabel={ENTRY_TYPE_META.action.badgeLabel}
       badgeClass={entryTypeClass("action")}
       title={entry.payload.actionName}
       timestamp={entry.timestamp}
@@ -232,11 +229,9 @@
                 ? Math.max((row.durationMs / timelineTotalMs) * 100, 0.6)
                 : 0}
             <a
-              href="{base}/{ENTRY_TYPE_SLUGS[row.type]}/{row.id}"
+              href="{base}/{ENTRY_TYPE_META[row.type].slug}/{row.id}"
               class="hover:bg-base-300 grid grid-cols-[minmax(0,240px)_1fr_3.5rem] items-center gap-3 rounded-md px-2 py-1.5 text-left transition-colors"
-              title="{ENTRY_TYPE_BADGE_LABELS[
-                row.type
-              ]} · offset {row.offsetMs !== null
+              title="{ENTRY_TYPE_META[row.type].badgeLabel} · offset {row.offsetMs !== null
                 ? formatDuration(row.offsetMs)
                 : '-'} · duration {formatDuration(row.durationMs)}"
             >
@@ -247,7 +242,7 @@
                     row.type,
                   )}"
                 >
-                  {ENTRY_TYPE_BADGE_LABELS[row.type]}
+                  {ENTRY_TYPE_META[row.type].badgeLabel}
                 </Badge>
                 <span class="min-w-0 truncate text-xs" title={entrySummary(row)}
                   >{entrySummary(row)}</span

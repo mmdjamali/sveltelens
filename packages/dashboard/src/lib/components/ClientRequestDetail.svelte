@@ -5,7 +5,8 @@
   import KeyValueTable from "./KeyValueTable.svelte";
   import BodyView from "./BodyView.svelte";
   import { Badge } from "./ui/badge/index.js";
-  import { ENTRY_TYPE_BADGE_LABELS, type Entry } from "../types";
+  import { ENTRY_TYPE_META } from "../entry-types";
+  import type { Entry } from "../types";
 
   import ArrowLeftIcon from "@lucide/svelte/icons/arrow-left";
 
@@ -20,7 +21,7 @@
 <div class="mx-auto max-w-6xl pb-6">
   <div class="card bg-base-200 rounded-field overflow-hidden">
     <DetailHeader
-      badgeLabel={ENTRY_TYPE_BADGE_LABELS["client-request"]}
+      badgeLabel={ENTRY_TYPE_META["client-request"].badgeLabel}
       badgeClass={entryTypeClass("client-request")}
       title={entry.payload.url}
       timestamp={entry.timestamp}
