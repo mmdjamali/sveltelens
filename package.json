@@ -11,7 +11,9 @@
     "build:package": "cd packages/sveltelens && bun run build",
     "build": "bun run build:dashboard && bun run build:package",
     "dev:demo": "cd examples/demo-app && bun run dev",
-    "test": "cd packages/sveltelens && bun run test"
+    "test:package": "cd packages/sveltelens && bun run test",
+    "test:dashboard": "cd packages/dashboard && bun run test",
+    "test": "bun run test:package && bun run test:dashboard"
   },
   "devDependencies": {
     "node-gyp": "^11.0.0",
