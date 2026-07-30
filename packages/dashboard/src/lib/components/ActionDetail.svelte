@@ -4,6 +4,7 @@
     formatBytes,
     statusClass,
     methodClass,
+    resultTypeClass,
   } from "../format";
   import type { Entry } from "../types";
   import { Badge } from "./ui/badge/index.js";
@@ -45,6 +46,13 @@
           >{entry.payload.status}</Badge
         >
       </OverviewRow>
+      {#if entry.payload.resultType}
+        <OverviewRow label="Result">
+          <Badge variant="soft" class={resultTypeClass(entry.payload.resultType)}
+            >{entry.payload.resultType}</Badge
+          >
+        </OverviewRow>
+      {/if}
       <OverviewRow label="Duration">
         {formatDuration(entry.durationMs)}
       </OverviewRow>

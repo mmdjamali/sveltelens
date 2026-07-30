@@ -1,4 +1,4 @@
-import type { Entry, EntryType, LogPayload } from './types';
+import type { ActionResultType, Entry, EntryType, LogPayload } from './types';
 
 export function timeAgo(timestamp: number): string {
   const diffMs = Date.now() - timestamp;
@@ -27,6 +27,19 @@ export function statusClass(status: number | null): string {
   if (status >= 300) return SKY;
   if (status >= 200) return EMERALD;
   return NEUTRAL;
+}
+
+const RESULT_TYPE_CLASSES: Record<ActionResultType, string> = {
+  error: RED,
+  failure: AMBER,
+  redirect: SKY,
+  success: EMERALD,
+};
+
+// SvelteKit's own ActionResult tag (only known for use:enhance/fetch submits — see
+// ActionPayload.resultType) colored the same as the status ranges it corresponds to.
+export function resultTypeClass(resultType: ActionResultType): string {
+  return RESULT_TYPE_CLASSES[resultType];
 }
 
 const METHOD_CLASSES: Record<string, string> = {

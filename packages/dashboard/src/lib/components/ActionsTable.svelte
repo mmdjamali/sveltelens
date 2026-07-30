@@ -3,7 +3,7 @@
     timeAgo,
     formatAbsoluteTime,
     statusClass,
-    methodClass,
+    resultTypeClass,
     formatDuration,
   } from "../format";
   import type { Entry } from "../types";
@@ -16,7 +16,7 @@
   const columns = [
     { label: "Action", class: "pl-4" },
     { label: "Route" },
-    { label: "Status", class: "w-16" },
+    { label: "Status", class: "w-32" },
     { label: "Duration", class: "w-20" },
     { label: "Happened", class: "w-28 pr-4 text-right" },
   ];
@@ -25,14 +25,9 @@
 <EntryTable type="action" rows={entries} id={(e) => e.id} {columns}>
   {#snippet cells(entry)}
     <Table.Cell class="max-w-0 py-0 pl-4">
-      <div class="flex min-w-0 items-center gap-2">
-        <Badge variant="soft" class={methodClass(entry.payload.method)}
-          >{entry.payload.method}</Badge
-        >
-        <span class="min-w-0 truncate font-mono text-xs font-medium"
-          >{entry.payload.actionName}</span
-        >
-      </div>
+      <span class="min-w-0 truncate font-mono text-xs font-medium"
+        >{entry.payload.actionName}</span
+      >
     </Table.Cell>
     <Table.Cell class="py-0">
       <span
@@ -41,9 +36,16 @@
       >
     </Table.Cell>
     <Table.Cell class="py-0">
-      <Badge variant="soft" class={statusClass(entry.payload.status)}
-        >{entry.payload.status}</Badge
-      >
+      <div class="flex items-center gap-1">
+        <Badge variant="soft" class={statusClass(entry.payload.status)}
+          >{entry.payload.status}</Badge
+        >
+        {#if entry.payload.resultType}
+          <Badge variant="soft" class={resultTypeClass(entry.payload.resultType)}
+            >{entry.payload.resultType}</Badge
+          >
+        {/if}
+      </div>
     </Table.Cell>
     <Table.Cell class="py-0">
       <span class="font-mono text-xs">{formatDuration(entry.durationMs)}</span>
