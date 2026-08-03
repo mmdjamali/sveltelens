@@ -36,6 +36,11 @@
       "types": "./dist/adapters/mysql2.d.ts",
       "import": "./dist/adapters/mysql2.js",
       "require": "./dist/adapters/mysql2.cjs"
+    },
+    "./adapters/libsql": {
+      "types": "./dist/adapters/libsql.d.ts",
+      "import": "./dist/adapters/libsql.js",
+      "require": "./dist/adapters/libsql.cjs"
     }
   },
   "scripts": {
@@ -54,6 +59,7 @@
     "@sveltejs/kit": "^2.15.0",
     "@types/node": "^22.10.0",
     "@types/ws": "^8.5.13",
+    "@libsql/client": "^0.17.4",
     "@types/better-sqlite3": "^7.6.11",
     "@types/pg": "^8.11.10",
     "better-sqlite3": "^11.0.0",
