@@ -26,6 +26,11 @@
       "types": "./dist/adapters/sqlite.d.ts",
       "import": "./dist/adapters/sqlite.js",
       "require": "./dist/adapters/sqlite.cjs"
+    },
+    "./adapters/pg": {
+      "types": "./dist/adapters/pg.d.ts",
+      "import": "./dist/adapters/pg.js",
+      "require": "./dist/adapters/pg.cjs"
     }
   },
   "scripts": {
@@ -45,7 +50,9 @@
     "@types/node": "^22.10.0",
     "@types/ws": "^8.5.13",
     "@types/better-sqlite3": "^7.6.11",
+    "@types/pg": "^8.11.10",
     "better-sqlite3": "^11.0.0",
+    "pg": "^8.13.1",
     "tsup": "^8.3.5",
     "typescript": "^5.6.3",
     "undici": "^7.0.0",
