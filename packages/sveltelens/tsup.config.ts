@@ -10,6 +10,7 @@ export default defineConfig({
     'adapters/libsql': 'src/adapters/libsql.ts',
     'adapters/postgres-js': 'src/adapters/postgres-js.ts',
     'adapters/mongodb': 'src/adapters/mongodb.ts',
+    'adapters/bun-sqlite': 'src/adapters/bun-sqlite.ts',
   },
   format: ['esm', 'cjs'],
   dts: true,

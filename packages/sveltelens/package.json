@@ -51,6 +51,11 @@
       "types": "./dist/adapters/mongodb.d.ts",
       "import": "./dist/adapters/mongodb.js",
       "require": "./dist/adapters/mongodb.cjs"
+    },
+    "./adapters/bun-sqlite": {
+      "types": "./dist/adapters/bun-sqlite.d.ts",
+      "import": "./dist/adapters/bun-sqlite.js",
+      "require": "./dist/adapters/bun-sqlite.cjs"
     }
   },
   "scripts": {
