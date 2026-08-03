@@ -28,7 +28,10 @@ export default defineConfig({
       },
       {
         text: 'Adapters',
-        items: [{ text: 'SQLite', link: '/guide/adapters/sqlite' }],
+        items: [
+          { text: 'SQLite', link: '/guide/adapters/sqlite' },
+          { text: 'PostgreSQL', link: '/guide/adapters/pg' },
+        ],
       },
     ],
 
