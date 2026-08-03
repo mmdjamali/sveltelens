@@ -22,16 +22,7 @@
   <header class="border-b bg-base-100 border-base-300 sticky top-0 z-50">
     <div class="mx-auto flex h-14 max-w-6xl items-center justify-between px-4">
       <a href={base} class="flex items-center gap-3">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 80 80"
-          class="size-7"
-        >
-          <path
-            class="fill-primary"
-            d="M0 40a39.87 39.87 0 0 1 11.72-28.28A40 40 0 1 1 0 40zm34 10a4 4 0 0 1-4-4v-2a2 2 0 1 0-4 0v2a4 4 0 0 1-4 4h-2a2 2 0 1 0 0 4h2a4 4 0 0 1 4 4v2a2 2 0 1 0 4 0v-2a4 4 0 0 1 4-4h2a2 2 0 1 0 0-4h-2zm24-24a6 6 0 0 1-6-6v-3a3 3 0 0 0-6 0v3a6 6 0 0 1-6 6h-3a3 3 0 0 0 0 6h3a6 6 0 0 1 6 6v3a3 3 0 0 0 6 0v-3a6 6 0 0 1 6-6h3a3 3 0 0 0 0-6h-3zm-4 36a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM21 28a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"
-          />
-        </svg>
+        <img src="{base}/logo.svg" alt="" class="size-7" />
         <strong class="text-lg font-semibold">Sveltelens</strong>
       </a>
 
