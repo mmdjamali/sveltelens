@@ -36,6 +36,7 @@ export default defineConfig({
           { text: 'PostgreSQL (postgres.js)', link: '/guide/adapters/postgres-js' },
           { text: 'MongoDB', link: '/guide/adapters/mongodb' },
           { text: 'Bun SQLite', link: '/guide/adapters/bun-sqlite' },
+          { text: 'Node SQLite', link: '/guide/adapters/node-sqlite' },
         ],
       },
     ],

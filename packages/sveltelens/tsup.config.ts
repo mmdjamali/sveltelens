@@ -11,6 +11,7 @@ export default defineConfig({
     'adapters/postgres-js': 'src/adapters/postgres-js.ts',
     'adapters/mongodb': 'src/adapters/mongodb.ts',
     'adapters/bun-sqlite': 'src/adapters/bun-sqlite.ts',
+    'adapters/node-sqlite': 'src/adapters/node-sqlite.ts',
   },
   format: ['esm', 'cjs'],
   dts: true,
@@ -18,5 +19,5 @@ export default defineConfig({
   sourcemap: true,
   shims: true,
   target: 'node18',
-  external: ['vite', '@sveltejs/kit', 'better-sqlite3', 'pg', 'mysql2', '@libsql/client', 'postgres', 'mongodb'],
+  external: ['vite', '@sveltejs/kit', 'better-sqlite3', 'pg', 'mysql2', '@libsql/client', 'postgres', 'mongodb', 'node:sqlite'],
 });

@@ -56,6 +56,11 @@
       "types": "./dist/adapters/bun-sqlite.d.ts",
       "import": "./dist/adapters/bun-sqlite.js",
       "require": "./dist/adapters/bun-sqlite.cjs"
+    },
+    "./adapters/node-sqlite": {
+      "types": "./dist/adapters/node-sqlite.d.ts",
+      "import": "./dist/adapters/node-sqlite.js",
+      "require": "./dist/adapters/node-sqlite.cjs"
     }
   },
   "scripts": {
