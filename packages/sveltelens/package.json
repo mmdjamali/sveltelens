@@ -31,6 +31,11 @@
       "types": "./dist/adapters/pg.d.ts",
       "import": "./dist/adapters/pg.js",
       "require": "./dist/adapters/pg.cjs"
+    },
+    "./adapters/mysql2": {
+      "types": "./dist/adapters/mysql2.d.ts",
+      "import": "./dist/adapters/mysql2.js",
+      "require": "./dist/adapters/mysql2.cjs"
     }
   },
   "scripts": {
@@ -52,6 +57,7 @@
     "@types/better-sqlite3": "^7.6.11",
     "@types/pg": "^8.11.10",
     "better-sqlite3": "^11.0.0",
+    "mysql2": "^3.23.2",
     "pg": "^8.13.1",
     "tsup": "^8.3.5",
     "typescript": "^5.6.3",
