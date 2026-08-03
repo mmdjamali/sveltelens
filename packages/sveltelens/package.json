@@ -41,6 +41,11 @@
       "types": "./dist/adapters/libsql.d.ts",
       "import": "./dist/adapters/libsql.js",
       "require": "./dist/adapters/libsql.cjs"
+    },
+    "./adapters/postgres-js": {
+      "types": "./dist/adapters/postgres-js.d.ts",
+      "import": "./dist/adapters/postgres-js.js",
+      "require": "./dist/adapters/postgres-js.cjs"
     }
   },
   "scripts": {
@@ -65,6 +70,7 @@
     "better-sqlite3": "^11.0.0",
     "mysql2": "^3.23.2",
     "pg": "^8.13.1",
+    "postgres": "^3.4.9",
     "tsup": "^8.3.5",
     "typescript": "^5.6.3",
     "undici": "^7.0.0",

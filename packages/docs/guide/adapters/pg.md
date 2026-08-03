@@ -1,6 +1,6 @@
 # PostgreSQL
 
-Adapters wrap the _database driver_, not the ORM on top of it — so one adapter covers Drizzle, Kysely, and raw SQL alike.
+Adapters wrap the _database driver_, not the ORM on top of it — so one adapter covers Drizzle, Kysely, and raw SQL alike. This is the `pg` (node-postgres) package specifically — for `postgres` (postgres.js), see [PostgreSQL (postgres.js)](./postgres-js).
 
 ```ts
 import { Pool } from 'pg';
