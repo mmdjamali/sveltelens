@@ -46,6 +46,11 @@
       "types": "./dist/adapters/postgres-js.d.ts",
       "import": "./dist/adapters/postgres-js.js",
       "require": "./dist/adapters/postgres-js.cjs"
+    },
+    "./adapters/mongodb": {
+      "types": "./dist/adapters/mongodb.d.ts",
+      "import": "./dist/adapters/mongodb.js",
+      "require": "./dist/adapters/mongodb.cjs"
     }
   },
   "scripts": {
@@ -68,6 +73,7 @@
     "@types/better-sqlite3": "^7.6.11",
     "@types/pg": "^8.11.10",
     "better-sqlite3": "^11.0.0",
+    "mongodb": "^7.5.0",
     "mysql2": "^3.23.2",
     "pg": "^8.13.1",
     "postgres": "^3.4.9",

@@ -34,6 +34,7 @@ export default defineConfig({
           { text: 'MySQL', link: '/guide/adapters/mysql2' },
           { text: 'libSQL / Turso', link: '/guide/adapters/libsql' },
           { text: 'PostgreSQL (postgres.js)', link: '/guide/adapters/postgres-js' },
+          { text: 'MongoDB', link: '/guide/adapters/mongodb' },
         ],
       },
     ],

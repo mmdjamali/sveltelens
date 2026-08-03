@@ -9,6 +9,7 @@ export default defineConfig({
     'adapters/mysql2': 'src/adapters/mysql2.ts',
     'adapters/libsql': 'src/adapters/libsql.ts',
     'adapters/postgres-js': 'src/adapters/postgres-js.ts',
+    'adapters/mongodb': 'src/adapters/mongodb.ts',
   },
   format: ['esm', 'cjs'],
   dts: true,
@@ -16,5 +17,5 @@ export default defineConfig({
   sourcemap: true,
   shims: true,
   target: 'node18',
-  external: ['vite', '@sveltejs/kit', 'better-sqlite3', 'pg', 'mysql2', '@libsql/client', 'postgres'],
+  external: ['vite', '@sveltejs/kit', 'better-sqlite3', 'pg', 'mysql2', '@libsql/client', 'postgres', 'mongodb'],
 });
