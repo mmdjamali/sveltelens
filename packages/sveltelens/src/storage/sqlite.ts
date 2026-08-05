@@ -22,6 +22,7 @@ interface Row {
 export class SqliteStorage implements Storage {
   private db: import('better-sqlite3').Database;
   private maxEntries: number;
+  private entryCount: number;
 
   constructor(path: string, maxEntries: number = 1000) {
     this.maxEntries = maxEntries;
@@ -48,6 +49,7 @@ export class SqliteStorage implements Storage {
     if (!columns.some((c) => c.name === 'offsetMs')) {
       this.db.exec('ALTER TABLE entries ADD COLUMN offsetMs INTEGER');
     }
+    this.entryCount = (this.db.prepare('SELECT COUNT(*) as c FROM entries').get() as { c: number }).c;
   }
 
   add(entry: Entry): void {
@@ -58,13 +60,21 @@ export class SqliteStorage implements Storage {
       )
       .run(id, type, requestId, timestamp, durationMs, offsetMs, JSON.stringify(rest.payload));
 
-    const count = (this.db.prepare('SELECT COUNT(*) as c FROM entries').get() as { c: number }).c;
-    if (count > this.maxEntries) {
+    // id is always a fresh randomUUID() (see utils.ts), so INSERT OR REPLACE
+    // never actually replaces a row in practice — treat every add() as net-new.
+    // (RunResult.changes reports 1 for both a genuine insert and a same-id
+    // replace on this better-sqlite3 version, so it can't distinguish them —
+    // verified empirically against a live better-sqlite3@11.10.0 instance.)
+    this.entryCount++;
+
+    if (this.entryCount > this.maxEntries) {
+      const overflow = this.entryCount - this.maxEntries;
       this.db
         .prepare(
           'DELETE FROM entries WHERE id IN (SELECT id FROM entries ORDER BY timestamp ASC LIMIT ?)'
         )
-        .run(count - this.maxEntries);
+        .run(overflow);
+      this.entryCount -= overflow;
     }
   }
 
@@ -107,6 +117,7 @@ export class SqliteStorage implements Storage {
 
   clear(): void {
     this.db.exec('DELETE FROM entries');
+    this.entryCount = 0;
   }
 
   counts(): Record<EntryType, number> {
