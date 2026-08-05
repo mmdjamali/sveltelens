@@ -49,7 +49,9 @@ describe('libsql', () => {
     const client = libsql({ execute: () => Promise.reject(new Error('boom')) } as unknown as Client);
 
     await expect(client.execute('SELECT 1')).rejects.toThrow('boom');
-    expect(storage.list({ type: 'query' }).entries).toHaveLength(1);
+    const entries = storage.list({ type: 'query' }).entries;
+    expect(entries).toHaveLength(1);
+    expect((entries[0].payload as QueryPayload).error).toBe('boom');
   });
 
   it('does not record once sveltelens is disabled', async () => {

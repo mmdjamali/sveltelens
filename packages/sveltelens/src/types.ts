@@ -63,6 +63,7 @@ export interface QueryPayload {
   sql: string;
   params: unknown[];
   connection: string | null;
+  error: string | null;
 }
 
 export interface LogPayload {

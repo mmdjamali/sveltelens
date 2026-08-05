@@ -25,7 +25,11 @@ export function mysql2<T extends Pool | Connection>(client: T): T {
           return value;
         },
         (err) => {
-          recordQuery({ ...parsed, durationMs: Math.round(performance.now() - start) });
+          recordQuery({
+            ...parsed,
+            durationMs: Math.round(performance.now() - start),
+            error: err instanceof Error ? err.message : String(err),
+          });
           throw err;
         },
       );
