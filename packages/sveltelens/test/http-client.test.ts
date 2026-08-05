@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeAll, afterAll, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, vi, beforeAll, afterAll, beforeEach, afterEach } from 'vitest';
 import http from 'node:http';
 import type { AddressInfo } from 'node:net';
 import { MemoryStorage } from '../src/storage/memory.js';
@@ -74,5 +74,45 @@ describe('http-client interceptor', () => {
     await fetch(`${baseUrl}/fail`);
     const entry = storage.list({ type: 'client-request' }).entries[0];
     expect((entry.payload as ClientRequestPayload).status).toBe(500);
+  });
+
+  describe('installFetchPatch body capture gating by pause state', () => {
+    it('skips cloning/reading request and response bodies while paused', async () => {
+      recorder.paused = true;
+      const request = new Request(`${baseUrl}/echo`);
+      const requestCloneSpy = vi.spyOn(request, 'clone');
+      const responseCloneSpy = vi.spyOn(Response.prototype, 'clone');
+
+      try {
+        const res = await fetch(request);
+        expect(await res.text()).toBe('{"ok":true}');
+
+        expect(requestCloneSpy).not.toHaveBeenCalled();
+        expect(responseCloneSpy).not.toHaveBeenCalled();
+        // Belt-and-suspenders: paused also means nothing gets recorded at all.
+        expect(storage.list({ type: 'client-request' }).entries).toHaveLength(0);
+      } finally {
+        responseCloneSpy.mockRestore();
+      }
+    });
+
+    it('clones/reads request and response bodies when not paused (control)', async () => {
+      const request = new Request(`${baseUrl}/echo`);
+      const requestCloneSpy = vi.spyOn(request, 'clone');
+      const responseCloneSpy = vi.spyOn(Response.prototype, 'clone');
+
+      try {
+        await fetch(request);
+
+        expect(requestCloneSpy).toHaveBeenCalled();
+        expect(responseCloneSpy).toHaveBeenCalled();
+
+        const entry = storage.list({ type: 'client-request' }).entries[0];
+        const payload = entry.payload as ClientRequestPayload;
+        expect(payload.responseBody?.text).toBe('{"ok":true}');
+      } finally {
+        responseCloneSpy.mockRestore();
+      }
+    });
   });
 });
