@@ -76,4 +76,28 @@ describe('MemoryStorage', () => {
     expect(counts.exception).toBe(1);
     expect(counts.request).toBe(0);
   });
+
+  it('handles wraparound correctly across multiple full cycles', () => {
+    const storage = new MemoryStorage(3);
+    for (const id of ['a', 'b', 'c', 'd', 'e', 'f', 'g']) storage.add(makeEntry({ id }));
+    expect(storage.list().entries.map((e) => e.id)).toEqual(['g', 'f', 'e']);
+  });
+
+  it('resets head/count correctly on clear() then re-fill past capacity', () => {
+    const storage = new MemoryStorage(2);
+    storage.add(makeEntry({ id: 'a' }));
+    storage.add(makeEntry({ id: 'b' }));
+    storage.clear();
+    for (const id of ['x', 'y', 'z']) storage.add(makeEntry({ id }));
+    expect(storage.list().entries.map((e) => e.id)).toEqual(['z', 'y']);
+    expect(storage.get('x')).toBeNull();
+  });
+
+  it('returns null from get() for an evicted entry immediately after wraparound', () => {
+    const storage = new MemoryStorage(2);
+    storage.add(makeEntry({ id: 'a' }));
+    storage.add(makeEntry({ id: 'b' }));
+    storage.add(makeEntry({ id: 'c' }));
+    expect(storage.get('a')).toBeNull();
+  });
 });
