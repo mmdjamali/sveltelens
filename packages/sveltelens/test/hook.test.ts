@@ -84,6 +84,28 @@ describe('sveltelensHandle event.fetch wrapping', () => {
     expect(payload.url).toBe('http://localhost/api/widgets');
   });
 
+  it('redacts the Set-Cookie response header by default', async () => {
+    const storage = new MemoryStorage(50);
+    const recorder = new Recorder(storage);
+    setSveltelensState({ recorder, config: resolveConfig() });
+
+    const shortCircuitFetch = (async () =>
+      new Response('{"ok":true}', { status: 200, headers: { 'set-cookie': 'session=secret' } })) as typeof fetch;
+
+    const event = fakeEvent(shortCircuitFetch);
+    await sveltelensHandle({
+      event,
+      resolve: async (e) => {
+        await e.fetch('/api/widgets');
+        return new Response('page');
+      },
+    } as never);
+
+    const entries = storage.list({ type: 'client-request' }).entries;
+    const payload = entries[0].payload as ClientRequestPayload;
+    expect(payload.responseHeaders['set-cookie']).toBe('[redacted]');
+  });
+
   it('passes cross-origin event.fetch calls straight through without recording (already captured elsewhere)', async () => {
     const storage = new MemoryStorage(50);
     const recorder = new Recorder(storage);
