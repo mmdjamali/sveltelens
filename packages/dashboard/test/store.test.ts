@@ -36,4 +36,17 @@ describe('store.filtered', () => {
     store.search = 'todos';
     expect(store.filtered('log')).toHaveLength(0);
   });
+
+  it('does not return stale cached results when an id is reused with new content', () => {
+    store.entries = [entry('1', 'log', { level: 'log', message: 'first message' })];
+    store.search = 'first';
+    expect(store.filtered('all')).toHaveLength(1);
+
+    // Same id, brand new object, unrelated content.
+    store.entries = [entry('1', 'log', { level: 'log', message: 'second message' })];
+    expect(store.filtered('all')).toHaveLength(0); // 'first' no longer matches
+
+    store.search = 'second';
+    expect(store.filtered('all')).toHaveLength(1);
+  });
 });

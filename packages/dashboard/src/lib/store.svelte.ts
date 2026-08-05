@@ -14,6 +14,16 @@ class SveltelensStore {
   search = $state('');
 
   private ws: WebSocket | null = null;
+  private searchTextCache = new WeakMap<Entry, string>();
+
+  private searchTextFor(entry: Entry): string {
+    let cached = this.searchTextCache.get(entry);
+    if (cached === undefined) {
+      cached = JSON.stringify(entry).toLowerCase();
+      this.searchTextCache.set(entry, cached);
+    }
+    return cached;
+  }
 
   filtered<T extends EntryType>(type: T): Extract<Entry, { type: T }>[];
   filtered(type: 'all'): Entry[];
@@ -21,7 +31,7 @@ class SveltelensStore {
     const q = this.search.trim().toLowerCase();
     return this.entries.filter((e) => {
       if (type !== 'all' && e.type !== type) return false;
-      if (q && !JSON.stringify(e).toLowerCase().includes(q)) return false;
+      if (q && !this.searchTextFor(e).includes(q)) return false;
       return true;
     });
   }

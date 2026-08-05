@@ -4,7 +4,19 @@
   let {
     value = $bindable(""),
     placeholder = "Search Tag",
-  }: { value?: string; placeholder?: string } = $props();
+    debounceMs = 200,
+  }: { value?: string; placeholder?: string; debounceMs?: number } = $props();
+
+  let localValue = $state(value);
+  let timer: ReturnType<typeof setTimeout> | undefined;
+
+  function handleInput(e: Event) {
+    localValue = (e.target as HTMLInputElement).value;
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      value = localValue;
+    }, debounceMs);
+  }
 </script>
 
 <div class="relative w-64">
@@ -15,6 +27,7 @@
     type="text"
     class="input w-full pl-10 text-xs outline-none"
     {placeholder}
-    bind:value
+    value={localValue}
+    oninput={handleInput}
   />
 </div>
