@@ -1,7 +1,5 @@
-import type { DatabaseSync, StatementSync } from 'node:sqlite';
-import { recordQuery } from '../record.js';
-
-const TIMED_STATEMENT_METHODS = ['run', 'get', 'all'] as const;
+import type { DatabaseSync } from 'node:sqlite';
+import { wrapStatement } from './shared.js';
 
 /**
  * Wraps a `node:sqlite` `DatabaseSync` so every prepared statement's run/get/all
@@ -14,19 +12,4 @@ export function nodeSqlite<T extends DatabaseSync>(db: T): T {
   const originalPrepare = db.prepare.bind(db);
   db.prepare = ((sql: string) => wrapStatement(originalPrepare(sql), sql)) as T['prepare'];
   return db;
-}
-
-function wrapStatement<S extends StatementSync>(stmt: S, sql: string): S {
-  for (const method of TIMED_STATEMENT_METHODS) {
-    const original = stmt[method].bind(stmt) as (...params: unknown[]) => unknown;
-    (stmt[method] as unknown) = (...params: unknown[]) => {
-      const start = performance.now();
-      try {
-        return original(...params);
-      } finally {
-        recordQuery({ sql, params, durationMs: Math.round(performance.now() - start) });
-      }
-    };
-  }
-  return stmt;
 }

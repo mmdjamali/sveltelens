@@ -1,6 +1,4 @@
-import { recordQuery } from '../record.js';
-
-const TIMED_STATEMENT_METHODS = ['run', 'get', 'all'] as const;
+import { wrapStatement } from './shared.js';
 
 /**
  * Structural stand-in for `bun:sqlite`'s `Database`/`Statement` — kept local so this
@@ -23,19 +21,4 @@ export function bunSqlite<T extends BunDatabase>(db: T): T {
   const originalPrepare = db.prepare.bind(db);
   db.prepare = ((sql: string, ...params: unknown[]) => wrapStatement(originalPrepare(sql, ...params), sql, params)) as T['prepare'];
   return db;
-}
-
-function wrapStatement<S extends BunStatement>(stmt: S, sql: string, prepareParams: unknown[]): S {
-  for (const method of TIMED_STATEMENT_METHODS) {
-    const original = stmt[method].bind(stmt) as (...params: unknown[]) => unknown;
-    (stmt[method] as unknown) = (...params: unknown[]) => {
-      const start = performance.now();
-      try {
-        return original(...params);
-      } finally {
-        recordQuery({ sql, params: params.length ? params : prepareParams, durationMs: Math.round(performance.now() - start) });
-      }
-    };
-  }
-  return stmt;
 }
