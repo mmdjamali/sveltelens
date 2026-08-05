@@ -4,6 +4,7 @@ import type { HttpServer } from 'vite';
 import { WebSocketServer } from 'ws';
 import type { Recorder } from '../recorder.js';
 import type { Entry } from '../types.js';
+import { isSameOrigin } from './origin.js';
 
 /** Dedicated `ws` server on `${basePath}/api/stream`, pushing every recorded entry live. */
 export function installStreamServer(
@@ -25,6 +26,10 @@ export function installStreamServer(
   const onUpgrade = (req: IncomingMessage, socket: Duplex, head: Buffer) => {
     const url = new URL(req.url ?? '', 'http://localhost');
     if (url.pathname !== streamPath) return;
+    if (!isSameOrigin(req)) {
+      socket.destroy();
+      return;
+    }
     wss.handleUpgrade(req, socket, head, (ws) => wss.emit('connection', ws, req));
   };
   httpServer.on('upgrade', onUpgrade);

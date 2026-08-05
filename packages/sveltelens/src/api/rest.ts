@@ -1,6 +1,7 @@
 import type { IncomingMessage, ServerResponse } from 'node:http';
 import type { Storage } from '../storage/types.js';
 import type { Recorder } from '../recorder.js';
+import { isSameOrigin } from './origin.js';
 
 type NextFn = (err?: unknown) => void;
 
@@ -16,6 +17,9 @@ export function createApiMiddleware(storage: Storage, recorder: Recorder, basePa
 
   return function sveltelensApiMiddleware(req: IncomingMessage, res: ServerResponse, next: NextFn) {
     if (!req.url || !req.url.startsWith(apiPrefix)) return next();
+    if (!isSameOrigin(req)) {
+      return sendJson(res, 403, { error: 'cross-origin request rejected' });
+    }
 
     const url = new URL(req.url, 'http://localhost');
     const pathname = url.pathname;
