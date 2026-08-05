@@ -25,7 +25,8 @@ export function createApiMiddleware(storage: Storage, recorder: Recorder, basePa
       const requestId = url.searchParams.get('requestId') ?? undefined;
       const cursor = url.searchParams.get('cursor') ?? undefined;
       const limitParam = url.searchParams.get('limit');
-      const limit = limitParam ? Number(limitParam) : undefined;
+      const parsedLimit = limitParam ? Number(limitParam) : NaN;
+      const limit = Number.isInteger(parsedLimit) && parsedLimit > 0 ? parsedLimit : undefined;
       const result = storage.list({
         type: type as never,
         requestId,
