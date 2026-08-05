@@ -28,7 +28,16 @@ export default defineConfig({
       },
       {
         text: 'Adapters',
-        items: [{ text: 'SQLite', link: '/guide/adapters/sqlite' }],
+        items: [
+          { text: 'SQLite', link: '/guide/adapters/sqlite' },
+          { text: 'PostgreSQL', link: '/guide/adapters/pg' },
+          { text: 'MySQL', link: '/guide/adapters/mysql2' },
+          { text: 'libSQL / Turso', link: '/guide/adapters/libsql' },
+          { text: 'PostgreSQL (postgres.js)', link: '/guide/adapters/postgres-js' },
+          { text: 'MongoDB', link: '/guide/adapters/mongodb' },
+          { text: 'Bun SQLite', link: '/guide/adapters/bun-sqlite' },
+          { text: 'Node SQLite', link: '/guide/adapters/node-sqlite' },
+        ],
       },
     ],
 

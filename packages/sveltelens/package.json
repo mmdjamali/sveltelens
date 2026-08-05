@@ -26,6 +26,41 @@
       "types": "./dist/adapters/sqlite.d.ts",
       "import": "./dist/adapters/sqlite.js",
       "require": "./dist/adapters/sqlite.cjs"
+    },
+    "./adapters/pg": {
+      "types": "./dist/adapters/pg.d.ts",
+      "import": "./dist/adapters/pg.js",
+      "require": "./dist/adapters/pg.cjs"
+    },
+    "./adapters/mysql2": {
+      "types": "./dist/adapters/mysql2.d.ts",
+      "import": "./dist/adapters/mysql2.js",
+      "require": "./dist/adapters/mysql2.cjs"
+    },
+    "./adapters/libsql": {
+      "types": "./dist/adapters/libsql.d.ts",
+      "import": "./dist/adapters/libsql.js",
+      "require": "./dist/adapters/libsql.cjs"
+    },
+    "./adapters/postgres-js": {
+      "types": "./dist/adapters/postgres-js.d.ts",
+      "import": "./dist/adapters/postgres-js.js",
+      "require": "./dist/adapters/postgres-js.cjs"
+    },
+    "./adapters/mongodb": {
+      "types": "./dist/adapters/mongodb.d.ts",
+      "import": "./dist/adapters/mongodb.js",
+      "require": "./dist/adapters/mongodb.cjs"
+    },
+    "./adapters/bun-sqlite": {
+      "types": "./dist/adapters/bun-sqlite.d.ts",
+      "import": "./dist/adapters/bun-sqlite.js",
+      "require": "./dist/adapters/bun-sqlite.cjs"
+    },
+    "./adapters/node-sqlite": {
+      "types": "./dist/adapters/node-sqlite.d.ts",
+      "import": "./dist/adapters/node-sqlite.js",
+      "require": "./dist/adapters/node-sqlite.cjs"
     }
   },
   "scripts": {
@@ -44,8 +79,14 @@
     "@sveltejs/kit": "^2.15.0",
     "@types/node": "^22.10.0",
     "@types/ws": "^8.5.13",
+    "@libsql/client": "^0.17.4",
     "@types/better-sqlite3": "^7.6.11",
+    "@types/pg": "^8.11.10",
     "better-sqlite3": "^11.0.0",
+    "mongodb": "^7.5.0",
+    "mysql2": "^3.23.2",
+    "pg": "^8.13.1",
+    "postgres": "^3.4.9",
     "tsup": "^8.3.5",
     "typescript": "^5.6.3",
     "undici": "^7.0.0",

@@ -1,0 +1,47 @@
+import type { Connection, Pool } from 'mysql2/promise';
+import { recordQuery } from '../record.js';
+
+const TIMED_METHODS = ['query', 'execute'] as const;
+
+/**
+ * Wraps a `mysql2/promise` `Pool` or `Connection` so every `query()`/`execute()`
+ * call is timed and recorded: `mysql2(await createPool(...))`.
+ *
+ * Only the promise API (`mysql2/promise`) is supported — the callback-style
+ * `mysql2` client isn't wrapped, since it has no return value to attach timing to.
+ */
+export function mysql2<T extends Pool | Connection>(client: T): T {
+  for (const method of TIMED_METHODS) {
+    const original = client[method].bind(client) as (...args: unknown[]) => unknown;
+    (client[method] as unknown) = (...args: unknown[]) => {
+      const parsed = parseArgs(args);
+      const start = performance.now();
+      const result = original(...args);
+      if (!parsed || typeof (result as Promise<unknown>)?.then !== 'function') return result;
+
+      return (result as Promise<unknown>).then(
+        (value) => {
+          recordQuery({ ...parsed, durationMs: Math.round(performance.now() - start) });
+          return value;
+        },
+        (err) => {
+          recordQuery({ ...parsed, durationMs: Math.round(performance.now() - start) });
+          throw err;
+        },
+      );
+    };
+  }
+  return client;
+}
+
+function parseArgs(args: unknown[]): { sql: string; params: unknown[] } | null {
+  const [first, second] = args;
+  if (typeof first === 'string') {
+    return { sql: first, params: Array.isArray(second) ? second : [] };
+  }
+  if (first && typeof first === 'object' && 'sql' in first) {
+    const options = first as { sql: string };
+    return { sql: options.sql, params: Array.isArray(second) ? second : [] };
+  }
+  return null;
+}
