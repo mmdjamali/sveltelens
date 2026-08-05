@@ -28,6 +28,12 @@
         >
       </div>
 
+      {#if entry.payload.error}
+        <div class="text-error mb-4 text-sm break-all">
+          {entry.payload.error}
+        </div>
+      {/if}
+
       <pre
         class="bg-base-300/40 overflow-x-auto rounded-box border border-base-300 p-3 font-mono text-xs whitespace-pre-wrap">{@html highlight(
           interpolateSql(entry.payload.sql, entry.payload.params),
