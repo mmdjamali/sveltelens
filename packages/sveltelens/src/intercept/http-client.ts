@@ -50,7 +50,11 @@ function parseHeaderBuffers(buffers: Buffer[] | undefined): Record<string, strin
   return result;
 }
 
-export function installHttpClientInterceptor(recorder: Recorder, redact: string[]): () => void {
+export function installHttpClientInterceptor(
+  recorder: Recorder,
+  redact: string[],
+  redactBodyKeys: string[]
+): () => void {
   const pending = new WeakMap<
     object,
     {
@@ -127,7 +131,7 @@ export function installHttpClientInterceptor(recorder: Recorder, redact: string[
   diagnosticsChannel.channel('undici:request:headers').subscribe(onHeaders);
   diagnosticsChannel.channel('undici:request:error').subscribe(onError);
 
-  const uninstallFetch = installFetchPatch(recorder, redact);
+  const uninstallFetch = installFetchPatch(recorder, redact, redactBodyKeys);
 
   return () => {
     diagnosticsChannel.channel('undici:request:create').unsubscribe(onCreate);
@@ -140,7 +144,7 @@ export function installHttpClientInterceptor(recorder: Recorder, redact: string[
 /** Fallback path: captures request/response bodies via clone(), which the raw
  * undici channel data does not expose. Runs inside fetchPatchScope so the
  * channel subscribers above skip the same call. */
-function installFetchPatch(recorder: Recorder, redact: string[]): () => void {
+function installFetchPatch(recorder: Recorder, redact: string[], redactBodyKeys: string[]): () => void {
   const original = globalThis.fetch;
   if (!original) return () => {};
 
@@ -183,8 +187,8 @@ function installFetchPatch(recorder: Recorder, redact: string[]): () => void {
             status: response.status,
             requestHeaders,
             responseHeaders: redactHeaders(headersToObject(response.headers), redact),
-            requestBody: captureBody(requestBodyText, requestHeaders['content-type'] ?? null),
-            responseBody: captureBody(responseBodyText, response.headers.get('content-type')),
+            requestBody: captureBody(requestBodyText, requestHeaders['content-type'] ?? null, redactBodyKeys),
+            responseBody: captureBody(responseBodyText, response.headers.get('content-type'), redactBodyKeys),
             error: null,
           },
         });
@@ -200,7 +204,7 @@ function installFetchPatch(recorder: Recorder, redact: string[]): () => void {
             status: null,
             requestHeaders,
             responseHeaders: {},
-            requestBody: captureBody(requestBodyText, requestHeaders['content-type'] ?? null),
+            requestBody: captureBody(requestBodyText, requestHeaders['content-type'] ?? null, redactBodyKeys),
             responseBody: null,
             error: err instanceof Error ? err.message : String(err),
           },

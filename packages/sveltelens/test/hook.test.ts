@@ -4,7 +4,7 @@ import { MemoryStorage } from '../src/storage/memory.js';
 import { Recorder } from '../src/recorder.js';
 import { resolveConfig } from '../src/config.js';
 import { setSveltelensState } from '../src/state.js';
-import type { ClientRequestPayload } from '../src/types.js';
+import type { ClientRequestPayload, RequestPayload } from '../src/types.js';
 
 describe('parseActionResult', () => {
   it('recovers status and location from a JSON-wrapped redirect (use:enhance)', () => {
@@ -101,5 +101,50 @@ describe('sveltelensHandle event.fetch wrapping', () => {
     } as never);
 
     expect(storage.list({ type: 'client-request' }).entries).toHaveLength(0);
+  });
+});
+
+describe('sveltelensHandle body redaction', () => {
+  it('redacts a password field in a JSON request/response body under default config', async () => {
+    const storage = new MemoryStorage(50);
+    const recorder = new Recorder(storage);
+    setSveltelensState({ recorder, config: resolveConfig() });
+
+    const event = {
+      url: new URL('http://localhost/api/login'),
+      request: new Request('http://localhost/api/login', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ password: 'hunter2', username: 'bob' }),
+      }),
+      route: { id: '/api/login' },
+      getClientAddress: () => '127.0.0.1',
+      fetch: (async () => new Response('unused')) as typeof fetch,
+    } as unknown as Parameters<typeof sveltelensHandle>[0]['event'];
+
+    await sveltelensHandle({
+      event,
+      resolve: async () =>
+        new Response(JSON.stringify({ token: 'secret-token-value', ok: true }), {
+          status: 200,
+          headers: { 'content-type': 'application/json' },
+        }),
+    } as never);
+
+    const entries = storage.list({ type: 'request' }).entries;
+    expect(entries).toHaveLength(1);
+    const payload = entries[0].payload as RequestPayload;
+
+    expect(payload.requestBody?.text).not.toBeNull();
+    expect(JSON.parse(payload.requestBody!.text as string)).toEqual({
+      password: '[redacted]',
+      username: 'bob',
+    });
+
+    expect(payload.responseBody?.text).not.toBeNull();
+    expect(JSON.parse(payload.responseBody!.text as string)).toEqual({
+      token: '[redacted]',
+      ok: true,
+    });
   });
 });

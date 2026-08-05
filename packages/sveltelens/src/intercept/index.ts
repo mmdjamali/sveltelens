@@ -6,13 +6,13 @@ import { installExceptionInterceptor } from './exceptions.js';
 const GLOBAL_KEY = '__SVELTELENS_INTERCEPTORS_INSTALLED__';
 
 /** Idempotent: Vite HMR can re-execute plugin setup, but interceptors must patch globals once. */
-export function installInterceptors(recorder: Recorder, redactHeaders: string[]): void {
+export function installInterceptors(recorder: Recorder, redactHeaders: string[], redactBodyKeys: string[]): void {
   const g = globalThis as typeof globalThis & { [GLOBAL_KEY]?: () => void };
   if (g[GLOBAL_KEY]) {
     g[GLOBAL_KEY]();
   }
 
-  const uninstallHttp = installHttpClientInterceptor(recorder, redactHeaders);
+  const uninstallHttp = installHttpClientInterceptor(recorder, redactHeaders, redactBodyKeys);
   const uninstallConsole = installConsoleInterceptor(recorder);
   const uninstallExceptions = installExceptionInterceptor(recorder);
 
