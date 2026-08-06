@@ -5,9 +5,9 @@
   import { base } from "$app/paths";
   import { store } from "$lib/store.svelte";
   import AppSidebar from "$lib/components/Sidebar.svelte";
-  import IconPlayerPause from "@tabler/icons-svelte/icons/player-pause";
-  import IconPlayerPlay from "@tabler/icons-svelte/icons/player-play";
-  import IconTrash from "@tabler/icons-svelte/icons/trash";
+  import IconPlayerPause from "@lucide/svelte/icons/pause";
+  import IconPlayerPlay from "@lucide/svelte/icons/play";
+  import IconTrash from "@lucide/svelte/icons/trash";
 
   let { children } = $props();
 
