@@ -6,7 +6,7 @@
   let { data } = $props();
 
   function submit() {
-    return async ({ update }) => {
+    return async ({ update }: { update: () => Promise<void> }) => {
       await update();
       await invalidateAll();
     };
