@@ -5,7 +5,7 @@ import path from 'node:path';
 import { SqliteStorage } from '../src/storage/sqlite.js';
 import type { Entry } from '../src/types.js';
 
-function makeEntry(id: string): Entry {
+function makeEntry(id: string, overrides: Partial<Entry> = {}): Entry {
   return {
     id,
     requestId: 'r1',
@@ -14,6 +14,7 @@ function makeEntry(id: string): Entry {
     offsetMs: null,
     type: 'log',
     payload: { level: 'log', message: `msg-${id}` },
+    ...overrides,
   } as Entry;
 }
 
@@ -48,5 +49,35 @@ describe('SqliteStorage', () => {
     storage.add(makeEntry('c'));
     expect(storage.get('a')).toBeNull();
     expect(storage.list().entries).toHaveLength(2);
+  });
+
+  it('does not prune by age when maxAgeMs is unset', () => {
+    dir = mkdtempSync(path.join(tmpdir(), 'sveltelens-sqlite-'));
+    const storage = new SqliteStorage(path.join(dir, 'db.sqlite'), 1000, null);
+    storage.add(makeEntry('old', { timestamp: Date.now() - 1000 * 60 * 60 * 24 * 365 }));
+    for (let i = 0; i < 150; i++) {
+      storage.add(makeEntry(`fresh-${i}`));
+    }
+    expect(storage.get('old')).not.toBeNull();
+  });
+
+  it('prunes entries older than maxAgeMs once the 100-insert check fires', () => {
+    dir = mkdtempSync(path.join(tmpdir(), 'sveltelens-sqlite-'));
+    const storage = new SqliteStorage(path.join(dir, 'db.sqlite'), 1000, 1000);
+    storage.add(makeEntry('old', { timestamp: Date.now() - 10_000 }));
+    for (let i = 0; i < 100; i++) {
+      storage.add(makeEntry(`fresh-${i}`));
+    }
+    expect(storage.get('old')).toBeNull();
+  });
+
+  it('does not prune by age before the 100-insert threshold is reached', () => {
+    dir = mkdtempSync(path.join(tmpdir(), 'sveltelens-sqlite-'));
+    const storage = new SqliteStorage(path.join(dir, 'db.sqlite'), 1000, 1000);
+    storage.add(makeEntry('old', { timestamp: Date.now() - 10_000 }));
+    for (let i = 0; i < 50; i++) {
+      storage.add(makeEntry(`fresh-${i}`));
+    }
+    expect(storage.get('old')).not.toBeNull();
   });
 });

@@ -22,9 +22,12 @@ interface Row {
 export class SqliteStorage implements Storage {
   private db: import('better-sqlite3').Database;
   private maxEntries: number;
+  private maxAgeMs: number | null;
+  private insertsSinceAgePrune = 0;
 
-  constructor(path: string, maxEntries: number = 1000) {
+  constructor(path: string, maxEntries: number = 1000, maxAgeMs: number | null = null) {
     this.maxEntries = maxEntries;
+    this.maxAgeMs = maxAgeMs;
     mkdirSync(dirname(path), { recursive: true });
     const Database = require('better-sqlite3') as typeof import('better-sqlite3');
     this.db = new Database(path);
@@ -65,6 +68,18 @@ export class SqliteStorage implements Storage {
           'DELETE FROM entries WHERE id IN (SELECT id FROM entries ORDER BY timestamp ASC LIMIT ?)'
         )
         .run(count - this.maxEntries);
+    }
+
+    if (this.maxAgeMs !== null) {
+      this.insertsSinceAgePrune++;
+      // ponytail: age-check only every 100 inserts, not every one — a stale
+      // entry surviving up to ~100 extra writes past its age limit is an
+      // acceptable, documented ceiling; upgrade to a scheduled/timer-based
+      // prune if per-insert precision ever actually matters.
+      if (this.insertsSinceAgePrune >= 100) {
+        this.insertsSinceAgePrune = 0;
+        this.db.prepare('DELETE FROM entries WHERE timestamp < ?').run(Date.now() - this.maxAgeMs);
+      }
     }
   }
 

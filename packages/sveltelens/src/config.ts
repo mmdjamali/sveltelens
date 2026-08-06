@@ -5,6 +5,7 @@ export interface SveltelensConfig {
   storage?: 'memory' | 'sqlite';
   sqlitePath?: string;
   maxEntries?: number;
+  maxAgeMs?: number;
   ignore?: (string | RegExp)[];
   redactHeaders?: string[];
 }
@@ -17,7 +18,7 @@ export const DEFAULT_IGNORE = [DEFAULT_PATH, '/__sveltelens/*', '/@vite/*', '/@f
 export type ResolvedConfig = Required<
   Pick<SveltelensConfig, 'enabled' | 'path' | 'maxEntries' | 'ignore' | 'redactHeaders'>
 > &
-  SveltelensConfig;
+  Omit<SveltelensConfig, 'maxAgeMs'> & { maxAgeMs: number | null };
 
 export function resolveConfig(config: SveltelensConfig = {}): ResolvedConfig {
   const path = config.path ?? DEFAULT_PATH;
@@ -27,6 +28,7 @@ export function resolveConfig(config: SveltelensConfig = {}): ResolvedConfig {
     path,
     storage: config.storage ?? 'memory',
     maxEntries: config.maxEntries ?? DEFAULT_MAX_ENTRIES,
+    maxAgeMs: config.maxAgeMs ?? null,
     ignore: config.ignore ?? [path, `${path}/*`, ...DEFAULT_IGNORE],
     redactHeaders: config.redactHeaders ?? DEFAULT_REDACT_HEADERS,
   };
