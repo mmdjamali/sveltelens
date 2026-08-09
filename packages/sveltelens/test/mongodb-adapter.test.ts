@@ -50,13 +50,20 @@ describe('mongodb', () => {
       command: { insert: 'todos', documents: [{ title: 'x' }] },
       databaseName: 'app',
     } as never);
-    client.emit('commandFailed', { requestId: 2, commandName: 'insert', duration: 5, databaseName: 'app' } as never);
+    client.emit('commandFailed', {
+      requestId: 2,
+      commandName: 'insert',
+      duration: 5,
+      databaseName: 'app',
+      failure: new Error('boom'),
+    } as never);
 
     const entries = storage.list({ type: 'query' }).entries;
     expect(entries).toHaveLength(1);
     expect(entries[0].durationMs).toBe(5);
     const payload = entries[0].payload as QueryPayload;
     expect(payload.sql).toContain('insert(');
+    expect(payload.error).toBe('boom');
   });
 
   it('does not record once sveltelens is disabled', () => {

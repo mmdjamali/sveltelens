@@ -14,6 +14,8 @@ export function recordQuery(query: {
   durationMs?: number;
   /** Connection or database name, shown in the dashboard when several are in play. */
   connection?: string | null;
+  /** Error message when the query failed. Omit or null for a successful query. */
+  error?: string | null;
 }): void {
   const state = getSveltelensState();
   if (!state || !state.config.enabled) return;
@@ -25,6 +27,7 @@ export function recordQuery(query: {
       sql: query.sql,
       params: query.params ?? [],
       connection: query.connection ?? null,
+      error: query.error ?? null,
     },
   });
 }

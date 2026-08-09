@@ -39,6 +39,7 @@ export function mongodb<T extends MongoClient>(client: T): T {
       sql: started?.sql ?? `${event.commandName}(...)`,
       durationMs: Math.round(event.duration),
       connection: started?.connection ?? event.databaseName,
+      error: event.failure instanceof Error ? event.failure.message : String(event.failure),
     });
   });
 

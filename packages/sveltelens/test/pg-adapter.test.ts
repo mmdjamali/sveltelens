@@ -62,7 +62,9 @@ describe('pg', () => {
     } as unknown as Pool);
 
     await expect(pool.query('SELECT 1')).rejects.toThrow('boom');
-    expect(storage.list({ type: 'query' }).entries).toHaveLength(1);
+    const entries = storage.list({ type: 'query' }).entries;
+    expect(entries).toHaveLength(1);
+    expect((entries[0].payload as QueryPayload).error).toBe('boom');
   });
 
   it('does not record the callback form', async () => {
