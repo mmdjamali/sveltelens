@@ -19,9 +19,11 @@
     "dev:docs": "cd packages/docs && bun run dev",
     "test:package": "cd packages/sveltelens && bun run test",
     "test:dashboard": "cd packages/dashboard && bun run test",
-    "test": "bun run test:package && bun run test:dashboard"
+    "test": "bun run test:package && bun run test:dashboard",
+    "lint": "biome lint ."
   },
   "devDependencies": {
+    "@biomejs/biome": "^2.5.7",
     "node-gyp": "^11.0.0",
     "typescript": "^5.6.3"
   }
