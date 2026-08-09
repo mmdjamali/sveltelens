@@ -1,10 +1,10 @@
 import type { Component } from 'svelte';
-import { IconFileFunction, type Icon } from '@tabler/icons-svelte';
-import IconRoute from '@tabler/icons-svelte/icons/route';
-import IconWorld from '@tabler/icons-svelte/icons/world';
-import IconDatabase from '@tabler/icons-svelte/icons/database';
-import IconFileText from '@tabler/icons-svelte/icons/file-text';
-import IconAlertTriangle from '@tabler/icons-svelte/icons/alert-triangle';
+import IconFileFunction from '@lucide/svelte/icons/square-function';
+import IconRoute from '@lucide/svelte/icons/route';
+import IconWorld from '@lucide/svelte/icons/globe';
+import IconDatabase from '@lucide/svelte/icons/database';
+import IconFileText from '@lucide/svelte/icons/file-text';
+import IconAlertTriangle from '@lucide/svelte/icons/triangle-alert';
 
 import type { EntryType } from './types';
 import RequestsTable from './components/RequestsTable.svelte';
@@ -27,7 +27,7 @@ export interface EntryTypeMeta {
   label: string;
   /** Singular, for the badge on one entry. */
   badgeLabel: string;
-  icon: Icon;
+  icon: Component<any>;
   /** Shown on the list page when nothing of this type has been captured yet. */
   emptyMessage: string;
   /**

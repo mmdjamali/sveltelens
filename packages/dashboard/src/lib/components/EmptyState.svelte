@@ -1,5 +1,5 @@
 <script lang="ts">
-  import IconInbox from "@tabler/icons-svelte/icons/inbox";
+  import IconInbox from "@lucide/svelte/icons/inbox";
 
   let { message }: { message: string } = $props();
 </script>
