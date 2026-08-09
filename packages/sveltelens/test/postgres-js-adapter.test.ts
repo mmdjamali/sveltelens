@@ -70,4 +70,14 @@ describe('postgresJs', () => {
     await sql`SELECT 1`;
     expect(storage.list({ type: 'query' }).entries).toHaveLength(0);
   });
+
+  it('records exactly once when .then() is called more than once on the same query', async () => {
+    const sql = postgresJs(makeFakeSql([{ id: 1 }]));
+    const query = sql`SELECT * FROM todos WHERE id = ${1}`;
+
+    await Promise.all([query, query]);
+
+    const entries = storage.list({ type: 'query' }).entries;
+    expect(entries).toHaveLength(1);
+  });
 });

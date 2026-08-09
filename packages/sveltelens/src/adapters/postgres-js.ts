@@ -59,16 +59,23 @@ function wrapPending(pending: unknown, sql: string, params: unknown[]): void {
     onRejected?: (err: unknown) => unknown,
   ) => unknown;
   let start: number | null = null;
+  let recorded = false;
 
   (query.then as unknown) = (onFulfilled?: (value: unknown) => unknown, onRejected?: (err: unknown) => unknown) => {
     if (start === null) start = performance.now();
     return originalThen(
       (value: unknown) => {
-        recordQuery({ sql, params, durationMs: Math.round(performance.now() - (start as number)) });
+        if (!recorded) {
+          recorded = true;
+          recordQuery({ sql, params, durationMs: Math.round(performance.now() - (start as number)) });
+        }
         return onFulfilled ? onFulfilled(value) : value;
       },
       (err: unknown) => {
-        recordQuery({ sql, params, durationMs: Math.round(performance.now() - (start as number)) });
+        if (!recorded) {
+          recorded = true;
+          recordQuery({ sql, params, durationMs: Math.round(performance.now() - (start as number)) });
+        }
         if (onRejected) return onRejected(err);
         throw err;
       },
