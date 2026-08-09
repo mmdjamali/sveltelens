@@ -10,7 +10,7 @@ export interface SveltelensConfig {
 }
 
 export const DEFAULT_PATH = '/__sveltelens';
-export const DEFAULT_REDACT_HEADERS = ['authorization', 'cookie'];
+export const DEFAULT_REDACT_HEADERS = ['authorization', 'cookie', 'set-cookie'];
 export const DEFAULT_MAX_ENTRIES = 1000;
 export const DEFAULT_IGNORE = [DEFAULT_PATH, '/__sveltelens/*', '/@vite/*', '/@fs/*', '/@id/*', '/__vite_ping', '/node_modules/*'];
 
