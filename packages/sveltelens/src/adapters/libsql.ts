@@ -1,5 +1,5 @@
 import type { Client } from '@libsql/client';
-import { recordQuery } from '../record.js';
+import { wrapPromiseQuery } from './shared.js';
 
 /**
  * Wraps a `@libsql/client` `Client` (libSQL / Turso) so every `execute()` call
@@ -10,29 +10,7 @@ import { recordQuery } from '../record.js';
  */
 export function libsql<T extends Client>(client: T): T {
   const originalExecute = client.execute.bind(client) as (...args: unknown[]) => unknown;
-
-  (client.execute as unknown) = (...args: unknown[]) => {
-    const parsed = parseArgs(args);
-    const start = performance.now();
-    const result = originalExecute(...args) as Promise<unknown>;
-    if (!parsed) return result;
-
-    return result.then(
-      (value) => {
-        recordQuery({ ...parsed, durationMs: Math.round(performance.now() - start) });
-        return value;
-      },
-      (err) => {
-        recordQuery({
-          ...parsed,
-          durationMs: Math.round(performance.now() - start),
-          error: err instanceof Error ? err.message : String(err),
-        });
-        throw err;
-      },
-    );
-  };
-
+  (client.execute as unknown) = wrapPromiseQuery(originalExecute, parseArgs);
   return client;
 }
 

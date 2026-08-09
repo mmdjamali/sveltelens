@@ -1,5 +1,5 @@
 import type { Connection, Pool } from 'mysql2/promise';
-import { recordQuery } from '../record.js';
+import { wrapPromiseQuery } from './shared.js';
 
 const TIMED_METHODS = ['query', 'execute'] as const;
 
@@ -13,27 +13,7 @@ const TIMED_METHODS = ['query', 'execute'] as const;
 export function mysql2<T extends Pool | Connection>(client: T): T {
   for (const method of TIMED_METHODS) {
     const original = client[method].bind(client) as (...args: unknown[]) => unknown;
-    (client[method] as unknown) = (...args: unknown[]) => {
-      const parsed = parseArgs(args);
-      const start = performance.now();
-      const result = original(...args);
-      if (!parsed || typeof (result as Promise<unknown>)?.then !== 'function') return result;
-
-      return (result as Promise<unknown>).then(
-        (value) => {
-          recordQuery({ ...parsed, durationMs: Math.round(performance.now() - start) });
-          return value;
-        },
-        (err) => {
-          recordQuery({
-            ...parsed,
-            durationMs: Math.round(performance.now() - start),
-            error: err instanceof Error ? err.message : String(err),
-          });
-          throw err;
-        },
-      );
-    };
+    (client[method] as unknown) = wrapPromiseQuery(original, parseArgs);
   }
   return client;
 }

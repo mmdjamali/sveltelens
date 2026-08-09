@@ -1,5 +1,5 @@
 import type { Client, Pool, QueryConfig } from 'pg';
-import { recordQuery } from '../record.js';
+import { wrapPromiseQuery } from './shared.js';
 
 /**
  * Wraps a node-postgres `Pool` or `Client` so every `query()` call is timed and
@@ -12,29 +12,7 @@ import { recordQuery } from '../record.js';
  */
 export function pg<T extends Pool | Client>(client: T): T {
   const originalQuery = client.query.bind(client) as (...args: unknown[]) => unknown;
-
-  (client.query as unknown) = (...args: unknown[]) => {
-    const parsed = parseArgs(args);
-    const start = performance.now();
-    const result = originalQuery(...args);
-    if (!parsed || typeof (result as Promise<unknown>)?.then !== 'function') return result;
-
-    return (result as Promise<unknown>).then(
-      (value) => {
-        recordQuery({ ...parsed, durationMs: Math.round(performance.now() - start) });
-        return value;
-      },
-      (err) => {
-        recordQuery({
-          ...parsed,
-          durationMs: Math.round(performance.now() - start),
-          error: err instanceof Error ? err.message : String(err),
-        });
-        throw err;
-      },
-    );
-  };
-
+  (client.query as unknown) = wrapPromiseQuery(originalQuery, parseArgs);
   return client;
 }
 
