@@ -16,14 +16,4 @@ postgres.js queries are lazy — nothing runs until you `await` the result or ot
 - Iterating with `.forEach()` or `for await` — those bypass `.then()`.
 - Nested `sql` fragments get an approximate `$1..$n` placeholder numbering rather than their true one — fine for the dashboard, not meant to be copy-pastable back into `psql`.
 
-## Everything else
-
-Anything that talks HTTP (PocketBase, Supabase, a REST API client, `fetch`) is already captured by the outgoing-HTTP interceptor with no adapter needed. For a non-HTTP data source without a shipped adapter, call `recordQuery` from wherever your library exposes the SQL:
-
-```ts
-import { recordQuery } from 'sveltelens';
-
-recordQuery({ sql, params, durationMs, connection: 'primary' });
-```
-
-It's a no-op when the plugin isn't running, so it's safe to leave in place.
+Using something else? See [Everything else](./other).

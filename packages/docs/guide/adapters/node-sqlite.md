@@ -11,14 +11,4 @@ const db = nodeSqlite(new DatabaseSync('app.db'));
 
 Every prepared statement's `run`/`get`/`all` is timed and recorded with a real `durationMs`. Pass the wrapped database wherever you'd pass the original — `drizzle(db)`, and so on. Requires Node 22.5+; `node:sqlite` is still experimental on some Node versions and may need `--experimental-sqlite`.
 
-## Everything else
-
-Anything that talks HTTP (PocketBase, Supabase, a REST API client, `fetch`) is already captured by the outgoing-HTTP interceptor with no adapter needed. For a non-HTTP data source without a shipped adapter, call `recordQuery` from wherever your library exposes the SQL:
-
-```ts
-import { recordQuery } from 'sveltelens';
-
-recordQuery({ sql, params, durationMs, connection: 'primary' });
-```
-
-It's a no-op when the plugin isn't running, so it's safe to leave in place.
+Using something else? See [Everything else](./other).

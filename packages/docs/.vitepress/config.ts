@@ -37,6 +37,7 @@ export default defineConfig({
           { text: 'MongoDB', link: '/guide/adapters/mongodb' },
           { text: 'Bun SQLite', link: '/guide/adapters/bun-sqlite' },
           { text: 'Node SQLite', link: '/guide/adapters/node-sqlite' },
+          { text: 'Everything else', link: '/guide/adapters/other' },
         ],
       },
     ],

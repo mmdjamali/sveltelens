@@ -13,14 +13,4 @@ Every `query(text, params)` or `query(config)` call is timed and recorded with a
 
 The callback form of `query()` and query streams (`pg-query-stream`) pass through unwrapped rather than being misrecorded — switch those call sites to the promise form to have them captured.
 
-## Everything else
-
-Anything that talks HTTP (PocketBase, Supabase, a REST API client, `fetch`) is already captured by the outgoing-HTTP interceptor with no adapter needed. For a non-HTTP data source without a shipped adapter, call `recordQuery` from wherever your library exposes the SQL:
-
-```ts
-import { recordQuery } from 'sveltelens';
-
-recordQuery({ sql, params, durationMs, connection: 'primary' });
-```
-
-It's a no-op when the plugin isn't running, so it's safe to leave in place.
+Using something else? See [Everything else](./other).
