@@ -106,22 +106,26 @@ function wrapEventFetch(
     const requestHeaders = redactHeaders(headersToObject(request.headers), redact);
 
     let requestBodyText: string | null = null;
-    try {
-      requestBodyText = await request.clone().text();
-    } catch {
-      requestBodyText = null;
+    if (!recorder.paused) {
+      try {
+        requestBodyText = await request.clone().text();
+      } catch {
+        requestBodyText = null;
+      }
     }
 
     const offsetMs = Math.max(0, Math.round(fetchStart - requestStart));
 
     try {
       const response = await originalFetch(input, init);
-      const clone = response.clone();
       let responseBodyText: string | null = null;
-      try {
-        responseBodyText = await clone.text();
-      } catch {
-        responseBodyText = null;
+      if (!recorder.paused) {
+        const clone = response.clone();
+        try {
+          responseBodyText = await clone.text();
+        } catch {
+          responseBodyText = null;
+        }
       }
       recorder.record({
         type: 'client-request',
@@ -177,10 +181,12 @@ export const sveltelensHandle: Handle = async ({ event, resolve }) => {
   const contentType = requestHeaders['content-type'] ?? null;
 
   let requestBodyText: string | null = null;
-  try {
-    requestBodyText = await event.request.clone().text();
-  } catch {
-    requestBodyText = null;
+  if (!recorder.paused) {
+    try {
+      requestBodyText = await event.request.clone().text();
+    } catch {
+      requestBodyText = null;
+    }
   }
 
   wrapEventFetch(event, recorder, config.redactHeaders, config.redactBodyKeys, start);
@@ -188,12 +194,14 @@ export const sveltelensHandle: Handle = async ({ event, resolve }) => {
   return requestContext.run({ requestId, startedAt: start }, async () => {
     try {
       const response = await resolve(event);
-      const responseClone = response.clone();
       let responseBodyText: string | null = null;
-      try {
-        responseBodyText = await responseClone.text();
-      } catch {
-        responseBodyText = null;
+      if (!recorder.paused) {
+        const responseClone = response.clone();
+        try {
+          responseBodyText = await responseClone.text();
+        } catch {
+          responseBodyText = null;
+        }
       }
 
       if (isFormAction(event.request.method, contentType, event.url)) {

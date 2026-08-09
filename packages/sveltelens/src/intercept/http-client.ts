@@ -158,24 +158,28 @@ function installFetchPatch(recorder: Recorder, redact: string[], redactBodyKeys:
       const requestHeaders = redactHeaders(headersToObject(request.headers), redact);
 
       let requestBodyText: string | null = null;
-      try {
-        if (init?.body && typeof init.body === 'string') {
-          requestBodyText = init.body;
-        } else if (input instanceof Request) {
-          requestBodyText = await input.clone().text().catch(() => null);
+      if (!recorder.paused) {
+        try {
+          if (init?.body && typeof init.body === 'string') {
+            requestBodyText = init.body;
+          } else if (input instanceof Request) {
+            requestBodyText = await input.clone().text().catch(() => null);
+          }
+        } catch {
+          requestBodyText = null;
         }
-      } catch {
-        requestBodyText = null;
       }
 
       try {
         const response = await original(input, init);
-        const clone = response.clone();
         let responseBodyText: string | null = null;
-        try {
-          responseBodyText = await clone.text();
-        } catch {
-          responseBodyText = null;
+        if (!recorder.paused) {
+          const clone = response.clone();
+          try {
+            responseBodyText = await clone.text();
+          } catch {
+            responseBodyText = null;
+          }
         }
         recorder.record({
           type: 'client-request',

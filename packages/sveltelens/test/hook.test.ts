@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { parseActionResult, sveltelensHandle } from '../src/hook.js';
 import { MemoryStorage } from '../src/storage/memory.js';
 import { Recorder } from '../src/recorder.js';
@@ -168,5 +168,59 @@ describe('sveltelensHandle body redaction', () => {
       token: '[redacted]',
       ok: true,
     });
+  });
+});
+
+describe('sveltelensHandle body capture gating by pause state', () => {
+  it('skips cloning/reading request and response bodies while paused', async () => {
+    const storage = new MemoryStorage(50);
+    const recorder = new Recorder(storage);
+    recorder.paused = true;
+    setSveltelensState({ recorder, config: resolveConfig() });
+
+    const event = fakeEvent((async () => new Response('unused')) as typeof fetch);
+    const requestCloneSpy = vi.spyOn(event.request, 'clone');
+    let responseCloneSpy: ReturnType<typeof vi.spyOn> | undefined;
+
+    await sveltelensHandle({
+      event,
+      resolve: async () => {
+        const response = new Response('page body');
+        responseCloneSpy = vi.spyOn(response, 'clone');
+        return response;
+      },
+    } as never);
+
+    expect(requestCloneSpy).not.toHaveBeenCalled();
+    expect(responseCloneSpy).not.toHaveBeenCalled();
+    // Belt-and-suspenders: paused also means nothing gets recorded at all.
+    expect(storage.list().entries).toHaveLength(0);
+  });
+
+  it('clones/reads request and response bodies when not paused (control)', async () => {
+    const storage = new MemoryStorage(50);
+    const recorder = new Recorder(storage);
+    setSveltelensState({ recorder, config: resolveConfig() });
+
+    const event = fakeEvent((async () => new Response('unused')) as typeof fetch);
+    const requestCloneSpy = vi.spyOn(event.request, 'clone');
+    let responseCloneSpy: ReturnType<typeof vi.spyOn> | undefined;
+
+    await sveltelensHandle({
+      event,
+      resolve: async () => {
+        const response = new Response('page body');
+        responseCloneSpy = vi.spyOn(response, 'clone');
+        return response;
+      },
+    } as never);
+
+    expect(requestCloneSpy).toHaveBeenCalled();
+    expect(responseCloneSpy).toHaveBeenCalled();
+
+    const entries = storage.list({ type: 'request' }).entries;
+    expect(entries).toHaveLength(1);
+    const payload = entries[0].payload as RequestPayload;
+    expect(payload.responseBody?.text).toBe('page body');
   });
 });
