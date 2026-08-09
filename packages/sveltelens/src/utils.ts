@@ -36,16 +36,47 @@ export function isTextualContentType(contentType: string | null): boolean {
   return TEXTUAL_CONTENT_TYPE.test(contentType);
 }
 
-export function captureBody(text: string | null, contentType: string | null): BodyCapture {
+function redactJsonValue(value: unknown, redactSet: Set<string>): unknown {
+  if (Array.isArray(value)) return value.map((v) => redactJsonValue(v, redactSet));
+  if (value && typeof value === 'object') {
+    const result: Record<string, unknown> = {};
+    for (const [key, val] of Object.entries(value as Record<string, unknown>)) {
+      result[key] = redactSet.has(key.toLowerCase()) ? '[redacted]' : redactJsonValue(val, redactSet);
+    }
+    return result;
+  }
+  return value;
+}
+
+/** Redacts named keys anywhere in a JSON body, at any nesting depth. Non-JSON or unparseable text is returned unchanged. */
+export function redactJsonBody(text: string, redactKeys: string[]): string {
+  if (redactKeys.length === 0) return text;
+  try {
+    const parsed = JSON.parse(text);
+    const redactSet = new Set(redactKeys.map((k) => k.toLowerCase()));
+    return JSON.stringify(redactJsonValue(parsed, redactSet));
+  } catch {
+    return text;
+  }
+}
+
+export function captureBody(
+  text: string | null,
+  contentType: string | null,
+  redactKeys: string[] = []
+): BodyCapture {
   if (text === null) {
     return { contentType, size: 0, truncated: false, text: null };
   }
   if (!isTextualContentType(contentType)) {
     return { contentType, size: Buffer.byteLength(text), truncated: false, text: null };
   }
-  const size = Buffer.byteLength(text);
+  const redactedText = contentType && /json/i.test(contentType) ? redactJsonBody(text, redactKeys) : text;
+  const size = Buffer.byteLength(redactedText);
   const truncated = size > BODY_TRUNCATE_BYTES;
-  const truncatedText = truncated ? Buffer.from(text).subarray(0, BODY_TRUNCATE_BYTES).toString() : text;
+  const truncatedText = truncated
+    ? Buffer.from(redactedText).subarray(0, BODY_TRUNCATE_BYTES).toString()
+    : redactedText;
   return { contentType, size, truncated, text: truncatedText };
 }
 

@@ -87,6 +87,7 @@ function wrapEventFetch(
   event: Parameters<Handle>[0]['event'],
   recorder: Recorder,
   redact: string[],
+  redactBodyKeys: string[],
   requestStart: number
 ): void {
   const originalFetch = event.fetch;
@@ -132,8 +133,8 @@ function wrapEventFetch(
           status: response.status,
           requestHeaders,
           responseHeaders: redactHeaders(headersToObject(response.headers), redact),
-          requestBody: captureBody(requestBodyText, requestHeaders['content-type'] ?? null),
-          responseBody: captureBody(responseBodyText, response.headers.get('content-type')),
+          requestBody: captureBody(requestBodyText, requestHeaders['content-type'] ?? null, redactBodyKeys),
+          responseBody: captureBody(responseBodyText, response.headers.get('content-type'), redactBodyKeys),
           error: null,
         },
       });
@@ -149,7 +150,7 @@ function wrapEventFetch(
           status: null,
           requestHeaders,
           responseHeaders: {},
-          requestBody: captureBody(requestBodyText, requestHeaders['content-type'] ?? null),
+          requestBody: captureBody(requestBodyText, requestHeaders['content-type'] ?? null, redactBodyKeys),
           responseBody: null,
           error: err instanceof Error ? err.message : String(err),
         },
@@ -182,7 +183,7 @@ export const sveltelensHandle: Handle = async ({ event, resolve }) => {
     requestBodyText = null;
   }
 
-  wrapEventFetch(event, recorder, config.redactHeaders, start);
+  wrapEventFetch(event, recorder, config.redactHeaders, config.redactBodyKeys, start);
 
   return requestContext.run({ requestId, startedAt: start }, async () => {
     try {
@@ -218,8 +219,8 @@ export const sveltelensHandle: Handle = async ({ event, resolve }) => {
             memoryUsageBytes: process.memoryUsage().heapUsed,
             requestHeaders,
             responseHeaders: redactHeaders(headersToObject(response.headers), config.redactHeaders),
-            requestBody: captureBody(requestBodyText, contentType),
-            responseBody: captureBody(responseBodyText, response.headers.get('content-type')),
+            requestBody: captureBody(requestBodyText, contentType, config.redactBodyKeys),
+            responseBody: captureBody(responseBodyText, response.headers.get('content-type'), config.redactBodyKeys),
             location: actionResult.location,
             resultType: actionResult.resultType,
           },
@@ -240,8 +241,8 @@ export const sveltelensHandle: Handle = async ({ event, resolve }) => {
             memoryUsageBytes: process.memoryUsage().heapUsed,
             requestHeaders,
             responseHeaders: redactHeaders(headersToObject(response.headers), config.redactHeaders),
-            requestBody: captureBody(requestBodyText, contentType),
-            responseBody: captureBody(responseBodyText, response.headers.get('content-type')),
+            requestBody: captureBody(requestBodyText, contentType, config.redactBodyKeys),
+            responseBody: captureBody(responseBodyText, response.headers.get('content-type'), config.redactBodyKeys),
           },
         });
       }
@@ -268,7 +269,7 @@ export const sveltelensHandle: Handle = async ({ event, resolve }) => {
             memoryUsageBytes: process.memoryUsage().heapUsed,
             requestHeaders,
             responseHeaders: {},
-            requestBody: captureBody(requestBodyText, contentType),
+            requestBody: captureBody(requestBodyText, contentType, config.redactBodyKeys),
             responseBody: null,
             location: null,
             resultType: 'error',
@@ -290,7 +291,7 @@ export const sveltelensHandle: Handle = async ({ event, resolve }) => {
             memoryUsageBytes: process.memoryUsage().heapUsed,
             requestHeaders,
             responseHeaders: {},
-            requestBody: captureBody(requestBodyText, contentType),
+            requestBody: captureBody(requestBodyText, contentType, config.redactBodyKeys),
             responseBody: null,
           },
         });

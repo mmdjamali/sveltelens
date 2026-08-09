@@ -48,7 +48,7 @@ export function sveltelens(userConfig: SveltelensConfig = {}): Plugin {
       const storage = createStorage(config);
       const recorder = new Recorder(storage);
       setSveltelensState({ recorder, config });
-      installInterceptors(recorder, config.redactHeaders);
+      installInterceptors(recorder, config.redactHeaders, config.redactBodyKeys);
 
       let uninstallStream: (() => void) | null = null;
       if (server.httpServer) {

@@ -25,6 +25,11 @@ describe('http-client interceptor', () => {
         res.end('boom');
         return;
       }
+      if (req.url === '/secret') {
+        res.setHeader('content-type', 'application/json');
+        res.end(JSON.stringify({ token: 'response-secret-value', ok: true }));
+        return;
+      }
       res.statusCode = 404;
       res.end();
     });
@@ -40,7 +45,7 @@ describe('http-client interceptor', () => {
   beforeEach(() => {
     storage = new MemoryStorage(50);
     recorder = new Recorder(storage);
-    uninstall = installHttpClientInterceptor(recorder, ['authorization']);
+    uninstall = installHttpClientInterceptor(recorder, ['authorization'], ['password', 'token']);
   });
 
   afterEach(() => uninstall());
@@ -74,5 +79,28 @@ describe('http-client interceptor', () => {
     await fetch(`${baseUrl}/fail`);
     const entry = storage.list({ type: 'client-request' }).entries[0];
     expect((entry.payload as ClientRequestPayload).status).toBe(500);
+  });
+
+  it('redacts configured body keys in JSON request/response bodies', async () => {
+    await fetch(`${baseUrl}/secret`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ password: 'hunter2', name: 'bob' }),
+    });
+
+    const entry = storage.list({ type: 'client-request' }).entries[0];
+    const payload = entry.payload as ClientRequestPayload;
+
+    expect(payload.requestBody?.text).not.toBeNull();
+    expect(JSON.parse(payload.requestBody!.text as string)).toEqual({
+      password: '[redacted]',
+      name: 'bob',
+    });
+
+    expect(payload.responseBody?.text).not.toBeNull();
+    expect(JSON.parse(payload.responseBody!.text as string)).toEqual({
+      token: '[redacted]',
+      ok: true,
+    });
   });
 });
