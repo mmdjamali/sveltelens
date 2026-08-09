@@ -20,7 +20,11 @@
     "test:package": "cd packages/sveltelens && bun run test",
     "test:dashboard": "cd packages/dashboard && bun run test",
     "test": "bun run test:package && bun run test:dashboard",
-    "lint": "biome lint ."
+    "lint": "biome lint .",
+    "check:package": "cd packages/sveltelens && bun run check",
+    "check:dashboard": "cd packages/dashboard && bun run check",
+    "check:demo": "cd examples/demo-app && bun run check",
+    "check": "bun run check:package && bun run check:dashboard && bun run check:demo"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.5.7",
