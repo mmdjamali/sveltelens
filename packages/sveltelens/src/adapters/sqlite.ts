@@ -1,7 +1,5 @@
 import type Database from 'better-sqlite3';
-import { recordQuery } from '../record.js';
-
-const TIMED_STATEMENT_METHODS = ['run', 'get', 'all'] as const;
+import { wrapStatement } from './shared.js';
 
 /**
  * Wraps a better-sqlite3 `Database` so every prepared statement's run/get/all is timed
@@ -15,19 +13,4 @@ export function betterSqlite3<T extends Database.Database>(db: T): T {
   const originalPrepare = db.prepare.bind(db);
   db.prepare = ((sql: string) => wrapStatement(originalPrepare(sql), sql)) as T['prepare'];
   return db;
-}
-
-function wrapStatement<S extends Database.Statement>(stmt: S, sql: string): S {
-  for (const method of TIMED_STATEMENT_METHODS) {
-    const original = stmt[method].bind(stmt) as (...params: unknown[]) => unknown;
-    (stmt[method] as unknown) = (...params: unknown[]) => {
-      const start = performance.now();
-      try {
-        return original(...params);
-      } finally {
-        recordQuery({ sql, params, durationMs: Math.round(performance.now() - start) });
-      }
-    };
-  }
-  return stmt;
 }
