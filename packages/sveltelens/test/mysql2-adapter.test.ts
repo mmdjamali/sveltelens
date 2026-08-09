@@ -47,6 +47,17 @@ describe('mysql2', () => {
     expect(payload.params).toEqual(['write docs']);
   });
 
+  it('records query({ sql, values }) with values pulled from the options object', async () => {
+    const pool = mysql2(makeFakePool([{ id: 42 }]));
+    await pool.query({ sql: 'SELECT * FROM users WHERE id = ?', values: [42] });
+
+    const entries = storage.list({ type: 'query' }).entries;
+    expect(entries).toHaveLength(1);
+    const payload = entries[0].payload as QueryPayload;
+    expect(payload.sql).toBe('SELECT * FROM users WHERE id = ?');
+    expect(payload.params).toEqual([42]);
+  });
+
   it('records a failed query and still rejects', async () => {
     const pool = mysql2({
       query: () => Promise.reject(new Error('boom')),

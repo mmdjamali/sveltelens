@@ -40,8 +40,13 @@ function parseArgs(args: unknown[]): { sql: string; params: unknown[] } | null {
     return { sql: first, params: Array.isArray(second) ? second : [] };
   }
   if (first && typeof first === 'object' && 'sql' in first) {
-    const options = first as { sql: string };
-    return { sql: options.sql, params: Array.isArray(second) ? second : [] };
+    const options = first as { sql: string; values?: unknown };
+    const params = Array.isArray(second)
+      ? second
+      : Array.isArray(options.values)
+        ? options.values
+        : [];
+    return { sql: options.sql, params };
   }
   return null;
 }
