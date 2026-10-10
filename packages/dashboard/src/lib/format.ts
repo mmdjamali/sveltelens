@@ -69,6 +69,7 @@ export function levelClass(level: LogPayload['level']): string {
 const ENTRY_TYPE_CLASSES: Record<EntryType, string> = {
   request: SKY,
   'client-request': VIOLET,
+  'browser-request': VIOLET,
   query: AMBER,
   log: EMERALD,
   exception: RED,
@@ -83,6 +84,7 @@ export function entryTypeClass(type: EntryType): string {
 const ENTRY_TYPE_BAR_CLASSES: Record<EntryType, string> = {
   request: 'bg-sky-500',
   'client-request': 'bg-violet-500',
+  'browser-request': 'bg-violet-500',
   query: 'bg-amber-500',
   log: 'bg-emerald-500',
   exception: 'bg-red-500',
@@ -95,7 +97,7 @@ export function entryTypeBarClass(type: EntryType): string {
 
 // The "verb" badge next to the type badge: HTTP method, log level, or exception name.
 export function entryVerb(entry: Entry): string | null {
-  if (entry.type === 'request' || entry.type === 'client-request') return entry.payload.method;
+  if (entry.type === 'request' || entry.type === 'client-request' || entry.type === 'browser-request') return entry.payload.method;
   if (entry.type === 'action') return entry.payload.actionName.toUpperCase();
   // 'log' level is redundant with the type badge, which already reads "LOG".
   if (entry.type === 'log') return entry.payload.level === 'log' ? null : entry.payload.level.toUpperCase();
@@ -107,12 +109,19 @@ export function entryVerbClass(entry: Entry): string {
   if (entry.type === 'log') return levelClass(entry.payload.level);
   if (entry.type === 'exception') return entryTypeClass('exception');
   if (entry.type === 'action') return methodClass(entry.payload.method);
-  if (entry.type === 'request' || entry.type === 'client-request') return methodClass(entry.payload.method);
+  if (entry.type === 'request' || entry.type === 'client-request' || entry.type === 'browser-request')
+    return methodClass(entry.payload.method);
   return NEUTRAL;
 }
 
 export function entryStatus(entry: Entry): number | null {
-  if (entry.type === 'request' || entry.type === 'client-request' || entry.type === 'action') return entry.payload.status;
+  if (
+    entry.type === 'request' ||
+    entry.type === 'client-request' ||
+    entry.type === 'browser-request' ||
+    entry.type === 'action'
+  )
+    return entry.payload.status;
   return null;
 }
 
@@ -128,6 +137,7 @@ export function entrySummary(entry: Entry): string {
     case 'request':
       return entry.payload.path;
     case 'client-request':
+    case 'browser-request':
       return entry.payload.url;
     case 'query':
       return entry.payload.sql;

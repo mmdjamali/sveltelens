@@ -56,7 +56,7 @@ export function sveltelens(userConfig: SveltelensConfig = {}): Plugin {
       }
       server.httpServer?.once('close', () => uninstallStream?.());
 
-      server.middlewares.use(createApiMiddleware(storage, recorder, config.path));
+      server.middlewares.use(createApiMiddleware(storage, recorder, config.path, config));
 
       // sirv resolves relative asset URLs against the request's directory, so a
       // request for the bare mount path (no trailing slash) must redirect first.

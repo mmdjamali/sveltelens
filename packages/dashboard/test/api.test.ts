@@ -65,7 +65,7 @@ describe('fetchEntry', () => {
 
 describe('fetchCounts', () => {
   it('returns the parsed JSON body', async () => {
-    const body = { request: 1, 'client-request': 0, query: 2, log: 0, exception: 0, action: 0 };
+    const body = { request: 1, 'client-request': 0, 'browser-request': 0, query: 2, log: 0, exception: 0, action: 0 };
     const fetchMock = vi.fn().mockResolvedValue(jsonResponse(body));
     vi.stubGlobal('fetch', fetchMock);
 

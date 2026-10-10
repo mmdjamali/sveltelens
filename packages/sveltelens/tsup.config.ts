@@ -4,6 +4,7 @@ export default defineConfig({
   entry: {
     index: 'src/index.ts',
     hook: 'src/hook.ts',
+    client: 'src/client.ts',
     'adapters/sqlite': 'src/adapters/sqlite.ts',
     'adapters/pg': 'src/adapters/pg.ts',
     'adapters/mysql2': 'src/adapters/mysql2.ts',

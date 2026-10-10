@@ -13,7 +13,10 @@
   let {
     entry,
     related,
-  }: { entry: Extract<Entry, { type: "client-request" }>; related: Entry[] } =
+  }: {
+    entry: Extract<Entry, { type: "client-request" | "browser-request" }>;
+    related: Entry[];
+  } =
     $props();
 </script>
 

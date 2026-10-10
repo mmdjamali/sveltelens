@@ -2,6 +2,7 @@ import type { Component } from 'svelte';
 import IconFileFunction from '@lucide/svelte/icons/square-function';
 import IconRoute from '@lucide/svelte/icons/route';
 import IconWorld from '@lucide/svelte/icons/globe';
+import IconAppWindow from '@lucide/svelte/icons/app-window';
 import IconDatabase from '@lucide/svelte/icons/database';
 import IconFileText from '@lucide/svelte/icons/file-text';
 import IconAlertTriangle from '@lucide/svelte/icons/triangle-alert';
@@ -74,6 +75,16 @@ export const ENTRY_TYPE_META: Record<EntryType, EntryTypeMeta> = {
     badgeLabel: 'HTTP Client',
     icon: IconWorld,
     emptyMessage: "Make an outgoing HTTP call and it'll show up here.",
+    table: ClientRequestsTable,
+    detail: ClientRequestDetail,
+  },
+  // Same payload shape as client-request, so the same table and detail render it.
+  'browser-request': {
+    slug: 'browser-requests',
+    label: 'Browser Requests',
+    badgeLabel: 'Browser Request',
+    icon: IconAppWindow,
+    emptyMessage: "Call installClient() from sveltelens/client, make a fetch in the page, and it'll show up here.",
     table: ClientRequestsTable,
     detail: ClientRequestDetail,
   },
