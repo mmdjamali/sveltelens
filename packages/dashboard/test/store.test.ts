@@ -10,7 +10,7 @@ function entry(id: string, type: Entry['type'], payload: unknown): Entry {
 }
 
 function emptyCounts(): Record<Entry['type'], number> {
-  return { request: 0, 'client-request': 0, query: 0, log: 0, exception: 0, action: 0 };
+  return { request: 0, 'client-request': 0, 'browser-request': 0, query: 0, log: 0, exception: 0, action: 0 };
 }
 
 describe('store.filtered', () => {

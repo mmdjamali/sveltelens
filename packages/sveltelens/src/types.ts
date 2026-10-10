@@ -4,7 +4,7 @@
  * Internal contracts live next to their implementations (see storage/types.ts).
  */
 
-export type EntryType = 'request' | 'client-request' | 'query' | 'log' | 'exception' | 'action';
+export type EntryType = 'request' | 'client-request' | 'browser-request' | 'query' | 'log' | 'exception' | 'action';
 
 export interface BodyCapture {
   contentType: string | null;
@@ -80,6 +80,8 @@ export interface ExceptionPayload {
 export type EntryPayload =
   | { type: 'request'; payload: RequestPayload }
   | { type: 'client-request'; payload: ClientRequestPayload }
+  /** A fetch made in the page, reported by `sveltelens/client`. Never tied to a server request. */
+  | { type: 'browser-request'; payload: ClientRequestPayload }
   | { type: 'query'; payload: QueryPayload }
   | { type: 'log'; payload: LogPayload }
   | { type: 'exception'; payload: ExceptionPayload }
@@ -95,3 +97,16 @@ export type Entry = {
 } & EntryPayload;
 
 export const BODY_TRUNCATE_BYTES = 64 * 1024;
+
+/** What `sveltelens/client` POSTs to `${path}/api/browser-requests`. Bodies are raw text; the server captures and redacts them. */
+export interface BrowserRequestReport {
+  method: string;
+  url: string;
+  status: number | null;
+  durationMs: number | null;
+  requestHeaders: Record<string, string>;
+  responseHeaders: Record<string, string>;
+  requestBody: { text: string; contentType: string | null } | null;
+  responseBody: { text: string; contentType: string | null } | null;
+  error: string | null;
+}

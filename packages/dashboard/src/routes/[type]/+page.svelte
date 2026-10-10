@@ -17,5 +17,5 @@
     <SearchBar bind:value={store.search} />
   </div>
 
-  <Table entries={store.filtered(data.type)} />
+  <Table type={data.type} entries={store.filtered(data.type)} />
 </div>

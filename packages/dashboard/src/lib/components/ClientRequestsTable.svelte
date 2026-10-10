@@ -11,8 +11,13 @@
   import { Badge } from "./ui/badge/index.js";
   import EntryTable from "./EntryTable.svelte";
 
-  let { entries }: { entries: Extract<Entry, { type: "client-request" }>[] } =
-    $props();
+  let {
+    entries,
+    type = "client-request",
+  }: {
+    entries: Extract<Entry, { type: "client-request" | "browser-request" }>[];
+    type?: "client-request" | "browser-request";
+  } = $props();
 
   const columns = [
     { label: "Method", class: "w-24 pl-4" },
@@ -23,7 +28,7 @@
   ];
 </script>
 
-<EntryTable type="client-request" rows={entries} id={(e) => e.id} {columns}>
+<EntryTable {type} rows={entries} id={(e) => e.id} {columns}>
   {#snippet cells(entry)}
     <Table.Cell class="py-0 pl-4">
       <Badge variant="soft" class={methodClass(entry.payload.method)}

@@ -19,6 +19,7 @@ export type {
   ActionPayload,
   ActionResultType,
   ClientRequestPayload,
+  BrowserRequestReport,
   QueryPayload,
   LogPayload,
   ExceptionPayload,

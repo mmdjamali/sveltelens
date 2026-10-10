@@ -1,7 +1,7 @@
 import type { Entry, EntryType } from '../types.js';
 import type { ListFilter, Storage } from './types.js';
 
-const ENTRY_TYPES: EntryType[] = ['request', 'client-request', 'query', 'log', 'exception', 'action'];
+const ENTRY_TYPES: EntryType[] = ['request', 'client-request', 'browser-request', 'query', 'log', 'exception', 'action'];
 
 /** Fixed-capacity FIFO ring buffer; oldest entries drop silently once full. add() is O(1). */
 export class MemoryStorage implements Storage {
