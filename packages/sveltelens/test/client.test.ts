@@ -14,10 +14,12 @@ describe('browser-request capture', () => {
   let baseUrl: string;
   let storage: MemoryStorage;
   let uninstall: () => void;
+  let forwarded: { url: string; body: BodyInit | null | undefined }[];
   const realFetch = globalThis.fetch;
 
   beforeEach(async () => {
     storage = new MemoryStorage(50);
+    forwarded = [];
     const recorder = new Recorder(storage);
     const middleware = createApiMiddleware(storage, recorder, BASE_PATH, {
       redactHeaders: ['authorization'],
@@ -33,8 +35,11 @@ describe('browser-request capture', () => {
     baseUrl = `http://localhost:${(server.address() as AddressInfo).port}`;
 
     // Node has no document base, so stand in for the browser resolving relative URLs.
-    globalThis.fetch = ((input: RequestInfo | URL, init?: RequestInit) =>
-      realFetch(typeof input === 'string' && input.startsWith('/') ? baseUrl + input : input, init)) as typeof fetch;
+    globalThis.fetch = ((input: RequestInfo | URL, init?: RequestInit) => {
+      const url = typeof input === 'string' ? input : input instanceof URL ? input.href : input.url;
+      if (!url.includes(BASE_PATH)) forwarded.push({ url, body: init?.body });
+      return realFetch(typeof input === 'string' && input.startsWith('/') ? baseUrl + input : input, init);
+    }) as typeof fetch;
     uninstall = installClient(BASE_PATH);
   });
 
@@ -70,6 +75,35 @@ describe('browser-request capture', () => {
     expect(payload.requestHeaders.authorization).toBe('[redacted]');
     expect(payload.requestBody?.text).toBe('{"password":"[redacted]","name":"n"}');
     expect(payload.responseBody?.text).toBe('{"ok":true,"password":"[redacted]"}');
+  });
+
+  it('records an ofetch-style options body and forwards that same body', async () => {
+    const init = {
+      method: 'PATCH',
+      body: JSON.stringify({ display_name: 'ada' }),
+      headers: new Headers({ 'content-type': 'application/json', authorization: 'Bearer x' }),
+      credentials: 'include' as const,
+      retry: 1,
+    };
+    const res = await fetch(`${baseUrl}/api/thing`, init);
+    expect(res.status).toBe(200);
+
+    const payload = (await waitForEntry()).payload as ClientRequestPayload;
+    expect(payload.method).toBe('PATCH');
+    expect(payload.requestBody?.text).toBe('{"display_name":"ada"}');
+    expect(forwarded[0]?.body).toBe(init.body);
+  });
+
+  it('records a body carried only on a Request', async () => {
+    const request = new Request(`${baseUrl}/api/thing`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: '{"name":"n"}',
+    });
+    await fetch(request);
+
+    const payload = (await waitForEntry()).payload as ClientRequestPayload;
+    expect(payload.requestBody?.text).toBe('{"name":"n"}');
   });
 
   it('records a network failure with its error and rethrows it', async () => {
