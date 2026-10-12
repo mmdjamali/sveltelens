@@ -5,8 +5,9 @@ export default defineConfig({
   description: 'A local developer observability dashboard for SvelteKit, inspired by Laravel Telescope.',
   appearance: 'force-dark',
   cleanUrls: true,
+  base: '/sveltescope/',
 
-  head: [['link', { rel: 'icon', href: '/logo.svg', type: 'image/svg+xml' }]],
+  head: [['link', { rel: 'icon', href: '/sveltescope/logo.svg', type: 'image/svg+xml' }]],
 
   themeConfig: {
     logo: '/logo.svg',
