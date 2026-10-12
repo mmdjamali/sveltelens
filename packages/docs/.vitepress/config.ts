@@ -5,16 +5,16 @@ export default defineConfig({
   description: 'A local developer observability dashboard for SvelteKit, inspired by Laravel Telescope.',
   appearance: 'force-dark',
   cleanUrls: true,
-  base: '/sveltescope/',
+  base: '/sveltelens/',
 
-  head: [['link', { rel: 'icon', href: '/sveltescope/logo.svg', type: 'image/svg+xml' }]],
+  head: [['link', { rel: 'icon', href: '/sveltelens/logo.svg', type: 'image/svg+xml' }]],
 
   themeConfig: {
     logo: '/logo.svg',
 
     nav: [
       { text: 'Guide', link: '/guide/what-is-sveltelens' },
-      { text: 'GitHub', link: 'https://github.com/mmdjamali/sveltescope' },
+      { text: 'GitHub', link: 'https://github.com/mmdjamali/sveltelens' },
     ],
 
     sidebar: [
@@ -43,14 +43,14 @@ export default defineConfig({
       },
     ],
 
-    socialLinks: [{ icon: 'github', link: 'https://github.com/mmdjamali/sveltescope' }],
+    socialLinks: [{ icon: 'github', link: 'https://github.com/mmdjamali/sveltelens' }],
 
     search: {
       provider: 'local',
     },
 
     editLink: {
-      pattern: 'https://github.com/mmdjamali/sveltescope/edit/main/packages/docs/:path',
+      pattern: 'https://github.com/mmdjamali/sveltelens/edit/main/packages/docs/:path',
       text: 'Edit this page on GitHub',
     },
 

@@ -36,7 +36,7 @@ Run `npm run dev` and open `http://localhost:5173/__sveltelens`.
 
 ## Docs
 
-Full guide — configuration, how it works, adapters — lives in [`packages/docs`](https://github.com/mmdjamali/sveltescope/tree/main/packages/docs) in this repo. Run `bun run dev:docs` from the repo root to browse it locally.
+Full guide — configuration, how it works, adapters — lives in [`packages/docs`](https://github.com/mmdjamali/sveltelens/tree/main/packages/docs) in this repo. Run `bun run dev:docs` from the repo root to browse it locally.
 
 ## License
 
