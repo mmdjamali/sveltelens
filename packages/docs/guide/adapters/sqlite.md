@@ -4,7 +4,7 @@ Adapters wrap the _database driver_, not the ORM on top of it — so one adapter
 
 ```ts
 import Database from 'better-sqlite3';
-import { betterSqlite3 } from 'sveltelens/adapters/sqlite';
+import { betterSqlite3 } from '@mmdjamali/sveltelens/adapters/sqlite';
 
 const sqlite = betterSqlite3(new Database('app.db'));
 ```

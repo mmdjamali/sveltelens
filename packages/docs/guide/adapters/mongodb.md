@@ -4,7 +4,7 @@ Adapters wrap the _database driver_ — for MongoDB that means the official `mon
 
 ```ts
 import { MongoClient } from 'mongodb';
-import { mongodb } from 'sveltelens/adapters/mongodb';
+import { mongodb } from '@mmdjamali/sveltelens/adapters/mongodb';
 
 const client = mongodb(new MongoClient(process.env.DATABASE_URL!, { monitorCommands: true }));
 ```

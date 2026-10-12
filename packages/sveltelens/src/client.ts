@@ -8,7 +8,7 @@ import { BODY_TRUNCATE_BYTES, type BrowserRequestReport } from './types.js';
  *
  * Call it from `hooks.client.ts` (or a plain Vite app's entry) behind a dev check:
  *
- *   import { installClient } from 'sveltelens/client';
+ *   import { installClient } from '@mmdjamali/sveltelens/client';
  *   if (import.meta.env.DEV) installClient();
  *
  * Returns an uninstall function. Pass `path` if the plugin was given a custom one.

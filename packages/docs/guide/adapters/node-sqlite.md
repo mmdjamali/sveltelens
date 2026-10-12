@@ -4,7 +4,7 @@ Adapters wrap the _database driver_, not the ORM on top of it — so one adapter
 
 ```ts
 import { DatabaseSync } from 'node:sqlite';
-import { nodeSqlite } from 'sveltelens/adapters/node-sqlite';
+import { nodeSqlite } from '@mmdjamali/sveltelens/adapters/node-sqlite';
 
 const db = nodeSqlite(new DatabaseSync('app.db'));
 ```

@@ -4,7 +4,7 @@ Adapters wrap the _database driver_, not the ORM on top of it — so one adapter
 
 ```ts
 import postgres from 'postgres';
-import { postgresJs } from 'sveltelens/adapters/postgres-js';
+import { postgresJs } from '@mmdjamali/sveltelens/adapters/postgres-js';
 
 const sql = postgresJs(postgres(process.env.DATABASE_URL!));
 ```

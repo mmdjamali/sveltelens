@@ -19,7 +19,7 @@ const config = {
     // The wire format is owned by the package that produces it. Type-only, so this
     // never resolves at runtime — but Vite needs the alias to agree with TypeScript.
     alias: {
-      sveltelens: '../sveltelens/src/index.ts',
+      '@mmdjamali/sveltelens': '../sveltelens/src/index.ts',
     },
   },
 };

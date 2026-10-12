@@ -4,7 +4,7 @@ Adapters wrap the _database driver_, not the ORM on top of it — so one adapter
 
 ```ts
 import { Database } from 'bun:sqlite';
-import { bunSqlite } from 'sveltelens/adapters/bun-sqlite';
+import { bunSqlite } from '@mmdjamali/sveltelens/adapters/bun-sqlite';
 
 const db = bunSqlite(new Database('app.db'));
 ```
