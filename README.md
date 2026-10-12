@@ -32,6 +32,16 @@ Other useful scripts (see root `package.json`):
 - `bun run dev:docs` — runs the docs site locally
 - `bun run build` — builds all publishable packages
 
+## MCP
+
+With the dev server running, coding agents can query captured requests, queries, logs and exceptions over MCP. With the demo app (`bun run dev:demo`):
+
+```sh
+claude mcp add --transport http sveltelens http://localhost:5173/__sveltelens/mcp
+```
+
+Tools: `list_entries`, `get_entry`, `get_request`, `clear_entries`. The endpoint lives in `packages/sveltelens/src/api/mcp.ts`; the full guide is [packages/docs/guide/mcp.md](packages/docs/guide/mcp.md).
+
 ## License
 
 MIT — see [LICENSE](./LICENSE).

@@ -25,6 +25,7 @@ export default defineConfig({
           { text: 'Getting Started', link: '/guide/getting-started' },
           { text: 'Configuration', link: '/guide/configuration' },
           { text: 'How It Works', link: '/guide/how-it-works' },
+          { text: 'MCP Server', link: '/guide/mcp' },
         ],
       },
       {

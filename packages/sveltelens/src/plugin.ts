@@ -5,6 +5,7 @@ import fs from 'node:fs';
 import sirv from 'sirv';
 import { resolveConfig, type SveltelensConfig } from './config.js';
 import { createStorage } from './storage/index.js';
+import { createMcpMiddleware } from './api/mcp.js';
 import { Recorder } from './recorder.js';
 import { installInterceptors } from './intercept/index.js';
 import { createApiMiddleware } from './api/rest.js';
@@ -57,6 +58,7 @@ export function sveltelens(userConfig: SveltelensConfig = {}): Plugin {
       server.httpServer?.once('close', () => uninstallStream?.());
 
       server.middlewares.use(createApiMiddleware(storage, recorder, config.path, config));
+      server.middlewares.use(createMcpMiddleware(storage, config.path));
 
       // sirv resolves relative asset URLs against the request's directory, so a
       // request for the bare mount path (no trailing slash) must redirect first.
@@ -87,6 +89,7 @@ export function sveltelens(userConfig: SveltelensConfig = {}): Plugin {
         const address = server.httpServer?.address();
         const port = typeof address === 'object' && address ? address.port : '';
         console.log(`  \x1b[35m➜\x1b[0m  Sveltelens:  \x1b[1mhttp://localhost:${port}${config.path}\x1b[0m`);
+        console.log(`  \x1b[35m➜\x1b[0m  Sveltelens MCP:  \x1b[1mhttp://localhost:${port}${config.path}/mcp\x1b[0m`);
       });
     },
   };
