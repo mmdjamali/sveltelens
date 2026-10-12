@@ -93,6 +93,25 @@ describe('mcp endpoint', () => {
     expect((await fetch(url)).status).toBe(405);
   });
 
+  it('does not reply to notifications for known methods', async () => {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ jsonrpc: '2.0', method: 'tools/list' }),
+    });
+    expect(res.status).toBe(202);
+  });
+
+  it('answers oversized bodies with 413', async () => {
+    const res = await fetch(url, { method: 'POST', body: 'x'.repeat(70 * 1024) });
+    expect(res.status).toBe(413);
+  });
+
+  it('get_request rejects an empty id instead of dumping everything', async () => {
+    seed();
+    expect((await call('get_request', { id: '' })).isError).toBe(true);
+  });
+
   it('rejects cross-origin requests', async () => {
     const res = await fetch(url, { method: 'POST', headers: { Origin: 'http://evil.example' }, body: '{}' });
     expect(res.status).toBe(403);

@@ -59,7 +59,7 @@ const ms = (d: number | null) => (d === null ? '' : ` (${Math.round(d)}ms)`);
 
 /** One line per entry; exported for tests. */
 export function summarize(e: Entry): string {
-  const time = new Date(e.timestamp).toISOString().slice(11, 19);
+  const time = `${new Date(e.timestamp).toISOString().slice(11, 19)}Z`;
   const head = `${e.id} ${time}`;
   switch (e.type) {
     case 'request': {
@@ -68,7 +68,7 @@ export function summarize(e: Entry): string {
     }
     case 'action': {
       const p = e.payload;
-      return `${head} action ${p.method} ${p.path} ?/${p.actionName} → ${p.resultType ?? p.status}${ms(e.durationMs)} [requestId ${e.requestId}]`;
+      return `${head} action ${p.method} ${p.path} → ${p.resultType ?? p.status}${ms(e.durationMs)} [requestId ${e.requestId}, action ${p.actionName}]`;
     }
     case 'client-request':
     case 'browser-request': {
@@ -153,6 +153,8 @@ function listEntries(storage: Storage, a: Args): string {
 }
 
 function getRequest(storage: Storage, id: string): string | null {
+  // An empty requestId would skip the filter and dump every entry.
+  if (!id) return null;
   const requestId = storage.get(id)?.requestId ?? id;
   // Every entry of one request is far below the cap, so one page is enough.
   const entries = storage.list({ requestId, limit: SCAN_WINDOW }).entries.reverse();
@@ -190,7 +192,8 @@ function callTool(storage: Storage, name: unknown, a: Args): ToolResult | null {
 type RpcRequest = { jsonrpc?: string; id?: string | number | null; method?: unknown; params?: Record<string, unknown> };
 
 function handleRpc(storage: Storage, msg: RpcRequest): object | null {
-  const isNotification = msg.id === undefined;
+  // Notifications never get a reply (JSON-RPC 2.0); none of ours need handling.
+  if (msg.id === undefined) return null;
   const ok = (result: unknown) => ({ jsonrpc: '2.0', id: msg.id, result });
   const fail = (code: number, message: string) => ({ jsonrpc: '2.0', id: msg.id ?? null, error: { code, message } });
   const params = msg.params ?? {};
@@ -215,7 +218,7 @@ function handleRpc(storage: Storage, msg: RpcRequest): object | null {
       return result ? ok(result) : fail(-32602, `Unknown tool: ${String(params.name)}`);
     }
     default:
-      return isNotification ? null : fail(-32601, `Method not found: ${String(msg.method)}`);
+      return fail(-32601, `Method not found: ${String(msg.method)}`);
   }
 }
 
@@ -238,19 +241,17 @@ export function createMcpMiddleware(storage: Storage, basePath: string) {
       return send(res, 405);
     }
 
+    // Drain instead of destroying on overflow: destroying the socket would drop the 413.
     const chunks: Buffer[] = [];
     let size = 0;
     req.on('data', (chunk: Buffer) => {
       size += chunk.length;
-      if (size > MAX_BODY_BYTES) {
-        send(res, 413, { jsonrpc: '2.0', id: null, error: { code: -32600, message: 'body too large' } });
-        req.destroy();
-        return;
-      }
-      chunks.push(chunk);
+      if (size <= MAX_BODY_BYTES) chunks.push(chunk);
     });
     req.on('end', () => {
-      if (res.writableEnded) return;
+      if (size > MAX_BODY_BYTES) {
+        return send(res, 413, { jsonrpc: '2.0', id: null, error: { code: -32600, message: 'body too large' } });
+      }
       let body: unknown;
       try {
         body = JSON.parse(Buffer.concat(chunks).toString('utf-8'));
