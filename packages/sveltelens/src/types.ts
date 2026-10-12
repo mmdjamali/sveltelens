@@ -80,7 +80,7 @@ export interface ExceptionPayload {
 export type EntryPayload =
   | { type: 'request'; payload: RequestPayload }
   | { type: 'client-request'; payload: ClientRequestPayload }
-  /** A fetch made in the page, reported by `sveltelens/client`. Never tied to a server request. */
+  /** A fetch made in the page, reported by `@mmdjamali/sveltelens/client`. Never tied to a server request. */
   | { type: 'browser-request'; payload: ClientRequestPayload }
   | { type: 'query'; payload: QueryPayload }
   | { type: 'log'; payload: LogPayload }
@@ -98,7 +98,7 @@ export type Entry = {
 
 export const BODY_TRUNCATE_BYTES = 64 * 1024;
 
-/** What `sveltelens/client` POSTs to `${path}/api/browser-requests`. Bodies are raw text; the server captures and redacts them. */
+/** What `@mmdjamali/sveltelens/client` POSTs to `${path}/api/browser-requests`. Bodies are raw text; the server captures and redacts them. */
 export interface BrowserRequestReport {
   method: string;
   url: string;

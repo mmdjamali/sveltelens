@@ -4,7 +4,7 @@ Adapters wrap the _database driver_, not the ORM on top of it — so one adapter
 
 ```ts
 import { Pool } from 'pg';
-import { pg } from 'sveltelens/adapters/pg';
+import { pg } from '@mmdjamali/sveltelens/adapters/pg';
 
 const pool = pg(new Pool({ connectionString: process.env.DATABASE_URL }));
 ```

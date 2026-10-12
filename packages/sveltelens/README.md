@@ -5,7 +5,7 @@ A local developer observability dashboard for SvelteKit, inspired by [Laravel Te
 ## Install
 
 ```sh
-npm i -D sveltelens
+npm i -D @mmdjamali/sveltelens
 ```
 
 ## Setup
@@ -14,7 +14,7 @@ npm i -D sveltelens
 
 ```ts
 import { sveltekit } from '@sveltejs/kit/vite';
-import { sveltelens } from 'sveltelens';
+import { sveltelens } from '@mmdjamali/sveltelens';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
@@ -25,7 +25,7 @@ export default defineConfig({
 **2. Add the hook** to `src/hooks.server.ts`:
 
 ```ts
-import { sveltelensHandle, sveltelensHandleError } from 'sveltelens/hook';
+import { sveltelensHandle, sveltelensHandleError } from '@mmdjamali/sveltelens/hook';
 import { sequence } from '@sveltejs/kit/hooks';
 
 export const handle = sequence(sveltelensHandle /*, ...your other hooks */);

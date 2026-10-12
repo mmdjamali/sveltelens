@@ -1,7 +1,7 @@
 import Database from 'better-sqlite3';
 import { drizzle } from 'drizzle-orm/better-sqlite3';
 import { sqliteTable, integer, text } from 'drizzle-orm/sqlite-core';
-import { betterSqlite3 } from 'sveltelens/adapters/sqlite';
+import { betterSqlite3 } from '@mmdjamali/sveltelens/adapters/sqlite';
 
 export const todos = sqliteTable('todos', {
   id: integer('id').primaryKey({ autoIncrement: true }),

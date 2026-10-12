@@ -6,7 +6,7 @@ Sveltelens patches Node platform primitives inside the Vite dev server process, 
 | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | Incoming requests  | `sveltelensHandle` wraps `resolve()` in `AsyncLocalStorage`, recording method, path, route id, status, duration, headers, and truncated bodies.                          |
 | Outgoing HTTP      | Subscribes to undici's `diagnostics_channel` events and patches `globalThis.fetch`, so plain `fetch`, `axios`, `got`, and SDKs like the PocketBase client are all captured without an adapter. |
-| Browser HTTP       | Opt-in: `installClient()` from `sveltelens/client` patches `fetch` in the page and POSTs each call to the dev server, which applies the same header and body redaction. These entries have no `requestId`. |
+| Browser HTTP       | Opt-in: `installClient()` from `@mmdjamali/sveltelens/client` patches `fetch` in the page and POSTs each call to the dev server, which applies the same header and body redaction. These entries have no `requestId`. |
 | Exceptions         | `process.on('uncaughtException'/'unhandledRejection')`, errors caught in the handle hook, and `sveltelensHandleError` for errors thrown in `load`.                       |
 | Logs               | `console.log/info/warn/error/debug` are patched server-side.                                                                                                              |
 | DB queries         | Optional thin adapters (see [Adapters](./adapters/sqlite)) — most ORMs and clients that go over HTTP are already covered by the outgoing-HTTP interceptor.                |

@@ -1,5 +1,5 @@
 {
-  "name": "sveltelens",
+  "name": "@mmdjamali/sveltelens",
   "version": "0.1.0",
   "description": "Laravel Telescope-style local developer observability dashboard for SvelteKit",
   "keywords": [
@@ -119,5 +119,8 @@
     "undici": "^7.0.0",
     "vite": "^6.0.0",
     "vitest": "^2.1.8"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

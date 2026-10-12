@@ -1,6 +1,6 @@
 import { sveltekit } from '@sveltejs/kit/vite';
 import tailwindcss from '@tailwindcss/vite';
-import { sveltelens } from 'sveltelens';
+import { sveltelens } from '@mmdjamali/sveltelens';
 import { defineConfig } from 'vite';
 
 export default defineConfig({

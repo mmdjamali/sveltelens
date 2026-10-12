@@ -4,7 +4,7 @@ Adapters wrap the _database driver_, not the ORM on top of it — so one adapter
 
 ```ts
 import { createClient } from '@libsql/client';
-import { libsql } from 'sveltelens/adapters/libsql';
+import { libsql } from '@mmdjamali/sveltelens/adapters/libsql';
 
 const client = libsql(createClient({ url: process.env.DATABASE_URL!, authToken: process.env.DATABASE_AUTH_TOKEN }));
 ```

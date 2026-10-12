@@ -15,4 +15,4 @@ export type {
   QueryPayload,
   LogPayload,
   ExceptionPayload,
-} from 'sveltelens';
+} from '@mmdjamali/sveltelens';
