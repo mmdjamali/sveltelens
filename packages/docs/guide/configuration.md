@@ -17,7 +17,7 @@ sveltelens({
 | Option          | Default                     | Description                                                                                                             |
 | --------------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
 | `enabled`       | `true`                      | Disable entirely without removing the plugin.                                                                            |
-| `path`          | `/__sveltelens`             | Mount path for the dashboard and its API.                                                                                |
+| `path`          | `/__sveltelens`             | Mount path for the dashboard, its API, and the [MCP endpoint](./mcp) (`<path>/mcp`).                                       |
 | `storage`       | `'memory'`                  | `'memory'` uses an in-process ring buffer. `'sqlite'` persists to disk via `better-sqlite3` (lazily required — not a hard dependency). |
 | `sqlitePath`    | `.sveltelens/db.sqlite`     | Only used when `storage: 'sqlite'`.                                                                                       |
 | `maxEntries`    | `1000`                      | Max entries kept (oldest evicted first).                                                                                 |

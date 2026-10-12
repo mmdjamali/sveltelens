@@ -21,4 +21,6 @@ features:
     details: The plugin only runs during `vite dev`. Nothing ships in production builds.
   - title: Everything related
     details: Every query, outgoing call, and log line during a request is linked back to it, even across libraries that don't know Sveltelens exists.
+  - title: Agent-ready
+    details: A built-in MCP endpoint lets coding agents list failing requests, read request timelines, and inspect bodies and stack traces on their own.
 ---

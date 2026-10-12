@@ -34,13 +34,13 @@ Other useful scripts (see root `package.json`):
 
 ## MCP
 
-With the dev server running, agents can query captured requests, queries, logs and exceptions over MCP:
+With the dev server running, coding agents can query captured requests, queries, logs and exceptions over MCP. With the demo app (`bun run dev:demo`):
 
 ```sh
 claude mcp add --transport http sveltelens http://localhost:5173/__sveltelens/mcp
 ```
 
-See [packages/docs/guide/mcp.md](packages/docs/guide/mcp.md).
+Tools: `list_entries`, `get_entry`, `get_request`, `clear_entries`. The endpoint lives in `packages/sveltelens/src/api/mcp.ts`; the full guide is [packages/docs/guide/mcp.md](packages/docs/guide/mcp.md).
 
 ## License
 

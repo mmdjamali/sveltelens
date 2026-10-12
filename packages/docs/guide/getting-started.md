@@ -44,6 +44,14 @@ This patches `fetch` in the page and reports each call to the dev server. They a
 
 Run `npm run dev` and open `http://localhost:5173/__sveltelens`.
 
+**4. (Optional) Connect a coding agent** over MCP:
+
+```sh
+claude mcp add --transport http sveltelens http://localhost:5173/__sveltelens/mcp
+```
+
+See [MCP Server](./mcp) for the tools and other clients.
+
 Nothing runs in production builds — the plugin is dev-only (`apply: 'serve'`), and `sveltelensHandle` becomes a no-op passthrough when the plugin isn't active, so it's safe to leave the import in place.
 
 ## Next steps
@@ -51,3 +59,4 @@ Nothing runs in production builds — the plugin is dev-only (`apply: 'serve'`),
 - [Configuration](./configuration) — every option `sveltelens()` accepts.
 - [How It Works](./how-it-works) — what gets captured and how.
 - [Adapters](./adapters/sqlite) — wiring up a database driver directly.
+- [MCP Server](./mcp) — letting coding agents query captured data.

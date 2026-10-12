@@ -10,6 +10,7 @@ SvelteKit apps talk to a lot of things during development — outgoing APIs, dat
 
 - **Zero-config** — install the plugin and the hook, and requests, outgoing HTTP, and exceptions are already captured.
 - **Package-agnostic** — works whether you're using `fetch`, `axios`, `got`, an ORM, or a third-party SDK, because it intercepts at the platform level rather than wrapping specific libraries.
+- **Agent-ready** — the same data is served over [MCP](./mcp), so a coding agent can look up failing requests, queries, and stack traces itself instead of you pasting them in.
 - **Dev-only** — the plugin only runs during `vite dev` ([`apply: 'serve'`](https://vite.dev/guide/api-plugin.html#conditional-application)). Nothing runs in production builds, so it's safe to leave installed.
 
 Continue to [Getting Started](./getting-started) to install it.
