@@ -8,3 +8,4 @@ build/
 **/.vitepress/cache/
 *.log
 .DS_Store
+packages/sveltelens/README.md
