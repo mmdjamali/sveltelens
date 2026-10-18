@@ -93,7 +93,7 @@
     "dev": "tsup --watch",
     "test": "vitest run",
     "check": "tsc --noEmit",
-    "prepublishOnly": "cd ../dashboard && bun run build && cd ../sveltelens && bun run build"
+    "prepublishOnly": "cp ../../README.md README.md && cd ../dashboard && bun run build && cd ../sveltelens && bun run build"
   },
   "peerDependencies": {
     "vite": "^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0"
