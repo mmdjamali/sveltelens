@@ -98,7 +98,14 @@ export type Entry = {
 
 export const BODY_TRUNCATE_BYTES = 64 * 1024;
 
-/** What `@mmdjamali/sveltelens/client` POSTs to `${path}/api/browser-requests`. Bodies are raw text; the server captures and redacts them. */
+/** Vite HMR event carrying a `BrowserRequestReport` from the page to the dev server. */
+export const BROWSER_REQUEST_EVENT = 'sveltelens:browser-request';
+
+/**
+ * What `@mmdjamali/sveltelens/client` reports: sent on the `BROWSER_REQUEST_EVENT` HMR event,
+ * or POSTed to `${path}/api/browser-requests` when there is no HMR socket. Bodies are raw text;
+ * the server captures and redacts them.
+ */
 export interface BrowserRequestReport {
   method: string;
   url: string;
