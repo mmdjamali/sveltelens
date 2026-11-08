@@ -1,4 +1,5 @@
 <script lang="ts">
+  import MiddleTruncate from './MiddleTruncate.svelte';
   import {
     timeAgo,
     formatAbsoluteTime,
@@ -35,11 +36,8 @@
         >{entry.payload.method}</Badge
       >
     </Table.Cell>
-    <Table.Cell
-      class="text-base-content max-w-0 truncate py-0 font-mono text-xs"
-      title={entry.payload.url}
-    >
-      {entry.payload.url}
+    <Table.Cell class="text-base-content max-w-0 py-0 font-mono text-xs">
+      <MiddleTruncate text={entry.payload.url} />
     </Table.Cell>
     <Table.Cell class="py-0 text-center">
       {#if entry.payload.status !== null}

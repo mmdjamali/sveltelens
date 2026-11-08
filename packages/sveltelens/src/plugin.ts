@@ -8,7 +8,8 @@ import { createStorage } from './storage/index.js';
 import { createMcpMiddleware } from './api/mcp.js';
 import { Recorder } from './recorder.js';
 import { installInterceptors } from './intercept/index.js';
-import { createApiMiddleware } from './api/rest.js';
+import { createApiMiddleware, isBrowserRequestReport, recordBrowserRequest } from './api/rest.js';
+import { BROWSER_REQUEST_EVENT } from './types.js';
 import { installStreamServer } from './api/ws.js';
 import { setSveltelensState } from './state.js';
 
@@ -43,6 +44,8 @@ export function sveltelens(userConfig: SveltelensConfig = {}): Plugin {
   return {
     name: 'sveltelens',
     apply: 'serve',
+    // Pre-bundled deps get no `import.meta.hot`, so serve the browser entry as-is.
+    config: () => ({ optimizeDeps: { exclude: ['@mmdjamali/sveltelens/client'] } }),
     configureServer(server: ViteDevServer) {
       if (!config.enabled) return;
 
@@ -56,6 +59,11 @@ export function sveltelens(userConfig: SveltelensConfig = {}): Plugin {
         uninstallStream = installStreamServer(server.httpServer, recorder, config.path);
       }
       server.httpServer?.once('close', () => uninstallStream?.());
+
+      // Browser fetch reports ride Vite's HMR socket, so the page makes no extra HTTP calls.
+      server.ws.on(BROWSER_REQUEST_EVENT, (data: unknown) => {
+        if (isBrowserRequestReport(data)) recordBrowserRequest(recorder, data, config);
+      });
 
       server.middlewares.use(createApiMiddleware(storage, recorder, config.path, config));
       server.middlewares.use(createMcpMiddleware(storage, config.path));

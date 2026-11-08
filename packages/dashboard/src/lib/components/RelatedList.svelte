@@ -10,6 +10,7 @@
   import type { Entry } from "../types";
   import { Badge } from "./ui/badge/index.js";
   import DetailSection from "./DetailSection.svelte";
+  import MiddleTruncate from "./MiddleTruncate.svelte";
 
   let { entry, related }: { entry: Entry; related: Entry[] } = $props();
 
@@ -62,9 +63,15 @@
               >
                 {ENTRY_TYPE_META[row.type].badgeLabel}
               </Badge>
-              <span class="min-w-0 truncate text-xs" title={entrySummary(row)}
-                >{entrySummary(row)}</span
-              >
+              {#if row.type === "request" || row.type === "client-request" || row.type === "browser-request"}
+                <span class="min-w-0 text-xs"
+                  ><MiddleTruncate text={entrySummary(row)} /></span
+                >
+              {:else}
+                <span class="min-w-0 truncate text-xs" title={entrySummary(row)}
+                  >{entrySummary(row)}</span
+                >
+              {/if}
             </span>
             <span
               class="bg-base-300/40 relative h-2 w-full overflow-hidden rounded-full"

@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import type { Entry } from '../src/lib/types';
 import {
+  splitTail,
   formatDuration,
   formatBytes,
   interpolateSql,
@@ -111,5 +112,16 @@ describe('prettyJson', () => {
     expect(prettyJson('{"a":1}')).toBe('{\n  "a": 1\n}');
     expect(prettyJson('not json')).toBe('not json');
     expect(prettyJson(null)).toBe('');
+  });
+});
+
+describe('splitTail', () => {
+  it('keeps the last path segment as the tail', () => {
+    expect(splitTail('/api/users/123/profile')).toEqual(['/api/users/123', '/profile']);
+  });
+  it('falls back to the last 20 chars when the segment is long', () => {
+    const [head, tail] = splitTail(`/api/${'x'.repeat(50)}`);
+    expect(tail).toHaveLength(20);
+    expect(head + tail).toBe(`/api/${'x'.repeat(50)}`);
   });
 });

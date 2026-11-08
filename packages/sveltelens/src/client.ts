@@ -1,9 +1,9 @@
 import { DEFAULT_PATH } from './config.js';
-import { BODY_TRUNCATE_BYTES, type BrowserRequestReport } from './types.js';
+import { BODY_TRUNCATE_BYTES, BROWSER_REQUEST_EVENT, type BrowserRequestReport } from './types.js';
 
 /**
  * Browser request capture: patches `window.fetch` and reports each
- * call to the dev server, which redacts and records it. Works for frontend-only apps
+ * call to the dev server (over Vite's HMR socket), which redacts and records it. Works for frontend-only apps
  * (SPA mode, adapter-static) since nothing here depends on a server request.
  *
  * Call it from `hooks.client.ts` (or a plain Vite app's entry) behind a dev check:
@@ -18,7 +18,12 @@ export function installClient(path: string = DEFAULT_PATH): () => void {
   if (!original) return () => {};
   const endpoint = `${path}/api/browser-requests`;
 
+  // Vite fills in `import.meta.hot` in dev. Reports go over its websocket, so the page
+  // makes no extra HTTP calls. Without it (HMR off, non-Vite host), fall back to a POST.
+  const hot = (import.meta as { hot?: { send(event: string, data: unknown): void } }).hot;
+
   const report = (body: BrowserRequestReport) => {
+    if (hot) return hot.send(BROWSER_REQUEST_EVENT, body);
     original(endpoint, {
       method: 'POST',
       headers: { 'content-type': 'application/json' },

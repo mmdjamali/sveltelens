@@ -149,7 +149,7 @@ export function isBrowserRequestReport(v: unknown): v is BrowserRequestReport {
   );
 }
 
-function recordBrowserRequest(recorder: Recorder, r: BrowserRequestReport, redact: RedactOptions): void {
+export function recordBrowserRequest(recorder: Recorder, r: BrowserRequestReport, redact: RedactOptions): void {
   const body = (b: BrowserRequestReport['requestBody']) =>
     b ? captureBody(b.text, b.contentType, redact.redactBodyKeys) : null;
   recorder.record({
