@@ -236,3 +236,11 @@ export function prettyJson(text: string | null): string {
     return text;
   }
 }
+
+// Splits a URL so the tail (last path segment, or last 20 chars if that is long) stays
+// visible while the head truncates: `/api/users/…/profile`.
+export function splitTail(text: string): [string, string] {
+  const slash = text.lastIndexOf('/');
+  const cut = slash > 0 && text.length - slash <= 30 ? slash : Math.max(0, text.length - 20);
+  return [text.slice(0, cut), text.slice(cut)];
+}
